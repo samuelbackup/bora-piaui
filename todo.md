@@ -71,3 +71,8 @@
 - [x] Validar as novas jornadas em desktop e celular.
 - [x] Salvar e publicar a versão com Agenda Cultural e Parceiros integrados.
 - [x] Confirmar no domínio publicado as rotas de Agenda Cultural e Seja parceiro após a propagação da implantação.
+- [x] Definir os campos não sensíveis e a serialização CSV das propostas de parceria.
+- [x] Adicionar exportação CSV demonstrativa ao Painel Editorial.
+- [x] Testar a serialização CSV, o estado vazio e a proteção de dados pessoais.
+- [x] Validar o download no navegador e o estado vazio após a limpeza.
+- [ ] Publicar a exportação CSV demonstrativa no Painel Editorial.
