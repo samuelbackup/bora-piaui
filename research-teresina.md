@@ -17,3 +17,9 @@
 
 - Não apresentar horários, preços, disponibilidade ou contatos específicos sem confirmação no dia da publicação.
 - Para a demonstração do protótipo, usar apenas nomes, descrições, categorias e ações de abertura de rota. Indicar que informações operacionais exigem verificação.
+
+## Destino de rota confirmado
+
+O Tribunal Regional Eleitoral do Piauí identifica o **Parque Ambiental Encontro dos Rios** no bairro Poti Velho, no encontro do Rio Poti com o Rio Parnaíba. Esse nome completo será usado como destino textual no botão de rota do protótipo.
+
+3. Tribunal Regional Eleitoral do Piauí, [Pontos Turísticos](https://encontrodoscorregedores.tre-pi.jus.br/encontrodoscorregedores/locais). Acesso em 20 ago. 2026.

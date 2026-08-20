@@ -29,6 +29,12 @@ const markImage = "/manus-storage/bora-piaui-route-mark_13f422fa.png";
 const topoTexture = "/manus-storage/bora-piaui-topographic-texture_996c6da6.png";
 const sourceGov = "https://www.gov.br/g20/en/about-the-g20/host-cities/teresina";
 const sourceVisitBrasil = "https://visitbrasil.com/en/location/teresina/";
+const teresinaRoutes = [
+  { title: "Parque Ambiental Encontro dos Rios", type: "Natureza · Poti Velho", detail: "Poti encontra o Parnaíba", href: "https://www.google.com/maps/dir/?api=1&destination=Parque%20Ambiental%20Encontro%20dos%20Rios%2C%20Teresina%2C%20PI" },
+  { title: "Mirante da Ponte Estaiada", type: "Vista panorâmica · Rio Poti", detail: "Ação final da jornada", href: "https://www.google.com/maps/dir/?api=1&destination=Mirante%20da%20Ponte%20Estaiada%2C%20Teresina%2C%20PI" },
+  { title: "Museu do Piauí", type: "História · Centro", detail: "Primeira parada do roteiro", href: "https://www.google.com/maps/dir/?api=1&destination=Museu%20do%20Piaui%2C%20Teresina%2C%20PI" },
+  { title: "Polo Cerâmico do Poty Velho", type: "Cultura · Poty Velho", detail: "Artesanato e território", href: "https://www.google.com/maps/dir/?api=1&destination=Polo%20Ceramico%20do%20Poty%20Velho%2C%20Teresina%2C%20PI" },
+];
 
 const navigation = [
   { id: "visao", label: "Visão geral", number: "01" },
@@ -52,7 +58,7 @@ const screens = [
   { number: "03", title: "Descobrir — Natureza e cultura", action: "Abrir Parque Ambiental Encontro dos Rios", goal: "Permitir comparar locais reais de Teresina por interesse, sem depender de avaliações fictícias.", blocks: "Filtros Natureza, Cultura e Vista panorâmica; cards com categoria, resumo, fonte e ação de rota.", question: "A pessoa consegue escolher entre uma experiência de natureza, história ou paisagem?" },
   { number: "04", title: "Detalhe — Encontro dos Rios", action: "Abrir rota", goal: "Apresentar o parque onde Poti e Parnaíba se encontram e encaminhar a pessoa para uma ação real.", blocks: "Resumo, artesanato local como contexto, fonte, data de verificação e botão de rota externa.", question: "A pessoa entende por que visitar o local e reconhece o que está verificado?" },
   { number: "05", title: "Roteiro — Rios e história", action: "Começar roteiro", goal: "Conectar patrimônio, paisagem urbana e encontro dos rios em uma sequência de visita.", blocks: "Museu do Piauí, Praça Pedro II, Mirante da Ponte Estaiada e Parque Ambiental Encontro dos Rios.", question: "A pessoa entende a proposta do roteiro sem receber uma promessa indevida de duração ou horário?" },
-  { number: "06", title: "Ação — Rota para a Ponte Estaiada", action: "Abrir mapa externo", goal: "Concluir a jornada com uma rota para o Mirante da Ponte Estaiada sobre o Rio Poti.", blocks: "Nome do local, ação de mapa, orientação de verificação operacional e alternativa de retorno ao roteiro.", question: "A pessoa percebe claramente que a experiência digital terminou em uma próxima ação prática?" },
+  { number: "06", title: "Ação — Rota para a Ponte Estaiada", action: "Abrir rota no Google Maps", goal: "Concluir a jornada com uma rota para o Mirante da Ponte Estaiada sobre o Rio Poti.", blocks: "Nome do local, ação de mapa, orientação de verificação operacional e alternativa de retorno ao roteiro.", question: "A pessoa percebe claramente que a experiência digital terminou em uma próxima ação prática?" },
 ];
 
 const tokens = [
@@ -65,7 +71,7 @@ const tokens = [
 const checklist = [
   "Teresina definida como cidade-piloto do cenário.",
   "Conteúdo preenchido para Encontro dos Rios, Ponte Estaiada, Museu do Piauí e roteiro Rios e história.",
-  "Rotas, contatos e estados vazios estão simulados.",
+  "Rotas reais do Google Maps estão disponíveis para os pontos do cenário.",
   "Tarefas de teste estão prontas, sem dicas de navegação.",
   "Participantes foram recrutados e autorizaram a sessão.",
 ];
@@ -249,6 +255,12 @@ export default function Home() {
               <Accordion type="single" collapsible className="border-y border-[#174c45]/20 bg-[#fffaf0] px-5 sm:px-7">
                 {screens.map((screen) => <AccordionItem key={screen.number} value={screen.number} className="border-[#174c45]/10"><AccordionTrigger className="py-5 text-left hover:no-underline"><span className="flex items-center gap-4"><span className="text-xs font-extrabold tracking-[0.15em] text-[#b87324]">{screen.number}</span><span className="text-base font-extrabold tracking-[-0.025em] sm:text-lg">{screen.title}</span></span></AccordionTrigger><AccordionContent className="pb-6"><div className="grid gap-4 text-sm leading-6 text-[#53685e] sm:grid-cols-2"><p><b className="text-[#174c45]">Objetivo:</b> {screen.goal}</p><p><b className="text-[#174c45]">Blocos:</b> {screen.blocks}</p><p className="sm:col-span-2 rounded-xl bg-[#efe6d4] px-4 py-3"><b className="text-[#174c45]">Ação dominante:</b> {screen.action} <span className="mx-2 text-[#b87324]">·</span> <b className="text-[#174c45]">No teste:</b> {screen.question}</p></div></AccordionContent></AccordionItem>)}
               </Accordion>
+            </div>
+            <div className="mt-8 border-y border-[#174c45]/18 py-6">
+              <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="eyebrow">Ação real do protótipo</p><h3 className="display-font mt-2 text-3xl leading-none">Abrir rota para um ponto de Teresina.</h3></div><p className="max-w-sm text-sm leading-6 text-[#5b6d62]">Os botões abrem o Google Maps em uma nova aba. O ponto de origem é definido pelo dispositivo da pessoa.</p></div>
+              <div className="field-matrix mt-6 grid overflow-hidden md:grid-cols-2">
+                {teresinaRoutes.map((route, index) => <a key={route.title} href={route.href} target="_blank" rel="noopener noreferrer" aria-label={`Abrir rota para ${route.title} no Google Maps`} className="group flex min-h-36 flex-col justify-between border-b border-[#174c45]/12 bg-[#fffaf0] p-5 transition-colors hover:bg-[#efe6d4] md:border-r md:[&:nth-child(2n)]:border-r-0 md:[&:nth-last-child(-n+2)]:border-b-0"><div className="flex items-start justify-between gap-4"><div><p className="eyebrow">Ponto {String(index + 1).padStart(2, "0")}</p><p className="mt-3 text-base font-extrabold tracking-[-0.025em] text-[#174c45]">{route.title}</p><p className="mt-1 text-xs font-bold text-[#0b7285]">{route.type}</p></div><MapPinned className="h-5 w-5 shrink-0 text-[#b87324] transition-transform duration-200 group-hover:-translate-y-1" /></div><span className="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-[#174c45]">Ver rota <ArrowUpRight className="h-4 w-4 text-[#0b7285]" /></span><span className="mt-1 text-xs text-[#617269]">{route.detail}</span></a>)}
+              </div>
             </div>
           </section>
 
