@@ -1,90 +1,45 @@
-# Direção de design — Guia Bora Piauí
+# Direção visual — protótipo Bora Piauí
 
-## Abordagens consideradas
+## Três abordagens consideradas
 
-### 1. Caderno de Campo
+### Rota de Sol
 
-**Tema:** Um guia editorial inspirado em anotações de expedição e cartografia local, com calor humano e forte legibilidade.
+**Introdução:** Interface vibrante inspirada no calor urbano e nos rios de Teresina, com decisões rápidas e foco na próxima saída. **Probabilidade:** 0,07.
 
-**Probabilidade:** 0.07
+### Atlas de Bairro
 
-### 2. Sala de Operações
+**Introdução:** Linguagem jornalística de proximidade, com camadas de contexto e descobertas por região. **Probabilidade:** 0,04.
 
-**Tema:** Um painel técnico de decisão, estruturado por métricas, checklists e estados de prontidão.
+### Janela do Poti
 
-**Probabilidade:** 0.03
+**Introdução:** Uma experiência leve e contemplativa que privilegia paisagem, sombra e ritmo de passeio. **Probabilidade:** 0,09.
 
-### 3. Biblioteca de Produto
+## Direção escolhida — Rota de Sol
 
-**Tema:** Um repositório calmo e modular, com navegação densa e aparência de documentação digital.
+**Movimento de design:** Editorial tropical contemporâneo, com referências de sinalização urbana e guias de viagem impressos.
 
-**Probabilidade:** 0.09
+**Princípios:** A navegação privilegia decisão rápida; uma imagem dominante orienta cada vista; informação prática aparece no momento da escolha; e o roteiro se comporta como companheiro de viagem, não como painel administrativo.
 
-## Direção escolhida — Caderno de Campo
+**Filosofia de cor:** Azul-rio orienta ações; coral-sol marca energia, destaque e progresso; creme claro protege a leitura sob alta luminosidade; e verde folha sinaliza natureza e confirmação. A cor de assinatura é **coral-sol #F05D45**.
 
-### Movimento de design
+**Paradigma de layout:** Páginas em camadas horizontais, como paradas ao longo de um rio. O roteiro ocupa uma faixa persistente no mobile e um painel lateral no desktop, evitando uma grade de cartões uniforme.
 
-**Editorial cartográfico contemporâneo**: a clareza de um manual de campo encontra o ritmo visual de mapas e cadernos de viagem. O site deve parecer uma ferramenta de alinhamento de equipe, não uma landing page genérica.
+**Elementos de assinatura:** Pílulas de parada numeradas, linha de percurso coral conectando seções e uma marca gráfica de sol sobre rio.
 
-### Princípios centrais
+**Interação:** Filtros respondem de imediato, itens entram no roteiro com confirmação clara e ações de rota abrem em contexto externo.
 
-1. **Orientação antes de ornamentação:** cada bloco responde a uma decisão concreta do time.
-2. **Camadas de leitura:** títulos fortes, metadados discretos e detalhes expansíveis apoiam leitura rápida ou aprofundada.
-3. **Território como estrutura:** linhas de rota, marcas de coordenada e divisões topográficas organizam o conteúdo.
-4. **Evidência visível:** estados, metas e critérios são mostrados como instrumentos de trabalho, não como marketing.
+**Animação:** Entradas por opacidade e deslocamento vertical curto; o percurso avança ao adicionar paradas; máximo de 240 ms, com respeito a movimento reduzido.
 
-### Filosofia de cor
+**Tipografia:** Fraunces para títulos expressivos e Manrope para leitura e controles. Títulos são compactos; texto operacional usa 16 px ou mais.
 
-O fundo areia muito claro transmite materialidade e repouso visual. Verde profundo representa orientação e confiança; o ocre solar sinaliza decisões, prioridades e movimento. Azul-petróleo é reservado a links, rotas e elementos interativos. A paleta evita a estética corporativa azul-padrão e remete discretamente à paisagem semiárida.
+**Essência de marca:** Guia de descobertas práticas para quem quer viver Teresina com mais contexto e menos fricção. Personalidade: calorosa, curiosa e segura.
 
-### Paradigma de layout
+**Voz:** Chamadas diretas e convidativas, sem promessas vagas. Exemplos: “Comece pelo encontro das águas.” e “Monte uma tarde que faz sentido para você.”
 
-Uma **coluna de navegação fixa** funciona como índice de campo no desktop; o conteúdo avança em uma trilha vertical de seções assimétricas. Cada seção alterna entre texto editorial, quadros de decisão e matrizes de teste. No celular, a navegação se transforma em um índice compacto no topo.
+**Wordmark e logo:** Símbolo sem texto de um sol coral tocando duas curvas de rio azul, acompanhado por wordmark desenhado em minúsculas com contraste editorial.
 
-### Elementos de assinatura
+## Decisões de estilo
 
-1. Um monograma circular “BP” com linhas de coordenada.
-2. Trilhas pontilhadas e microcoordenadas como divisores e marcadores de progresso.
-3. Etiquetas de caderno de campo: `DECISÃO`, `TESTAR`, `PRONTO`, `ATENÇÃO`.
-
-### Filosofia de interação
-
-Interações devem reforçar navegação e foco: índice destaca a seção ativa, cartões expandem detalhes apenas quando necessário e checklists permitem marcar uma leitura local durante a sessão. Não há gamificação nem efeitos decorativos sem função.
-
-### Animação
-
-Usar transições rápidas de opacidade e deslocamento leve (160–220 ms) para o índice, os detalhes expansíveis e os estados de botão. A animação deve respeitar `prefers-reduced-motion`. Evitar animações contínuas, parallax e transições que ocultem o conteúdo.
-
-### Sistema tipográfico
-
-**DM Serif Display** para títulos e momentos de decisão; **Manrope** para texto, navegação e componentes. Títulos mantêm alto contraste e poucas palavras; números, tags e metadados usam caixa alta com espaçamento de letras controlado.
-
-### Essência de marca
-
-**Posicionamento:** um guia prático para a equipe transformar o Bora Piauí em uma experiência turística digital clara, confiável e validada com usuários.
-
-**Personalidade:** territorial, criteriosa, acolhedora.
-
-### Voz da marca
-
-Headlines são diretas e orientadas à decisão; CTAs descrevem a ação com precisão. Microcopy evita abstrações e explica o próximo passo.
-
-Exemplos: “Antes de expandir, valide uma cidade.” e “Faça a rota funcionar antes de adicionar recursos.”
-
-### Wordmark e símbolo
-
-O símbolo combina as iniciais **BP** dentro de um círculo de coordenadas, com um traço de rota aberto no quadrante inferior. O wordmark usa Manrope em caixa baixa, com espaçamento levemente ampliado.
-
-### Cor de assinatura
-
-**Verde Rota — `#174C45`**.
-
-## Style Decisions
-
-- O monograma BP aparece como um selo circular de coordenadas, com rota aberta, em pontos de orientação do guia.
-- Ocre é reservado para decisões, prioridades e movimento; petróleo identifica rotas, links e estados ativos.
-- Painéis seguem linguagem de instrumento de campo: folhas planas, tabelas pautadas, carimbos e checklists, sem profundidade genérica de SaaS.
-- Linhas de rota, microcoordenadas e divisores cartográficos organizam a progressão das seções, não apenas decoram o conteúdo.
-- Cada seção é conectada à seguinte por uma trilha ou marcador de rota visível; a progressão deve parecer mapeada, não apenas empilhada.
-- O selo circular BP reaparece nos momentos de orientação, abertura de teste e decisões de avanço para funcionar como assinatura de navegação.
-- A capa usa enquadramento de mapa, legenda de campo e metadados de referência para comunicar “guia interno” antes de “página de apresentação”.
+- Experiência concebida primeiro para celular e ampliada para desktop.
+- Componentes devem parecer sinalização e roteiro, nunca blocos de dashboard.
+- Não usar avaliações, notas ou depoimentos fictícios.

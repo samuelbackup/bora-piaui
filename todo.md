@@ -1,11 +1,8 @@
-# Atualização Teresina — cidade-piloto
+# Protótipo navegável Bora Piauí — Teresina
 
-- [x] Validar fontes oficiais e institucionais sobre Teresina e pontos de interesse do protótipo.
-- [x] Substituir referências genéricas por Teresina, atrações e roteiro realista.
-- [x] Incluir fontes e data de verificação para conteúdos usados no guia.
-- [x] Verificar responsividade, tipagem e compilação após a atualização.
-- [x] Salvar um checkpoint com a versão específica de Teresina.
-- [x] Confirmar os destinos de rota para os pontos turísticos selecionados de Teresina.
-- [x] Adicionar botões de Google Maps na jornada do protótipo.
-- [x] Verificar abertura externa, acessibilidade e layout dos botões.
-- [ ] Salvar um checkpoint com as rotas ativas.
+- [x] Validar o conteúdo essencial dos lugares e do roteiro-piloto de Teresina.
+- [x] Definir a arquitetura de navegação: início, descoberta, detalhe e roteiro.
+- [x] Criar a experiência visual independente do guia anterior.
+- [x] Implementar filtros, painel de roteiro e links externos de rota.
+- [x] Verificar a jornada em desktop e mobile.
+- [ ] Salvar a versão navegável pronta para demonstração.
