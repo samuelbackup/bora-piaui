@@ -69,4 +69,5 @@
 - [x] Validar o fluxo completo entre envio público, curadoria persistida e publicação da agenda.
 - [x] Cobrir filtros e validações com testes automatizados.
 - [x] Validar as novas jornadas em desktop e celular.
-- [ ] Salvar e publicar a versão com Agenda Cultural e Parceiros integrados.
+- [x] Salvar e publicar a versão com Agenda Cultural e Parceiros integrados.
+- [ ] Confirmar no domínio publicado as rotas de Agenda Cultural e Seja parceiro após a propagação da implantação.
