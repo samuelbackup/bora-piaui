@@ -1,5 +1,7 @@
 /* Cerrado e Rios — Atlas de Percursos: atlas editorial, filtros territoriais e dados públicos; barro queimado é a única cor de ação. */
 import { useMemo, useState } from "react";
+import { Link } from "wouter";
+import { trpc } from "@/lib/trpc";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   ArrowRight,
@@ -62,7 +64,7 @@ type Place = {
 
 const places: Place[] = [
   {
-    id: "delta",
+    id: "delta-do-parnaiba",
     title: "Delta do Parnaíba",
     category: "Litoral",
     region: "Costa do Delta",
@@ -93,7 +95,7 @@ const places: Place[] = [
     accent: "#D9A640",
   },
   {
-    id: "sete-cidades",
+    id: "parque-nacional-sete-cidades",
     title: "Parque Nacional de Sete Cidades",
     category: "Natureza",
     region: "Aventura e Mistério",
@@ -108,7 +110,7 @@ const places: Place[] = [
     accent: "#566B37",
   },
   {
-    id: "pedro-ii",
+    id: "serra-dos-matoes",
     title: "Serra dos Matões",
     category: "Natureza",
     region: "Aventura e Mistério",
@@ -123,7 +125,7 @@ const places: Place[] = [
     accent: "#6B8B5A",
   },
   {
-    id: "urubu",
+    id: "cachoeira-do-urubu",
     title: "Cachoeira do Urubu",
     category: "Natureza",
     region: "Águas",
@@ -138,7 +140,7 @@ const places: Place[] = [
     accent: "#3F7E8C",
   },
   {
-    id: "confusoes",
+    id: "serra-das-confusoes",
     title: "Parque Nacional da Serra das Confusões",
     category: "Natureza",
     region: "Nascentes",
@@ -154,7 +156,7 @@ const places: Place[] = [
     accent: "#3C482D",
   },
   {
-    id: "capivara",
+    id: "serra-da-capivara",
     title: "Parque Nacional Serra da Capivara",
     category: "Patrimônio",
     region: "Origens",
@@ -184,7 +186,7 @@ const places: Place[] = [
     accent: "#A86D32",
   },
   {
-    id: "teresina",
+    id: "encontro-dos-rios",
     title: "Encontro dos Rios",
     category: "Cidade",
     region: "Polo Teresina",
@@ -223,21 +225,44 @@ function sourceAnchor(url: string, label: string) {
 }
 
 export default function Home() {
+  const { data: publishedDestinations } = trpc.destinations.list.useQuery();
   const [category, setCategory] = useState<(typeof categories)[number]>("Todos");
   const [region, setRegion] = useState<(typeof regions)[number]>("Todos");
   const [query, setQuery] = useState("");
   const [itinerary, setItinerary] = useState<string[]>([]);
   const [selected, setSelected] = useState<Place | null>(null);
-  const [mapFocus, setMapFocus] = useState<string | null>("delta");
+  const [mapFocus, setMapFocus] = useState<string | null>("delta-do-parnaiba");
   const [plannerOpen, setPlannerOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const catalogPlaces = useMemo<Place[]>(() => {
+    if (!publishedDestinations) return places;
+    return publishedDestinations.map((destination, index) => {
+      const existing = places.find((place) => place.id === destination.slug);
+      return {
+        id: destination.slug,
+        title: destination.title,
+        category: destination.category as Category,
+        region: destination.polo as Region,
+        municipality: destination.municipality,
+        text: destination.summary,
+        detail: destination.description,
+        route: destination.routeUrl,
+        mapQuery: destination.mapQuery,
+        sourceName: destination.sourceName,
+        sourceUrl: destination.sourceUrl,
+        sourceYear: destination.sourceYear,
+        image: destination.images[0]?.imageUrl ?? existing?.image,
+        accent: existing?.accent ?? ["#2E6C76", "#D9A640", "#566B37", "#B9572D"][index % 4],
+      };
+    });
+  }, [publishedDestinations]);
   const visiblePlaces = useMemo(
-    () => places.filter((place) => (category === "Todos" || place.category === category) && (region === "Todos" || place.region === region) && `${place.title} ${place.category} ${place.region} ${place.municipality}`.toLowerCase().includes(query.toLowerCase())),
-    [category, query, region],
+    () => catalogPlaces.filter((place) => (category === "Todos" || place.category === category) && (region === "Todos" || place.region === region) && `${place.title} ${place.category} ${place.region} ${place.municipality}`.toLowerCase().includes(query.toLowerCase())),
+    [catalogPlaces, category, query, region],
   );
   const activeMapId = visiblePlaces.some((place) => place.id === mapFocus) ? mapFocus : visiblePlaces[0]?.id ?? null;
-  const plan = itinerary.map((id) => places.find((place) => place.id === id)).filter((place): place is Place => Boolean(place));
+  const plan = itinerary.map((id) => catalogPlaces.find((place) => place.id === id)).filter((place): place is Place => Boolean(place));
 
   function goTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -247,14 +272,14 @@ export default function Home() {
   function applyCategory(nextCategory: (typeof categories)[number]) {
     setCategory(nextCategory);
     setQuery("");
-    const firstMatch = places.find((place) => (nextCategory === "Todos" || place.category === nextCategory) && (region === "Todos" || place.region === region));
+    const firstMatch = catalogPlaces.find((place) => (nextCategory === "Todos" || place.category === nextCategory) && (region === "Todos" || place.region === region));
     if (firstMatch) setMapFocus(firstMatch.id);
   }
 
   function applyRegion(nextRegion: (typeof regions)[number]) {
     setRegion(nextRegion);
     setQuery("");
-    const firstMatch = places.find((place) => (nextRegion === "Todos" || place.region === nextRegion) && (category === "Todos" || place.category === category));
+    const firstMatch = catalogPlaces.find((place) => (nextRegion === "Todos" || place.region === nextRegion) && (category === "Todos" || place.category === category));
     if (firstMatch) setMapFocus(firstMatch.id);
   }
 
@@ -274,7 +299,7 @@ export default function Home() {
   }
 
   function handleMapSelect(placeId: string) {
-    const place = places.find((item) => item.id === placeId);
+    const place = catalogPlaces.find((item) => item.id === placeId);
     if (!place) return;
     setMapFocus(placeId);
     setSelected(place);
@@ -293,13 +318,14 @@ export default function Home() {
             <button onClick={() => goTo("dados")} className="tap hover:text-[#B9572D]">Dados</button>
             <button onClick={() => goTo("mapa")} className="tap hover:text-[#B9572D]">Mapa</button>
             <button onClick={() => goTo("como-funciona")} className="tap hover:text-[#B9572D]">Como funciona</button>
+            <Link href="/admin/destinos" className="tap text-[#566B37] hover:text-[#B9572D]">Painel demo</Link>
           </nav>
           <div className="flex items-center gap-2">
             <button onClick={() => setPlannerOpen(true)} className="tap inline-flex h-10 items-center gap-2 rounded-full bg-[#3C482D] px-4 text-sm font-extrabold text-white"><Bookmark className="h-4 w-4" /><span className="hidden sm:inline">Meu roteiro</span><span className="grid h-5 min-w-5 place-items-center rounded-full bg-white/18 px-1 text-[10px]">{plan.length}</span></button>
             <button onClick={() => setMenuOpen((value) => !value)} className="tap grid h-10 w-10 place-items-center rounded-full border border-[#3C482D]/15 md:hidden" aria-label="Abrir menu">{menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
           </div>
         </div>
-        {menuOpen && <nav className="border-t border-[#3C482D]/10 bg-[#F5ECD8] px-5 py-4 md:hidden"><div className="mx-auto flex max-w-7xl flex-col gap-1"><button onClick={() => goTo("explorar")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Explorar destinos</button><button onClick={() => goTo("dados")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Dados oficiais</button><button onClick={() => goTo("mapa")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Mapa do estado</button><button onClick={() => setPlannerOpen(true)} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Meu roteiro</button></div></nav>}
+        {menuOpen && <nav className="border-t border-[#3C482D]/10 bg-[#F5ECD8] px-5 py-4 md:hidden"><div className="mx-auto flex max-w-7xl flex-col gap-1"><button onClick={() => goTo("explorar")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Explorar destinos</button><button onClick={() => goTo("dados")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Dados oficiais</button><button onClick={() => goTo("mapa")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Mapa do estado</button><Link href="/admin/destinos" className="rounded-xl px-3 py-3 text-left text-sm font-bold text-[#566B37] hover:bg-[#EDE0C4]">Painel demonstrativo</Link><button onClick={() => setPlannerOpen(true)} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Meu roteiro</button></div></nav>}
       </header>
 
       <main id="inicio">
@@ -329,7 +355,7 @@ export default function Home() {
                 return <button key={item} type="button" data-active={region === item} onClick={() => applyRegion(item)} className="atlas-node tap"><span className="atlas-node-label">{item.replace("Polo ", "")}</span><span className="atlas-node-count">{total} {total === 1 ? "âncora" : "âncoras"} neste recorte</span></button>;
               })}
             </div>
-            <div className="discovery-route mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">{visiblePlaces.map((place, index) => <article key={place.id} className={`route-card place-card flex min-h-[315px] flex-col overflow-hidden rounded-[1.75rem] border border-[#3C482D]/12 bg-[#FFFDF6] shadow-[0_12px_32px_rgba(59,70,42,.06)] ${index === 0 ? "md:col-span-2 xl:row-span-2 xl:min-h-[640px]" : index === 4 ? "xl:col-span-2" : ""}`}><div className={`relative overflow-hidden ${index === 0 ? "h-44 xl:h-72" : "h-32"}`} style={{ backgroundColor: `${place.accent}18` }}>{place.image ? <img src={place.image} alt={`Ilustração editorial para ${place.title}`} className="place-image h-full w-full object-cover" /> : <div className="map-tile"><span>{place.region.toUpperCase()} · PARADA {index + 1}</span></div>}<span className="absolute left-4 top-4 grid h-8 w-8 place-items-center rounded-full bg-[#B9572D] text-xs font-extrabold text-white shadow-sm">{String(index + 1).padStart(2, "0")}</span></div><div className="flex flex-1 flex-col p-5"><p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#B9572D]">{place.region} · {place.category}</p><h3 className="display-font mt-2 text-3xl leading-[0.95] tracking-[-0.045em]">{place.title}</h3><p className="mt-1 text-xs font-bold text-[#70745F]">{place.municipality}</p><p className="mt-3 text-sm leading-6 text-[#66705E]">{place.text}</p><div className="mt-auto flex flex-wrap gap-2 pt-5"><button onClick={() => showPlaceOnMap(place)} className="tap inline-flex items-center gap-1.5 rounded-full bg-[#B9572D] px-3 py-2 text-xs font-extrabold text-white hover:bg-[#cd6d45]"><MapPinned className="h-3.5 w-3.5" /> Ver no mapa</button><button onClick={() => setSelected(place)} className="tap rounded-full border border-[#3C482D]/15 px-3 py-2 text-xs font-extrabold">Detalhes</button></div><span className="route-connector" aria-hidden="true" /></div></article>)}</div>
+            <div className="discovery-route mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">{visiblePlaces.map((place, index) => <article key={place.id} className={`route-card place-card flex min-h-[315px] flex-col overflow-hidden rounded-[1.75rem] border border-[#3C482D]/12 bg-[#FFFDF6] shadow-[0_12px_32px_rgba(59,70,42,.06)] ${index === 0 ? "md:col-span-2 xl:row-span-2 xl:min-h-[640px]" : index === 4 ? "xl:col-span-2" : ""}`}><div className={`relative overflow-hidden ${index === 0 ? "h-44 xl:h-72" : "h-32"}`} style={{ backgroundColor: `${place.accent}18` }}>{place.image ? <img src={place.image} alt={`Ilustração editorial para ${place.title}`} className="place-image h-full w-full object-cover" /> : <div className="map-tile"><span>{place.region.toUpperCase()} · PARADA {index + 1}</span></div>}<span className="absolute left-4 top-4 grid h-8 w-8 place-items-center rounded-full bg-[#B9572D] text-xs font-extrabold text-white shadow-sm">{String(index + 1).padStart(2, "0")}</span></div><div className="flex flex-1 flex-col p-5"><p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#B9572D]">{place.region} · {place.category}</p><h3 className="display-font mt-2 text-3xl leading-[0.95] tracking-[-0.045em]">{place.title}</h3><p className="mt-1 text-xs font-bold text-[#70745F]">{place.municipality}</p><p className="mt-3 text-sm leading-6 text-[#66705E]">{place.text}</p><div className="mt-auto flex flex-wrap gap-2 pt-5"><button onClick={() => showPlaceOnMap(place)} className="tap inline-flex items-center gap-1.5 rounded-full bg-[#B9572D] px-3 py-2 text-xs font-extrabold text-white hover:bg-[#cd6d45]"><MapPinned className="h-3.5 w-3.5" /> Ver no mapa</button><Link href={`/destinos/${place.id}`} className="tap rounded-full border border-[#3C482D]/15 px-3 py-2 text-xs font-extrabold">Detalhes</Link></div><span className="route-connector" aria-hidden="true" /></div></article>)}</div>
             {visiblePlaces.length === 0 && <div className="mt-8 rounded-[1.5rem] border border-dashed border-[#3C482D]/20 p-10 text-center"><SlidersHorizontal className="mx-auto h-7 w-7 text-[#B9572D]" /><p className="mt-3 font-bold">Nenhum destino encontrado nesse recorte.</p><button onClick={() => { setCategory("Todos"); setRegion("Todos"); setQuery(""); }} className="mt-4 text-sm font-extrabold text-[#566B37]">Limpar filtros</button></div>}
           </div>
         </section>

@@ -15,10 +15,23 @@
 - [x] Definir a categoria de cada ponto e incluir gastronomia no cenário de Teresina.
 - [x] Sincronizar filtros de categoria entre lista, marcadores e resumo do mapa.
 - [x] Validar estados de filtro, resultados vazios e visualização móvel.
-- [ ] Salvar um checkpoint com os filtros de mapa ativos.
+- [x] Salvar um checkpoint com os filtros de mapa ativos.
 - [x] Consolidar fontes oficiais e dados verificáveis sobre turismo e território do Piauí.
 - [x] Definir regiões prioritárias, destinos e categorias da experiência estadual.
 - [x] Ampliar mapa, descoberta e roteiro para a escala do estado.
 - [x] Inserir gráficos com fontes e datas explícitas.
 - [x] Validar a versão estadual em desktop e celular.
-- [ ] Salvar e publicar o checkpoint do protótipo estadual.
+- [x] Salvar e publicar o checkpoint do protótipo estadual.
+- [x] Definir estrutura de dados e permissões para destinos e condições de visitação.
+- [x] Habilitar banco de dados e autenticação para a área administrativa.
+- [x] Modelar e implementar operações de destinos, galerias e informações operacionais.
+- [x] Criar páginas públicas individuais para cada destino.
+- [x] Criar painel administrativo protegido para atualização de conteúdo.
+- [x] Validar fluxos público e administrativo e publicar a nova versão.
+- [x] Completar galerias para os destinos publicados com imagens e créditos rastreáveis.
+- [x] Executar validação autenticada de criação, edição, publicação e upload no painel. (Dispensada: painel convertido em demonstração sem login.)
+- [ ] Salvar e publicar a versão com páginas individuais e administração.
+- [x] Converter o painel administrativo em demonstração aberta sem login.
+- [x] Substituir as gravações administrativas por alterações locais ilustrativas.
+- [x] Validar e publicar o protótipo demonstrativo final.
+- [ ] Salvar e publicar o checkpoint da versão demonstrativa sem login.

@@ -21,3 +21,4 @@
 - Todo número exibido precisa informar **fonte e ano** na interface.
 - Horários, valores, contatos e disponibilidade de serviços devem remeter ao canal oficial ou permanecer fora do protótipo até validação operacional.
 - A categorização combinará polos oficiais com temas de descoberta: natureza, patrimônio, litoral, cultura e cidade.
+- Os registros iniciais foram configurados com o status **“verificar”** quando não havia fonte operacional específica para horário, preço, acesso ou contato. Dessa forma, cada futura confirmação fica acompanhada de fonte e data no painel administrativo.
