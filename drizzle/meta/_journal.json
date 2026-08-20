@@ -8,6 +8,13 @@
       "when": 1787193959076,
       "tag": "0000_futuristic_lizard",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1787238464398,
+      "tag": "0001_odd_mad_thinker",
+      "breakpoints": true
     }
   ]
 }

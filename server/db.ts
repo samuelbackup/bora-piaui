@@ -1,13 +1,19 @@
 import { and, asc, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
+  CulturalEvent,
   Destination,
   DestinationImage,
+  culturalEvents,
   destinationImages,
   destinations,
+  InsertCulturalEvent,
   InsertDestination,
   InsertDestinationImage,
+  InsertPartnerSubmission,
   InsertUser,
+  PartnerSubmission,
+  partnerSubmissions,
   users,
 } from "../drizzle/schema";
 import { ENV } from "./_core/env";
@@ -130,4 +136,69 @@ export async function removeDestinationImage(id: number) {
   if (!current[0]) return null;
   await db.delete(destinationImages).where(eq(destinationImages.id, id));
   return getDestinationById(current[0].destinationId);
+}
+
+export async function listPublishedCulturalEvents() {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  return db
+    .select()
+    .from(culturalEvents)
+    .where(and(eq(culturalEvents.published, true), eq(culturalEvents.confirmationStatus, "confirmado")))
+    .orderBy(asc(culturalEvents.startsAt));
+}
+
+export async function listAllCulturalEvents() {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  return db.select().from(culturalEvents).orderBy(desc(culturalEvents.updatedAt));
+}
+
+export async function getCulturalEventById(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  const result = await db.select().from(culturalEvents).where(eq(culturalEvents.id, id)).limit(1);
+  return result[0] ?? null;
+}
+
+export async function createCulturalEvent(data: InsertCulturalEvent) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  await db.insert(culturalEvents).values(data);
+  const result = await db.select().from(culturalEvents).where(eq(culturalEvents.slug, data.slug)).limit(1);
+  return result[0] ?? null;
+}
+
+export async function updateCulturalEvent(id: number, data: Partial<InsertCulturalEvent>) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  await db.update(culturalEvents).set(data).where(eq(culturalEvents.id, id));
+  return getCulturalEventById(id);
+}
+
+export async function createPartnerSubmission(data: InsertPartnerSubmission) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  const result = await db.insert(partnerSubmissions).values(data);
+  return getPartnerSubmissionById(Number(result[0].insertId));
+}
+
+export async function getPartnerSubmissionById(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  const result = await db.select().from(partnerSubmissions).where(eq(partnerSubmissions.id, id)).limit(1);
+  return result[0] ?? null;
+}
+
+export async function listPartnerSubmissions() {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  return db.select().from(partnerSubmissions).orderBy(desc(partnerSubmissions.updatedAt));
+}
+
+export async function updatePartnerSubmission(id: number, data: Partial<InsertPartnerSubmission>) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  await db.update(partnerSubmissions).set(data).where(eq(partnerSubmissions.id, id));
+  return getPartnerSubmissionById(id);
 }

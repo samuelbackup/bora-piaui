@@ -58,3 +58,15 @@
 - [x] Localizar a origem do controle residual “Terreno” no mapa de Patrimônios.
 - [x] Confirmar no navegador que o controle residual “Terreno” não aparece mais após a alteração.
 - [x] Publicar a correção definitiva do mapa de Patrimônios.
+- [x] Modelar e migrar os dados de eventos culturais e solicitações de parceria.
+- [x] Criar procedimentos tRPC públicos e editoriais para agenda e parceiros.
+- [x] Criar a página de Agenda Cultural com filtros e estado vazio curado.
+- [x] Criar a página demonstrativa Seja parceiro com envio para revisão editorial.
+- [x] Integrar Agenda e Parceiros à navegação pública e móvel.
+- [x] Atualizar os cabeçalhos de Patrimônios, Sabores e Dados com acessos de Agenda e Parceiros.
+- [x] Conectar a curadoria de agenda aos eventos persistidos e ao controle de publicação.
+- [x] Conectar a curadoria de parceiros às propostas persistidas e à mudança de status editorial.
+- [x] Validar o fluxo completo entre envio público, curadoria persistida e publicação da agenda.
+- [x] Cobrir filtros e validações com testes automatizados.
+- [x] Validar as novas jornadas em desktop e celular.
+- [ ] Salvar e publicar a versão com Agenda Cultural e Parceiros integrados.

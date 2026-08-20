@@ -5,10 +5,13 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import AdminDestinations from "./pages/AdminDestinations";
+import AdminEditorial from "./pages/AdminEditorial";
+import AgendaPage from "./pages/AgendaPage";
 import DadosPage from "./pages/DadosPage";
 import DestinationPage from "./pages/DestinationPage";
 import Home from "./pages/Home";
 import PatrimoniosPage from "./pages/PatrimoniosPage";
+import PartnersPage from "./pages/PartnersPage";
 import SaboresPage from "./pages/SaboresPage";
 
 function Router() {
@@ -17,9 +20,12 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/destinos/:slug" component={DestinationPage} />
       <Route path="/admin/destinos" component={AdminDestinations} />
+      <Route path="/admin/editorial" component={AdminEditorial} />
       <Route path="/patrimonios" component={PatrimoniosPage} />
       <Route path="/sabores" component={SaboresPage} />
       <Route path="/dados" component={DadosPage} />
+      <Route path="/agenda" component={AgendaPage} />
+      <Route path="/parceiros" component={PartnersPage} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
