@@ -57,4 +57,4 @@
 - [x] Salvar e publicar o checkpoint das correções de imagens e mapa.
 - [x] Localizar a origem do controle residual “Terreno” no mapa de Patrimônios.
 - [x] Confirmar no navegador que o controle residual “Terreno” não aparece mais após a alteração.
-- [ ] Publicar a correção definitiva do mapa de Patrimônios.
+- [x] Publicar a correção definitiva do mapa de Patrimônios.
