@@ -87,6 +87,8 @@ export function HeritageMap({ places, activePlaceId, onSelect }: HeritageMapProp
         onMapReady={(map) => {
           mapRef.current = map;
           map.setOptions({
+            mapTypeControl: false,
+            streetViewControl: false,
             styles: [
               { elementType: "geometry", stylers: [{ color: "#f1e5ca" }] },
               { elementType: "labels.text.fill", stylers: [{ color: "#564b35" }] },

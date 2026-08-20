@@ -47,6 +47,11 @@
 - [x] Criar galeria de Sabores com imagens e descrições editoriais rastreáveis.
 - [x] Implementar filtro de sabores por região do Piauí.
 - [x] Validar as novas interações em desktop e celular.
-- [ ] Salvar e publicar o checkpoint do mapa histórico e da galeria de sabores.
+- [x] Salvar e publicar o checkpoint do mapa histórico e da galeria de sabores.
 - [x] Substituir visuais territoriais genéricos por imagens de cada preparo ou identificá-los de forma transparente.
 - [x] Adicionar fonte ou critério editorial explícito a todos os cards de Sabores.
+- [x] Corrigir os destaques vazios de Cajuína e Bomba na trilha de Sabores.
+- [x] Substituir imagens genéricas por imagens que correspondam aos preparos exibidos.
+- [x] Corrigir o rótulo indevido exibido sobre o mapa de Patrimônios.
+- [x] Validar as correções visuais de Sabores e Patrimônios em desktop e celular.
+- [ ] Salvar e publicar o checkpoint das correções de imagens e mapa.
