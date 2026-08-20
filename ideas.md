@@ -60,6 +60,18 @@
 
 **Voz:** “Veja o lugar antes de sair.” e “Seu roteiro começa no mapa.”
 
+## Extensão estadual — Atlas de Percursos
+
+**Escopo de experiência:** A página passa de uma descoberta municipal para um atlas do Piauí. A navegação central permanece em **Explorar**, **Mapa** e **Meu roteiro**, mas a primeira decisão do visitante é agora o **polo turístico** e não apenas a categoria.
+
+**Estrutura territorial:** Os filtros combinam os polos utilizados pelo Observatório de Inteligência Turística do Piauí — Teresina, Aventura e Mistério, Costa do Delta, Águas, Nascentes, Origens e Histórico Cultural — com temas de descoberta: natureza, patrimônio, litoral, cultura e cidade.
+
+**Curadoria inicial:** O mapa parte de nove âncoras de descoberta, distribuídas para apresentar litoral, serras, unidades de conservação, arqueologia, patrimônio histórico e capital: Delta do Parnaíba, Barra Grande, Parque Nacional de Sete Cidades, Serra dos Matões, Cachoeira do Urubu, Parque Nacional da Serra das Confusões, Parque Nacional Serra da Capivara, Oeiras e Teresina.
+
+**Visualização de dados:** Dados oficiais aparecem em uma pausa editorial entre exploração e mapa. Os gráficos priorizam contexto prático — infraestrutura turística do Cadastur (2025), visitação na Serra da Capivara (2024) e escala territorial/ambiental — e sempre carregam fonte e ano visíveis.
+
+**Essência de marca revisada:** Um atlas prático para encontrar diferentes Piauís, conectar cada escolha ao território e começar uma rota com contexto. Personalidade: territorial, informada e acolhedora.
+
 ## Decisões de estilo
 
 - Experiência concebida primeiro para celular e ampliada para desktop.
@@ -68,3 +80,8 @@
 - Barro queimado #B9572D é a única cor de ação, seleção e progresso; amarelo é apenas luz pontual, verde organiza fundos e azul fica restrito a água e mapa.
 - Toda parada precisa estar ligada a um marcador, caminho ou recorte de mapa; os cartões não podem formar uma grade autônoma.
 - A marca usa o símbolo sol-rio junto de wordmark editorial em minúsculas, nunca como um texto operacional comum.
+- A expansão estadual deve priorizar polos e destinos com referência pública; ausência de série comparável impede qualquer alegação de ranking de visitação.
+- Gráficos devem exibir fonte e ano no próprio bloco visual, sem transformar a página em dashboard administrativo.
+- A descoberta estadual deve ser lida como uma sucessão de polos conectados: nenhuma área de cartões pode funcionar como uma grade sem trilha territorial.
+- O sistema visual de assinatura combina caminho em barro, marcador numerado, superfície de areia e traço de rio azul; ao menos um desses elementos deve estruturar cada seção principal.
+- Os dados entram como contexto editorial de viagem, sem rankings ou estética de painel administrativo.

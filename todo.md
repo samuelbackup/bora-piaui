@@ -16,3 +16,9 @@
 - [x] Sincronizar filtros de categoria entre lista, marcadores e resumo do mapa.
 - [x] Validar estados de filtro, resultados vazios e visualização móvel.
 - [ ] Salvar um checkpoint com os filtros de mapa ativos.
+- [x] Consolidar fontes oficiais e dados verificáveis sobre turismo e território do Piauí.
+- [x] Definir regiões prioritárias, destinos e categorias da experiência estadual.
+- [x] Ampliar mapa, descoberta e roteiro para a escala do estado.
+- [x] Inserir gráficos com fontes e datas explícitas.
+- [x] Validar a versão estadual em desktop e celular.
+- [ ] Salvar e publicar o checkpoint do protótipo estadual.
