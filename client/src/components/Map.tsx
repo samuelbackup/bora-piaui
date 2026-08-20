@@ -145,7 +145,9 @@ export function MapView({
     map.current = new window.google.maps.Map(mapContainer.current, {
       zoom: initialZoom,
       center: initialCenter,
-      mapTypeControl: true,
+      // O seletor padrão inclui a opção “Terreno” e pode permanecer visível
+      // quando opções específicas da página são aplicadas após a inicialização.
+      mapTypeControl: false,
       fullscreenControl: true,
       zoomControl: true,
       streetViewControl: true,

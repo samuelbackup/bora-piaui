@@ -54,4 +54,7 @@
 - [x] Substituir imagens genéricas por imagens que correspondam aos preparos exibidos.
 - [x] Corrigir o rótulo indevido exibido sobre o mapa de Patrimônios.
 - [x] Validar as correções visuais de Sabores e Patrimônios em desktop e celular.
-- [ ] Salvar e publicar o checkpoint das correções de imagens e mapa.
+- [x] Salvar e publicar o checkpoint das correções de imagens e mapa.
+- [x] Localizar a origem do controle residual “Terreno” no mapa de Patrimônios.
+- [x] Confirmar no navegador que o controle residual “Terreno” não aparece mais após a alteração.
+- [ ] Publicar a correção definitiva do mapa de Patrimônios.
