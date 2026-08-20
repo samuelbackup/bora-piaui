@@ -85,3 +85,6 @@ O símbolo combina as iniciais **BP** dentro de um círculo de coordenadas, com 
 - Ocre é reservado para decisões, prioridades e movimento; petróleo identifica rotas, links e estados ativos.
 - Painéis seguem linguagem de instrumento de campo: folhas planas, tabelas pautadas, carimbos e checklists, sem profundidade genérica de SaaS.
 - Linhas de rota, microcoordenadas e divisores cartográficos organizam a progressão das seções, não apenas decoram o conteúdo.
+- Cada seção é conectada à seguinte por uma trilha ou marcador de rota visível; a progressão deve parecer mapeada, não apenas empilhada.
+- O selo circular BP reaparece nos momentos de orientação, abertura de teste e decisões de avanço para funcionar como assinatura de navegação.
+- A capa usa enquadramento de mapa, legenda de campo e metadados de referência para comunicar “guia interno” antes de “página de apresentação”.
