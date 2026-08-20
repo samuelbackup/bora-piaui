@@ -11,4 +11,8 @@
 - [x] Preparar marcadores e foco de mapa para os lugares de Teresina.
 - [x] Integrar o mapa interativo à descoberta e aos detalhes de cada lugar.
 - [x] Validar o mapa, a navegação e a responsividade após o redesign.
-- [ ] Salvar o novo checkpoint do protótipo com mapa integrado.
+- [x] Salvar o novo checkpoint do protótipo com mapa integrado.
+- [x] Definir a categoria de cada ponto e incluir gastronomia no cenário de Teresina.
+- [x] Sincronizar filtros de categoria entre lista, marcadores e resumo do mapa.
+- [x] Validar estados de filtro, resultados vazios e visualização móvel.
+- [ ] Salvar um checkpoint com os filtros de mapa ativos.

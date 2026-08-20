@@ -81,11 +81,19 @@
   .route-stop { position: relative; padding-left: 2.1rem; }
   .route-stop::before { content: ""; position: absolute; left: 1.19rem; top: 0.28rem; width: 0.7rem; height: 0.7rem; border-radius: 9999px; background: #D9A640; box-shadow: 0 0 0 3px #3C482D; }
   .route-card { position: relative; }
+  .discovery-route { position: relative; isolation: isolate; }
+  .discovery-route::before { content: ""; position: absolute; z-index: -1; top: 8.2rem; left: 5%; right: 5%; height: 11rem; border-top: 2px dashed rgba(185,87,45,.68); border-radius: 50%; transform: rotate(-2deg); pointer-events: none; }
+  .place-card::before { content: ""; position: absolute; top: 0.95rem; right: 1rem; z-index: 12; width: 1.7rem; height: 1.7rem; border-radius: 9999px; border: 2px solid rgba(185,87,45,.55); box-shadow: 0 0 0 4px rgba(245,236,216,.95); pointer-events: none; }
+  .place-card::after { content: ""; position: absolute; right: 1.72rem; top: 2.6rem; bottom: 1.25rem; border-right: 1px dashed rgba(185,87,45,.28); pointer-events: none; }
   .map-tile { position: relative; display: grid; height: 100%; place-items: center; overflow: hidden; background: linear-gradient(145deg, #edf0d8 0%, #d5dba7 100%); }
   .map-tile::before { content: ""; position: absolute; inset: -20%; background: repeating-radial-gradient(ellipse at 28% 70%, transparent 0 13px, rgba(86,107,55,.28) 14px 15px, transparent 16px 27px); transform: rotate(-18deg); }
   .map-tile::after { content: ""; position: absolute; width: 160%; height: 14px; border-radius: 50%; border-top: 3px solid rgba(46,108,118,.6); transform: rotate(-18deg) translateY(18px); }
   .map-tile span { position: relative; z-index: 1; border-radius: 9999px; background: #fffdf6; padding: .35rem .6rem; color: #566b37; font-size: .58rem; font-weight: 800; letter-spacing: .11em; }
-  @media (min-width: 1280px) { .route-card:not(:last-child)::after { content: ""; position: absolute; top: 4rem; right: -1.36rem; z-index: 10; width: 1.7rem; border-top: 2px dashed #B9572D; } }
+  @media (min-width: 1280px) {
+    .discovery-route::before { top: 12rem; left: 3%; right: 3%; height: 20rem; border-width: 3px; }
+    .route-card:not(:last-child) .route-connector { position: absolute; top: 4rem; right: -1.36rem; z-index: 10; width: 1.7rem; border-top: 2px dashed #B9572D; }
+    .place-card:first-child::before { width: 2.15rem; height: 2.15rem; right: 1.35rem; top: 1.25rem; border-width: 3px; }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

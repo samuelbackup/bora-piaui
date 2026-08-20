@@ -27,7 +27,7 @@ const sourceVisitBrasil = "https://visitbrasil.com/en/location/teresina/";
 type Place = {
   id: string;
   title: string;
-  category: "Natureza" | "Cultura" | "Vista";
+  category: "Natureza" | "Cultura" | "Gastronomia" | "Vista";
   district: string;
   text: string;
   detail: string;
@@ -92,9 +92,22 @@ const places: Place[] = [
     image: potteryImage,
     accent: "#A86D32",
   },
+  {
+    id: "mercado",
+    title: "Mercado Central",
+    category: "Gastronomia",
+    district: "Centro",
+    text: "Sabores, ingredientes e movimento no centro.",
+    detail:
+      "Uma parada gastronômica para observar o ritmo do comércio local e procurar ingredientes, petiscos e preparos que fazem parte da cidade.",
+    route:
+      "https://www.google.com/maps/dir/?api=1&destination=Mercado%20Central%20de%20Teresina%2C%20Teresina%2C%20PI",
+    mapQuery: "Mercado Central de Teresina",
+    accent: "#D9A640",
+  },
 ];
 
-const categories = ["Todos", "Natureza", "Cultura", "Vista"] as const;
+const categories = ["Todos", "Natureza", "Cultura", "Gastronomia", "Vista"] as const;
 
 export default function Home() {
   const [category, setCategory] = useState<(typeof categories)[number]>("Todos");
@@ -114,6 +127,9 @@ export default function Home() {
       ),
     [category, query],
   );
+  const activeMapId = visiblePlaces.some((place) => place.id === mapFocus)
+    ? mapFocus
+    : visiblePlaces[0]?.id ?? null;
   const plan = itinerary
     .map((id) => places.find((place) => place.id === id))
     .filter((place): place is Place => Boolean(place));
@@ -142,6 +158,13 @@ export default function Home() {
   function showPlaceOnMap(place: Place) {
     setMapFocus(place.id);
     goTo("mapa");
+  }
+
+  function applyCategory(nextCategory: (typeof categories)[number]) {
+    setCategory(nextCategory);
+    setQuery("");
+    const firstMatch = nextCategory === "Todos" ? places[0] : places.find((place) => place.category === nextCategory);
+    if (firstMatch) setMapFocus(firstMatch.id);
   }
 
   function handleMapSelect(placeId: string) {
@@ -230,7 +253,7 @@ export default function Home() {
                 <span className="stop-chip">Parada 01 · escolha</span>
                 <h2 className="display-font mt-4 max-w-2xl text-4xl leading-none tracking-[-0.05em] sm:text-5xl">Escolha um lugar. Veja onde ele está.</h2>
               </div>
-              <button onClick={() => goTo("mapa")} className="tap inline-flex items-center gap-2 self-start rounded-full bg-[#3C482D] px-4 py-3 text-sm font-extrabold text-white hover:bg-[#556B37]">
+              <button onClick={() => goTo("mapa")} className="tap inline-flex items-center gap-2 self-start rounded-full bg-[#B9572D] px-4 py-3 text-sm font-extrabold text-white hover:bg-[#cd6d45]">
                 <MapPinned className="h-4 w-4" /> Abrir mapa
               </button>
             </div>
@@ -238,7 +261,7 @@ export default function Home() {
             <div className="mt-9 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div className="flex flex-wrap gap-2">
                 {categories.map((item) => (
-                  <button key={item} onClick={() => setCategory(item)} className={`tap rounded-full px-4 py-2.5 text-sm font-extrabold ${category === item ? "bg-[#B9572D] text-white" : "bg-[#E9DCC0] text-[#465039] hover:bg-[#DECDA9]"}`}>
+                  <button key={item} onClick={() => applyCategory(item)} className={`tap rounded-full px-4 py-2.5 text-sm font-extrabold ${category === item ? "bg-[#B9572D] text-white" : "bg-[#E9DCC0] text-[#465039] hover:bg-[#DECDA9]"}`}>
                     {item}
                   </button>
                 ))}
@@ -249,27 +272,28 @@ export default function Home() {
               </label>
             </div>
 
-            <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            <div className="discovery-route mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
               {visiblePlaces.map((place, index) => (
-                <article key={place.id} className="route-card place-card flex min-h-[315px] flex-col overflow-hidden rounded-[1.75rem] border border-[#3C482D]/12 bg-[#FFFDF6] shadow-[0_12px_32px_rgba(59,70,42,.06)]">
-                  <div className="relative h-32 overflow-hidden" style={{ backgroundColor: `${place.accent}18` }}>
+                <article key={place.id} className={`route-card place-card flex min-h-[315px] flex-col overflow-hidden rounded-[1.75rem] border border-[#3C482D]/12 bg-[#FFFDF6] shadow-[0_12px_32px_rgba(59,70,42,.06)] ${index === 0 ? "md:col-span-2 xl:row-span-2 xl:min-h-[640px]" : index === 3 ? "xl:col-span-2" : ""}`}>
+                  <div className={`relative overflow-hidden ${index === 0 ? "h-44 xl:h-72" : "h-32"}`} style={{ backgroundColor: `${place.accent}18` }}>
                     {place.image ? (
                       <img src={place.image} alt={`Representação de ${place.title}`} className="place-image h-full w-full object-cover" />
                     ) : (
                       <div className="map-tile"><span>RIO POTI · PARADA {index + 1}</span></div>
                     )}
-                    <span className="absolute left-4 top-4 grid h-8 w-8 place-items-center rounded-full bg-[#FFFDF6] text-xs font-extrabold text-[#2E3222] shadow-sm">0{index + 1}</span>
+                    <span className="absolute left-4 top-4 grid h-8 w-8 place-items-center rounded-full bg-[#B9572D] text-xs font-extrabold text-white shadow-sm">0{index + 1}</span>
                   </div>
                   <div className="flex flex-1 flex-col p-5">
-                    <p className="text-[10px] font-extrabold uppercase tracking-[0.14em]" style={{ color: place.accent }}>Marcador {String(index + 1).padStart(2, "0")} · {place.category} · {place.district}</p>
+                    <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#B9572D]">Marcador {String(index + 1).padStart(2, "0")} · {place.category} · {place.district}</p>
                     <h3 className="display-font mt-2 text-3xl leading-[0.95] tracking-[-0.045em]">{place.title}</h3>
                     <p className="mt-3 text-sm leading-6 text-[#66705E]">{place.text}</p>
                     <div className="mt-auto flex flex-wrap gap-2 pt-5">
-                      <button onClick={() => showPlaceOnMap(place)} className="tap inline-flex items-center gap-1.5 rounded-full bg-[#E9DCC0] px-3 py-2 text-xs font-extrabold text-[#3C482D]">
+                      <button onClick={() => showPlaceOnMap(place)} className="tap inline-flex items-center gap-1.5 rounded-full bg-[#B9572D] px-3 py-2 text-xs font-extrabold text-white hover:bg-[#cd6d45]">
                         <MapPinned className="h-3.5 w-3.5" /> Ver no mapa
                       </button>
                       <button onClick={() => setSelected(place)} className="tap rounded-full border border-[#3C482D]/15 px-3 py-2 text-xs font-extrabold">Detalhes</button>
                     </div>
+                    <span className="route-connector" aria-hidden="true" />
                   </div>
                 </article>
               ))}
@@ -290,9 +314,19 @@ export default function Home() {
               <div>
                 <span className="stop-chip !bg-[#566B37] !text-white before:!bg-[#D9A640]">Parada 02 · localize</span>
                 <h2 className="display-font mt-4 text-5xl leading-[0.92] tracking-[-0.055em] text-[#303722]">Seu roteiro começa no mapa.</h2>
-                <p className="mt-5 max-w-md text-base leading-7 text-[#586049]">Os marcadores representam as quatro paradas do protótipo. Toque ou clique neles para abrir detalhes e decidir a próxima rota.</p>
-                <div className="mt-7 flex flex-wrap gap-2">
-                  {places.map((place, index) => (
+                <p className="mt-5 max-w-md text-base leading-7 text-[#586049]">A rota acompanha as escolhas: filtre, veja os marcadores mudarem e aproxime-se de uma parada antes de abrir os detalhes.</p>
+                <div className="mt-7">
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#566B37]">Filtrar pontos no mapa</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {categories.map((item) => (
+                      <button key={item} onClick={() => applyCategory(item)} className={`tap rounded-full px-3 py-2 text-xs font-extrabold ${category === item ? "bg-[#B9572D] text-white" : "border border-[#3C482D]/12 bg-[#FFFDF6] text-[#3C482D]"}`}>
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {visiblePlaces.map((place, index) => (
                     <button key={place.id} onClick={() => { setMapFocus(place.id); }} className={`tap inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-extrabold ${mapFocus === place.id ? "border-[#B9572D] bg-[#B9572D] text-white" : "border-[#3C482D]/15 bg-[#FFFDF6] text-[#3C482D]"}`}>
                       <span className="grid h-4 w-4 place-items-center rounded-full bg-current/15 text-[9px]">{index + 1}</span>
                       {place.title}
@@ -300,7 +334,7 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-              <TeresinaMap places={places} activePlaceId={mapFocus} onSelect={handleMapSelect} />
+              <TeresinaMap places={visiblePlaces} activePlaceId={activeMapId} onSelect={handleMapSelect} />
             </div>
           </div>
         </section>
