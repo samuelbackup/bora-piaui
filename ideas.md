@@ -38,8 +38,33 @@
 
 **Wordmark e logo:** Símbolo sem texto de um sol coral tocando duas curvas de rio azul, acompanhado por wordmark desenhado em minúsculas com contraste editorial.
 
+## Direção revisada — Cerrado e Rios
+
+**Movimento de design:** Um guia territorial contemporâneo, inspirado nos rios, na vegetação de buriti, na luz seca e na cerâmica do Piauí.
+
+**Princípios:** A exploração começa pelo território; o mapa participa da decisão; a informação prática é concisa; e cada ponto conduz naturalmente para uma rota.
+
+**Filosofia de cor:** Barro queimado marca ações, verde de buriti organiza a navegação, amarelo de luz seca concentra destaque e azul de rio é reservado à água e ao mapa. A cor de assinatura passa a ser **barro queimado #B9572D**.
+
+**Paradigma de layout:** O mapa torna-se uma camada estrutural entre descoberta e escolha. Os cartões não funcionam como um catálogo isolado: cada um aponta para uma posição real no território.
+
+**Elementos de assinatura:** Marcadores numerados, superfícies de areia clara, blocos de verde profundo e caminhos em barro queimado.
+
+**Interação:** O visitante pode escolher um lugar no cartão ou no marcador, abrir detalhes, adicioná-lo ao roteiro e iniciar a rota externa.
+
+**Animação:** Movimento curto e funcional; o mapa centraliza o ponto selecionado e o marcador responde visualmente sem atrasar a interação.
+
+**Tipografia:** Fraunces continua nos títulos de lugar e Manrope nos controles operacionais, preservando contraste editorial e leitura rápida.
+
+**Essência de marca:** Uma forma prática de descobrir Teresina por seus rios, paisagens e ofícios. Personalidade: territorial, acolhedora e direta.
+
+**Voz:** “Veja o lugar antes de sair.” e “Seu roteiro começa no mapa.”
+
 ## Decisões de estilo
 
 - Experiência concebida primeiro para celular e ampliada para desktop.
 - Componentes devem parecer sinalização e roteiro, nunca blocos de dashboard.
 - Não usar avaliações, notas ou depoimentos fictícios.
+- Barro queimado #B9572D é a única cor de ação, seleção e progresso; amarelo é apenas luz pontual, verde organiza fundos e azul fica restrito a água e mapa.
+- Toda parada precisa estar ligada a um marcador, caminho ou recorte de mapa; os cartões não podem formar uma grade autônoma.
+- A marca usa o símbolo sol-rio junto de wordmark editorial em minúsculas, nunca como um texto operacional comum.
