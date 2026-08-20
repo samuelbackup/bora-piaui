@@ -75,4 +75,4 @@
 - [x] Adicionar exportação CSV demonstrativa ao Painel Editorial.
 - [x] Testar a serialização CSV, o estado vazio e a proteção de dados pessoais.
 - [x] Validar o download no navegador e o estado vazio após a limpeza.
-- [ ] Publicar a exportação CSV demonstrativa no Painel Editorial.
+- [x] Publicar a exportação CSV demonstrativa no Painel Editorial.
