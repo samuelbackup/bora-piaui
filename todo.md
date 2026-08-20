@@ -30,8 +30,15 @@
 - [x] Validar fluxos público e administrativo e publicar a nova versão.
 - [x] Completar galerias para os destinos publicados com imagens e créditos rastreáveis.
 - [x] Executar validação autenticada de criação, edição, publicação e upload no painel. (Dispensada: painel convertido em demonstração sem login.)
-- [ ] Salvar e publicar a versão com páginas individuais e administração.
+- [x] Salvar e publicar a versão com páginas individuais e administração.
 - [x] Converter o painel administrativo em demonstração aberta sem login.
 - [x] Substituir as gravações administrativas por alterações locais ilustrativas.
 - [x] Validar e publicar o protótipo demonstrativo final.
-- [ ] Salvar e publicar o checkpoint da versão demonstrativa sem login.
+- [x] Salvar e publicar o checkpoint da versão demonstrativa sem login.
+- [x] Analisar a referência de patrimônio e consolidar fontes culturais oficiais do Piauí.
+- [x] Criar a categoria editorial de patrimônios materiais e imateriais.
+- [x] Criar a categoria editorial de sabores com narrativas de preparos piauienses.
+- [x] Criar uma categoria dedicada a dados e indicadores verificáveis.
+- [ ] Publicar a expansão de conteúdo cultural e gastronômico após validação local concluída.
+- [ ] Salvar e publicar o checkpoint da expansão editorial de patrimônios, sabores e dados.
+- [ ] Validar no domínio publicado a navegação completa da home para Patrimônios, Sabores e Dados após a publicação.

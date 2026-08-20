@@ -315,7 +315,9 @@ export default function Home() {
           </button>
           <nav className="hidden items-center gap-7 text-sm font-bold md:flex">
             <button onClick={() => goTo("explorar")} className="tap hover:text-[#B9572D]">Explorar</button>
-            <button onClick={() => goTo("dados")} className="tap hover:text-[#B9572D]">Dados</button>
+            <Link href="/patrimonios" className="tap hover:text-[#B9572D]">Patrimônios</Link>
+            <Link href="/sabores" className="tap hover:text-[#B9572D]">Sabores</Link>
+            <Link href="/dados" className="tap hover:text-[#B9572D]">Dados</Link>
             <button onClick={() => goTo("mapa")} className="tap hover:text-[#B9572D]">Mapa</button>
             <button onClick={() => goTo("como-funciona")} className="tap hover:text-[#B9572D]">Como funciona</button>
             <Link href="/admin/destinos" className="tap text-[#566B37] hover:text-[#B9572D]">Painel demo</Link>
@@ -325,7 +327,7 @@ export default function Home() {
             <button onClick={() => setMenuOpen((value) => !value)} className="tap grid h-10 w-10 place-items-center rounded-full border border-[#3C482D]/15 md:hidden" aria-label="Abrir menu">{menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
           </div>
         </div>
-        {menuOpen && <nav className="border-t border-[#3C482D]/10 bg-[#F5ECD8] px-5 py-4 md:hidden"><div className="mx-auto flex max-w-7xl flex-col gap-1"><button onClick={() => goTo("explorar")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Explorar destinos</button><button onClick={() => goTo("dados")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Dados oficiais</button><button onClick={() => goTo("mapa")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Mapa do estado</button><Link href="/admin/destinos" className="rounded-xl px-3 py-3 text-left text-sm font-bold text-[#566B37] hover:bg-[#EDE0C4]">Painel demonstrativo</Link><button onClick={() => setPlannerOpen(true)} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Meu roteiro</button></div></nav>}
+        {menuOpen && <nav className="border-t border-[#3C482D]/10 bg-[#F5ECD8] px-5 py-4 md:hidden"><div className="mx-auto flex max-w-7xl flex-col gap-1"><button onClick={() => goTo("explorar")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Explorar destinos</button><Link href="/patrimonios" className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Patrimônios</Link><Link href="/sabores" className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Sabores</Link><Link href="/dados" className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Dados oficiais</Link><button onClick={() => goTo("mapa")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Mapa do estado</button><Link href="/admin/destinos" className="rounded-xl px-3 py-3 text-left text-sm font-bold text-[#566B37] hover:bg-[#EDE0C4]">Painel demonstrativo</Link><button onClick={() => setPlannerOpen(true)} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Meu roteiro</button></div></nav>}
       </header>
 
       <main id="inicio">
