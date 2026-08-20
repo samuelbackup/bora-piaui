@@ -39,6 +39,14 @@
 - [x] Criar a categoria editorial de patrimônios materiais e imateriais.
 - [x] Criar a categoria editorial de sabores com narrativas de preparos piauienses.
 - [x] Criar uma categoria dedicada a dados e indicadores verificáveis.
-- [ ] Publicar a expansão de conteúdo cultural e gastronômico após validação local concluída.
-- [ ] Salvar e publicar o checkpoint da expansão editorial de patrimônios, sabores e dados.
-- [ ] Validar no domínio publicado a navegação completa da home para Patrimônios, Sabores e Dados após a publicação.
+- [x] Publicar a expansão de conteúdo cultural e gastronômico após validação local concluída.
+- [x] Salvar e publicar o checkpoint da expansão editorial de patrimônios, sabores e dados.
+- [x] Validar no domínio publicado a navegação completa da home para Patrimônios, Sabores e Dados após a publicação.
+- [x] Definir coordenadas e referências para os patrimônios exibidos no mapa.
+- [x] Adicionar mapa interativo à página de Patrimônios.
+- [x] Criar galeria de Sabores com imagens e descrições editoriais rastreáveis.
+- [x] Implementar filtro de sabores por região do Piauí.
+- [x] Validar as novas interações em desktop e celular.
+- [ ] Salvar e publicar o checkpoint do mapa histórico e da galeria de sabores.
+- [x] Substituir visuais territoriais genéricos por imagens de cada preparo ou identificá-los de forma transparente.
+- [x] Adicionar fonte ou critério editorial explícito a todos os cards de Sabores.

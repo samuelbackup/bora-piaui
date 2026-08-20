@@ -17,3 +17,10 @@
 - **Sabores:** tratar receitas e bebidas como técnicas, memórias e sociabilidades. A cajuína terá enquadramento de patrimônio imaterial; a Bomba será identificada como memória urbana de Teresina em relato jornalístico.
 - **Dados:** manter uma página independente de indicadores, sem transformar dados em ranking de visitação. Cada métrica exibirá fonte, ano e escopo.
 - **Futuro:** história do estado e folclores ficam explicitamente fora desta entrega, preservando espaço para uma próxima trilha editorial.
+
+## Complemento: mapa e galeria de sabores
+
+- Os quatro marcadores do mapa usam pontos de visitação ou referências geocodificáveis: Matriz de Nossa Senhora da Vitória (Oeiras), Porto das Barcas (Parnaíba), Parque Nacional Serra da Capivara (São Raimundo Nonato) e Parque Nacional de Sete Cidades (Piracuruca). Eles não delimitam a área dos conjuntos tombados ou das unidades de conservação.
+- A cajuína mantém a referência do Iphan; a Bomba mantém o relato jornalístico indicado na tabela acima.
+- Maria Isabel e paçoca de carne de sol entram como fichas de **leitura editorial em pesquisa**. O protótipo não lhes atribui origem exclusiva, registro patrimonial ou fonte institucional ainda não confirmada.
+- Os filtros “Teresina”, “Centro-Norte” e “Interior e sertões” são recortes editoriais para navegação, e não afirmações de origem exclusiva de um preparo.
