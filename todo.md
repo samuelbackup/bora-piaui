@@ -79,4 +79,6 @@
 - [x] Revisar o bloco atual de polos, categorias e busca da descoberta.
 - [x] Aplicar a Opção 1 com faixa principal de filtros, resumo editorial e polos discretos.
 - [x] Validar filtros e layout da descoberta em desktop e celular.
-- [ ] Publicar o ajuste da interface de descoberta.
+- [x] Publicar o ajuste da interface de descoberta.
+- [ ] Publicar a reorganização da descoberta no domínio do Bora Piauí.
+- [ ] Confirmar no domínio publicado a faixa de filtros, o resumo editorial e os polos discretos.

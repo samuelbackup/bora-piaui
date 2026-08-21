@@ -15,5 +15,6 @@
 | Filtro regional | Teste automatizado confirmou um resultado para Teresina, dois para Interior e sertões e quatro itens para Todos. |
 | Visual móvel | As trilhas de Patrimônios e Sabores foram revisadas em 375 × 812 px, com navegação horizontal íntegra, tipografia legível e início das seções sem sobreposição. |
 | Transparência visual | Os cards cuja imagem mostra território, e não o preparo, passaram a informar explicitamente essa condição sobre o próprio visual. |
+| Descoberta — Opção 1 | A prévia local exibiu filtros principais em uma única faixa, resumo editorial e polos discretos; a consulta inicial ao domínio publicado ainda retornou a interface anterior e requer nova confirmação após propagação. |
 
 **Nota:** Rotas externas, regras de visitação, operação de atrativos e condições climáticas devem ser confirmadas pelo visitante nos canais responsáveis antes da viagem.
