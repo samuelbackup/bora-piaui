@@ -1,14 +1,13 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const projectRoot = process.cwd();
 const outputPath = "/tmp/bora-piaui-vercel-deploy-input.json";
-const staticFiles = [
-  "dist/public/index.html",
-  "dist/public/assets/index-DQDVDVZE.css",
-  "dist/public/assets/index-7scKd0ch.js",
-  "vercel.json",
-];
+const assetsDirectory = path.join(projectRoot, "dist/public/assets");
+const assetFiles = (await readdir(assetsDirectory))
+  .sort()
+  .map((asset) => path.join("dist/public/assets", asset));
+const staticFiles = ["dist/public/index.html", ...assetFiles, "vercel.json"];
 
 const files = await Promise.all(
   staticFiles.map(async (file) => ({
