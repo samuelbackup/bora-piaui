@@ -116,3 +116,6 @@
 - [x] Adicionar botão “Ver detalhes” ao painel do destino ativo no mapa.
 - [x] Validar a navegação do botão para o destino selecionado em desktop e celular.
 - [x] Publicar a ação de detalhes do destino ativo.
+- [x] Mapear as rotas e os fluxos atuais que permanecem sob responsabilidade do front-end.
+- [x] Documentar as fronteiras entre componentes de apresentação e contratos de dados.
+- [x] Preparar o contrato de integração front-end–back-end sem alterar a camada de servidor.
