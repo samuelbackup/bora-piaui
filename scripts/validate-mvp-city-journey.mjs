@@ -60,6 +60,19 @@ async function runContact(browser) {
   await page.close();
 }
 
+async function runCuratedServiceDirectory(browser) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+  await selectCityFromHome(page, 2, "sao-raimundo-nonato", "São Raimundo Nonato");
+
+  await page.getByRole("heading", { name: "Serviços curados", exact: true }).scrollIntoViewIfNeeded();
+  await page.getByRole("heading", { name: "Canais de atendimento do ICMBio", exact: true }).waitFor({ state: "visible" });
+  const serviceContact = page.getByRole("link", { name: "Contato com Canais de atendimento do ICMBio", exact: true });
+  const serviceSource = page.getByRole("link", { name: "Ver fonte sobre Canais de atendimento do ICMBio", exact: true });
+  assert(await serviceContact.getAttribute("href") === "https://www.gov.br/icmbio/pt-br/canais_atendimento", "O diretório de serviços não manteve o contato institucional publicado.");
+  assert(await serviceSource.getAttribute("href") === "https://www.gov.br/icmbio/pt-br/canais_atendimento", "O diretório de serviços não manteve a fonte publicada.");
+  await page.close();
+}
+
 async function runProximity(browser) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   await selectCityFromHome(page, 0, "teresina", "Teresina");
@@ -109,10 +122,11 @@ try {
   await runLoadingState(browser);
   await runDesktop(browser);
   await runContact(browser);
+  await runCuratedServiceDirectory(browser);
   await runProximity(browser);
   await runSerraProximity(browser);
   await runMobile(browser);
-  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", contact: "ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Cajueiro da Praia" }, null, 2));
+  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", contact: "ICMBio", curatedService: "Canais de atendimento do ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Cajueiro da Praia" }, null, 2));
 } finally {
   await browser.close();
 }

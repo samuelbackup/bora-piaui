@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getPilotCategories, getPilotCity, getPilotCurationTopics, getPilotItems, getPilotNearbyItems, loadPilotCatalog } from "./mvpPilot";
+import { getPilotCategories, getPilotCity, getPilotCurationTopics, getPilotCuratedBusinesses, getPilotItems, getPilotNearbyItems, loadPilotCatalog } from "./mvpPilot";
 
 describe("catálogo do MVP de front-end", () => {
   it("mantém três cidades-piloto com identificadores estáveis", () => {
@@ -39,5 +39,15 @@ describe("catálogo do MVP de front-end", () => {
   it("mantém gastronomia e serviços como curadoria transparente sem inventar negócios", () => {
     expect(getPilotCurationTopics("cajueiro-da-praia")).toHaveLength(2);
     expect(getPilotItems("cajueiro-da-praia", "business")).toEqual([]);
+  });
+
+  it("expõe somente serviços curados com contato e fonte publicados", () => {
+    expect(getPilotCuratedBusinesses("sao-raimundo-nonato", "restaurant")).toEqual([]);
+    const services = getPilotCuratedBusinesses("sao-raimundo-nonato", "service");
+
+    expect(services).toHaveLength(1);
+    expect(services[0]?.title).toBe("Canais de atendimento do ICMBio");
+    expect(services[0]?.contactUrl).toBe("https://www.gov.br/icmbio/pt-br/canais_atendimento");
+    expect(services[0]?.source.url).toContain("gov.br/icmbio");
   });
 });

@@ -36,6 +36,21 @@ export type PilotItem = {
   status: PilotItemStatus;
 };
 
+export type CuratedBusinessKind = "restaurant" | "service";
+
+export type CuratedBusiness = {
+  id: string;
+  citySlug: string;
+  kind: CuratedBusinessKind;
+  title: string;
+  category: string;
+  summary: string;
+  routeUrl?: string;
+  contactUrl?: string;
+  source: SourceReference;
+  status: PilotItemStatus;
+};
+
 export type PilotItinerary = {
   slug: string;
   citySlug: string;
@@ -68,6 +83,7 @@ export type PilotCurationTopic = {
 export type PilotCatalog = {
   cities: PilotCity[];
   items: PilotItem[];
+  curatedBusinesses: CuratedBusiness[];
   itineraries: PilotItinerary[];
   proximityRelations: PilotProximityRelation[];
   curationTopics: PilotCurationTopic[];
@@ -106,6 +122,12 @@ const cajueiroMunicipalSource: SourceReference = {
 const fumdhamMuseumSource: SourceReference = {
   name: "FUMDHAM · Museu do Homem Americano",
   url: "https://fumdham.org.br/cpt_home/museu-do-homem-americano/",
+  verifiedAt: "Consulta editorial 2026",
+};
+
+const icmbioContactSource: SourceReference = {
+  name: "ICMBio · Canais de Atendimento",
+  url: "https://www.gov.br/icmbio/pt-br/canais_atendimento",
   verifiedAt: "Consulta editorial 2026",
 };
 
@@ -319,6 +341,20 @@ export const pilotCurationTopics: PilotCurationTopic[] = [
   },
 ];
 
+export const curatedBusinesses: CuratedBusiness[] = [
+  {
+    id: "icmbio-atendimento-serra",
+    citySlug: "sao-raimundo-nonato",
+    kind: "service",
+    title: "Canais de atendimento do ICMBio",
+    category: "Apoio institucional",
+    summary: "Canal institucional para orientar o visitante antes de organizar a visita à Serra da Capivara.",
+    contactUrl: icmbioContactSource.url,
+    source: icmbioContactSource,
+    status: "published",
+  },
+];
+
 export const pilotItineraries: PilotItinerary[] = [
   {
     slug: "teresina-ponto-de-partida",
@@ -355,6 +391,7 @@ export const pilotItineraries: PilotItinerary[] = [
 export const pilotCatalog: PilotCatalog = {
   cities: pilotCities,
   items: pilotItems,
+  curatedBusinesses,
   itineraries: pilotItineraries,
   proximityRelations: pilotProximityRelations,
   curationTopics: pilotCurationTopics,
@@ -393,6 +430,10 @@ export function getPilotNearbyItems(anchorItemId: string, catalog: PilotCatalog 
 
 export function getPilotCurationTopics(citySlug: string, catalog: PilotCatalog = pilotCatalog) {
   return catalog.curationTopics.filter((topic) => topic.citySlug === citySlug);
+}
+
+export function getPilotCuratedBusinesses(citySlug: string, kind: CuratedBusinessKind, catalog: PilotCatalog = pilotCatalog) {
+  return catalog.curatedBusinesses.filter((entry) => entry.citySlug === citySlug && entry.kind === kind && entry.status === "published");
 }
 
 export function getPilotCategories(citySlug: string, kind: PilotItemKind | "all" = "all", catalog: PilotCatalog = pilotCatalog) {

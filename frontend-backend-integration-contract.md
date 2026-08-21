@@ -146,6 +146,19 @@ type PilotCurationTopic = {
   state: "curation_pending";
   source?: { name: string; url: string; verifiedAt?: string };
 };
+
+type CuratedBusiness = {
+  id: string;
+  citySlug: string;
+  kind: "restaurant" | "service";
+  title: string;
+  category: string;
+  summary: string;
+  routeUrl?: string;
+  contactUrl?: string;
+  source: { name: string; url: string; verifiedAt?: string };
+  publicationStatus: "published";
+};
 ```
 
 O campo `dayScope: "one-day"` classifica a proposta editorial como roteiro de um dia, sem substituir a confirmação operacional de horários, deslocamentos ou fornecedores. `PilotProximityRelation` representa uma associação editorial rastreável — e não uma estimativa de tempo, distância ou disponibilidade. `PilotCurationTopic` comunica uma necessidade editorial ainda pendente, sem expor negócio, horário, contato ou avaliação fictícios. O contrato deve devolver apenas negócios aprovados para a descoberta pública. Se não houver negócio curado em uma cidade, a resposta válida é uma lista vazia; o cliente apresenta um estado editorial de curadoria, sem criar registros de exemplo.
@@ -207,6 +220,7 @@ A resposta pública de envio deve retornar somente o recibo necessário para a c
 | Cidade-piloto | `getPilotCity({ slug })` e `listPilotItems({ citySlug, kind?, category? })` | Cidade, itens publicados e fontes correspondentes | Enquanto não há API, `loadPilotCatalog` mantém o mesmo modelo de retorno local; sem itens em um filtro, manter a cidade e apresentar estado vazio. |
 | Locais próximos | `listPilotProximityRelations({ anchorItemId })` | Relações publicadas, item relacionado e fonte editorial | Sem relações, manter a cidade e exibir estado de curadoria; sem tempo ou distância, não inferir proximidade operacional. |
 | Curadoria por cidade | `listPilotCurationTopics({ citySlug })` | Tópicos de gastronomia e serviços aguardando confirmação editorial | O cliente informa a pendência sem listar negócios ou dados operacionais não publicados. |
+| Diretórios curados | `listCuratedBusinesses({ citySlug, kind })` | Restaurantes ou serviços publicados com fonte e canais permitidos | Sem registros, renderizar estado de curadoria; `contactUrl` e `routeUrl` são opcionais e só geram ação quando vierem publicados. |
 | Roteiro | `getPilotItinerary({ slug })` | Roteiro publicado, parada ordenada e aviso de confirmação | `NOT_FOUND` exibe retorno para a cidade; se a rota externa não existir, ocultar a ação e explicar a indisponibilidade. |
 | Agenda | `listPublishedEvents({ city?, category?, month? })` | Eventos publicados por período | Sem eventos, preservar filtros e permitir limpá-los. |
 | Proposta | `submitPartnerProposal(input)` | Recibo de recebimento com estado editorial inicial | Erro de validação deve identificar o campo, sem perder os dados não sensíveis do formulário. |
@@ -239,6 +253,7 @@ Cada consumo de dados deverá ter estados previsíveis. Durante o carregamento, 
 | Mapa | Front-end e back-end | Cada destino mapeável tem coordenadas ou consulta geocodificável; marcador, card e ficha mantêm o mesmo `id`. |
 | Proximidade editorial | Front-end e curadoria | Toda relação parte de uma âncora publicada, aponta para item publicado e contém justificativa e fonte; a ausência de relações aciona estado de curadoria. |
 | Gastronomia e serviços | Curadoria e back-end | Negócios, contatos e condições operacionais só são publicados após confirmação editorial e fonte correspondente; antes disso, o cliente mostra apenas a pendência de curadoria. |
+| Diretório curado | Front-end e curadoria | O componente recebe apenas registros publicados; listas vazias são estados editoriais esperados e ações de contato, rota ou fonte só aparecem com URL válida. |
 | Acessibilidade | Front-end | Todos os controles são operáveis por teclado e toque, com foco visível e rótulos disponíveis. |
 | Segurança | Back-end | Ações editoriais dependem de autenticação e autorização; dados pessoais não vazam para rotas públicas. |
 

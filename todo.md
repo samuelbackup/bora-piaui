@@ -155,3 +155,10 @@
 - [x] Registrar com sucesso em `validation-city-proximity.md` a confirmação publicada de Cajueiro da Praia e São Raimundo Nonato, com links e checagens explícitas.
 - [x] Revalidar o conteúdo final de `validation-city-proximity.md` após o patch, garantindo que as três cidades-piloto estejam documentadas no arquivo.
 - [x] Só então remarcar no `todo.md` os itens de confirmação publicada e atualização do registro de validação.
+- [x] Mapear os padrões de cards, fontes, contato e estados de curadoria já presentes na interface.
+- [x] Criar componentes reutilizáveis para listas de restaurantes e serviços curados.
+- [x] Implementar ações de contato, rota e fonte com fallback para dados não publicados.
+- [x] Validar os novos componentes em desktop e celular sem cadastrar negócios não verificados.
+- [x] Publicar os componentes e atualizar o contrato de integração de curadoria.
+- [ ] Salvar um novo checkpoint com `CuratedBusinessDirectory`, validações e contrato de curadoria atualizado.
+- [ ] Confirmar no domínio publicado os diretórios curados em Teresina, Cajueiro da Praia e São Raimundo Nonato após a publicação.
