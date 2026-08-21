@@ -213,3 +213,5 @@
 - [x] Consolidar relatório resumido de entregas, estado atual e pendências do Bora Piauí.
 - [x] Enviar a documentação técnica e o relatório pendentes para a branch staging no GitHub.
 - [x] Converter o blueprint, o documento de integração e o relatório resumido em PDFs verificados.
+- [ ] Promover o modo escuro e a animação inicial da branch staging para a produção Vercel.
+- [ ] Validar no domínio de produção da Vercel o modo escuro e a animação publicados.
