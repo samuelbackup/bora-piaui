@@ -44,6 +44,16 @@ async function selectMapMarker(page, markerLabel, destinationText) {
   await waitForActiveDestination(page, destinationText);
 }
 
+async function openActiveDestinationDetails(page, slug, title) {
+  const detailsLink = page.getByRole("link", { name: new RegExp(`Ver detalhes de ${title}`) });
+  assert(await detailsLink.getAttribute("href") === `/destinos/${slug}`, "O botão de detalhes não aponta para o destino ativo.");
+  await Promise.all([
+    page.waitForURL(new RegExp(`/destinos/${slug}$`), { timeout: 10_000 }),
+    detailsLink.click(),
+  ]);
+  await page.getByRole("heading", { name: title, exact: true }).waitFor({ state: "visible", timeout: 10_000 });
+}
+
 async function runDesktop(browser) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   await page.goto(baseUrl, { waitUntil: "domcontentloaded" });
@@ -70,6 +80,7 @@ async function runDesktop(browser) {
     "O filtro do polo Aventura e Mistério não foi aplicado no desktop.",
   );
   await selectMapMarker(page, "Serra dos Matões", "Serra dos Matões · Pedro II");
+  await openActiveDestinationDetails(page, "serra-dos-matoes", "Serra dos Matões");
   await page.close();
   return { hoverSwitchMs };
 }
@@ -94,6 +105,7 @@ async function runMobile(browser) {
     "O filtro Costa do Delta não foi aplicado no celular.",
   );
   await selectMapMarker(page, "Barra Grande", "Barra Grande · Cajueiro da Praia");
+  await openActiveDestinationDetails(page, "barra-grande", "Barra Grande");
   await page.close();
   return { tapSwitchMs };
 }

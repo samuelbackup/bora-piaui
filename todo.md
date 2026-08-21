@@ -113,3 +113,6 @@
 - [x] Publicar o indicador de destino ativo no mapa.
 - [x] Comprovar por interação direta com um marcador que o indicador textual acompanha a seleção no mapa.
 - [x] Registrar a evidência da sincronia entre marcador e indicador textual no estado de validação.
+- [x] Adicionar botão “Ver detalhes” ao painel do destino ativo no mapa.
+- [x] Validar a navegação do botão para o destino selecionado em desktop e celular.
+- [x] Publicar a ação de detalhes do destino ativo.

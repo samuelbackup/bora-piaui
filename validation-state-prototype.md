@@ -26,5 +26,6 @@
 | Regressão de interface | Após a implementação, `pnpm check`, a suíte Vitest com 22 testes e a compilação de produção foram concluídos sem erros. |
 | Indicador de destino ativo | O mapa agora exibe um painel textual persistente com o rótulo “Destino ativo no mapa” e o nome do destino mais município. O cenário automatizado confirmou que o texto acompanha a prévia em desktop e em 375 × 812 px. |
 | Indicador — marcadores | No cenário automatizado, o clique direto em **Serra dos Matões** no desktop e em **Barra Grande** no viewport móvel atualizou o indicador para o destino e município correspondentes, preservando o recorte ativo do mapa. |
+| Detalhes do destino ativo | O painel do mapa passou a oferecer a ação “Ver detalhes”. A validação automatizada confirmou, em desktop e viewport móvel, que o link acompanha o marcador selecionado e abre a ficha correspondente: Serra dos Matões e Barra Grande, respectivamente. |
 
 **Nota:** Rotas externas, regras de visitação, operação de atrativos e condições climáticas devem ser confirmadas pelo visitante nos canais responsáveis antes da viagem.

@@ -1,7 +1,8 @@
 /* Cerrado e Rios — Atlas estadual: mapa é uma camada de decisão, com marcadores por polo e foco territorial amplo. */
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LoaderCircle, MapPin } from "lucide-react";
+import { ArrowRight, LoaderCircle, MapPin } from "lucide-react";
 import { MapView } from "@/components/Map";
+import { Link } from "wouter";
 
 export type MappedPlace = {
   id: string;
@@ -137,12 +138,13 @@ export function PiauiMap({ places, activePlaceId, onSelect }: PiauiMapProps) {
         {ready ? <MapPin className="h-4 w-4 text-[#B9572D]" /> : <LoaderCircle className="h-4 w-4 animate-spin text-[#B9572D]" />}
         {ready ? `${places.length} ${places.length === 1 ? "destino" : "destinos"} no mapa` : "Atualizando mapa"}
       </div>
-      <div id="mapa-destino-ativo" role="status" aria-live="polite" aria-atomic="true" className="pointer-events-none absolute bottom-4 left-4 right-4 flex max-w-md items-start gap-2 rounded-2xl border border-[#FFFDF6]/15 bg-[#3C482D]/95 px-3 py-2.5 text-[#FFFDF6] shadow-[0_12px_28px_rgba(45,54,34,.28)] backdrop-blur sm:right-auto">
+      <div id="mapa-destino-ativo" role="status" aria-live="polite" aria-atomic="true" className="pointer-events-auto absolute bottom-4 left-4 right-4 flex max-w-md items-center gap-2 rounded-2xl border border-[#FFFDF6]/15 bg-[#3C482D]/95 px-3 py-2.5 text-[#FFFDF6] shadow-[0_12px_28px_rgba(45,54,34,.28)] backdrop-blur sm:right-auto">
         <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#D9A640]" aria-hidden="true" />
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#D9A640]">Destino ativo no mapa</p>
           <p className="mt-0.5 truncate text-xs font-bold leading-5">{activePlace ? `${activePlace.title} · ${activePlace.municipality}` : "Selecione um destino para localizar no mapa."}</p>
         </div>
+        {activePlace && <Link href={`/destinos/${activePlace.id}`} aria-label={`Ver detalhes de ${activePlace.title}`} className="tap inline-flex shrink-0 items-center gap-1 rounded-full border border-[#FFFDF6]/35 bg-[#FFFDF6] px-2.5 py-2 text-[11px] font-extrabold text-[#3C482D] hover:bg-[#F5ECD8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A640] focus-visible:ring-offset-2 focus-visible:ring-offset-[#3C482D]">Ver detalhes <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></Link>}
       </div>
     </div>
   );
