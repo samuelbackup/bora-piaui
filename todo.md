@@ -88,4 +88,7 @@
 - [x] Inserir a imagem do Encontro dos Rios no card correspondente sem alterar a informação editorial.
 - [x] Testar interações e validar o atlas em desktop e celular.
 - [x] Publicar os refinamentos de polos e do Encontro dos Rios.
-- [ ] Confirmar no domínio publicado a imagem do Encontro dos Rios e os novos estados visuais dos polos.
+- [x] Confirmar no domínio publicado a imagem do Encontro dos Rios.
+- [x] Validar no domínio publicado o estado ativo e o filtro associado dos polos turísticos.
+- [x] Registrar evidência verificável do estado hover dos polos turísticos no domínio publicado.
+- [x] Registrar evidência verificável do foco por teclado nos polos turísticos no domínio publicado.

@@ -16,5 +16,7 @@
 | Visual móvel | As trilhas de Patrimônios e Sabores foram revisadas em 375 × 812 px, com navegação horizontal íntegra, tipografia legível e início das seções sem sobreposição. |
 | Transparência visual | Os cards cuja imagem mostra território, e não o preparo, passaram a informar explicitamente essa condição sobre o próprio visual. |
 | Descoberta — Opção 1 | A prévia local e o domínio publicado exibem filtros principais em uma única faixa, resumo editorial e polos discretos; a propagação foi confirmada após a publicação da versão 68c08a7d. |
+| Encontro dos Rios | O domínio publicado passou a exibir a imagem institucional do Mapa da Cultura PI no card do destino. |
+| Polos turísticos | No domínio publicado, a seleção de Teresina filtrou a lista. O foco por teclado exibiu anel de 4 px e, no polo apontado, o hover alterou fundo, cor, borda e sombra (7 px × 16 px), conforme inspeção dos estilos computados. |
 
 **Nota:** Rotas externas, regras de visitação, operação de atrativos e condições climáticas devem ser confirmadas pelo visitante nos canais responsáveis antes da viagem.
