@@ -53,6 +53,26 @@
   --ring: oklch(0.55 0.13 42);
 }
 
+.dark {
+  --background: oklch(0.2 0.027 112);
+  --foreground: oklch(0.94 0.025 86);
+  --card: oklch(0.25 0.032 112);
+  --card-foreground: oklch(0.94 0.025 86);
+  --popover: oklch(0.25 0.032 112);
+  --popover-foreground: oklch(0.94 0.025 86);
+  --primary: oklch(0.68 0.135 43);
+  --primary-foreground: oklch(0.19 0.02 105);
+  --secondary: oklch(0.36 0.05 108);
+  --secondary-foreground: oklch(0.94 0.025 86);
+  --muted: oklch(0.29 0.03 110);
+  --muted-foreground: oklch(0.78 0.035 91);
+  --accent: oklch(0.73 0.115 79);
+  --accent-foreground: oklch(0.2 0.03 105);
+  --border: oklch(0.38 0.035 108);
+  --input: oklch(0.38 0.035 108);
+  --ring: oklch(0.72 0.135 43);
+}
+
 @layer base {
   * { @apply border-border outline-ring/50; }
   html { scroll-behavior: smooth; }
@@ -63,6 +83,58 @@
   }
   ::selection { background: #B9572D; color: #FFFDF6; }
 }
+
+.dark body {
+  background-image: radial-gradient(circle at 92% -7%, rgba(217, 166, 64, 0.11), transparent 28rem), radial-gradient(circle at -5% 70%, rgba(86, 107, 55, 0.2), transparent 31rem);
+}
+
+.app-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background: #f5ecd8;
+  color: #2e3222;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1), transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.app-loading-overlay--ready {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.app-loading-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  opacity: 0.92;
+}
+
+.app-loading-mark > span:last-child span { color: #b9572d; }
+.app-loading-sun { width: 1rem; height: 1rem; border-radius: 9999px; background: #d9a640; box-shadow: 0 0 0 7px rgba(217, 166, 64, 0.18); }
+.dark .app-loading-overlay { background: #1b241a; color: #f5ecd8; }
+
+.dark .home-shell { background: #1b241a; color: #f5ecd8; }
+.dark .home-header,
+.dark .home-navigation-menu,
+.dark .home-theme-control { background-color: #1b241a !important; border-color: rgba(245, 236, 216, 0.16) !important; }
+.dark .home-shell [class*="bg-[#F5ECD8]"],
+.dark .home-shell [class*="bg-[#FFFDF6]"] { background-color: #263022 !important; }
+.dark .home-shell article { background: #263022 !important; }
+.dark .home-shell [class*="text-[#2E3222]"],
+.dark .home-shell [class*="text-[#35402B]"] { color: #f5ecd8 !important; }
+.dark .home-shell [class*="text-[#68705C]"],
+.dark .home-shell [class*="text-[#66705E]"],
+.dark .home-shell [class*="text-[#6B7057]"] { color: #d6d8c0 !important; }
+.dark .home-shell [class*="border-[#3C482D]"],
+.dark .home-shell [class*="border-[#566B37]"] { border-color: rgba(245, 236, 216, 0.18) !important; }
+.dark .home-shell select,
+.dark .home-shell input { color: #f5ecd8; }
+.dark .home-shell input::placeholder { color: #c1c7aa; }
 
 @layer components {
   /* Cerrado e Rios: barro para ação, buriti para orientação e azul apenas como território de água. */
@@ -119,4 +191,5 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
   .pole-preview-enter { animation: none !important; }
+  .app-loading-overlay { display: none !important; }
 }

@@ -49,4 +49,11 @@ describe("acessos territoriais da descoberta", () => {
       expect(homeSource).toContain(label);
     });
   });
+
+  it("oferece uma alternância persistente de modo escuro no menu compacto", () => {
+    expect(homeSource).toContain('role="switch"');
+    expect(homeSource).toContain('aria-checked={theme === "dark"}');
+    expect(homeSource).toContain('"Ativar modo escuro"');
+    expect(homeSource).toContain("toggleTheme?.()");
+  });
 });

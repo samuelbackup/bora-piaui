@@ -15,10 +15,12 @@ import {
   MapPinned,
   Menu,
   Minus,
+  Moon,
   Plus,
   Search,
   SlidersHorizontal,
   Sparkles,
+  Sun,
   TreePine,
   Waves,
   X,
@@ -26,6 +28,7 @@ import {
 import { toast } from "sonner";
 import { PiauiMap } from "@/components/PiauiMap";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { useTheme } from "@/contexts/ThemeContext";
 import { getPilotItinerary, pilotCities } from "@/lib/mvpPilot";
 import { trackMvpEvent } from "@/lib/mvpEvents";
 
@@ -264,6 +267,7 @@ function sourceAnchor(url: string, label: string) {
 
 export default function Home() {
   const { data: publishedDestinations } = trpc.destinations.list.useQuery();
+  const { theme, toggleTheme } = useTheme();
   const [category, setCategory] = useState<(typeof categories)[number]>("Todos");
   const [region, setRegion] = useState<(typeof regions)[number]>("Todos");
   const [query, setQuery] = useState("");
@@ -362,8 +366,8 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5ECD8] text-[#2E3222]">
-      <header className="sticky top-0 z-40 border-b border-[#3C482D]/10 bg-[#F5ECD8]/92 backdrop-blur-xl">
+    <div className="home-shell min-h-screen bg-[#F5ECD8] text-[#2E3222] transition-colors duration-200">
+      <header className="home-header sticky top-0 z-40 border-b border-[#3C482D]/10 bg-[#F5ECD8]/92 backdrop-blur-xl transition-colors duration-200">
         <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <button onClick={() => goTo("inicio")} className="tap flex items-center gap-3" aria-label="Ir ao início">
             <span className="grid h-11 w-11 place-items-center overflow-hidden rounded-2xl bg-[#B9572D] shadow-[0_6px_0_rgba(185,87,45,.16)]"><img src={markImage} alt="Marca Bora Piauí" className="h-9 w-9 object-contain" /></span>
@@ -375,6 +379,7 @@ export default function Home() {
           </div>
         </div>
         {menuOpen && <nav id="home-navigation-menu" aria-label="Navegação principal" className="border-t border-[#3C482D]/10 bg-[#F5ECD8] px-4 py-4 sm:px-6 lg:px-8"><div className="mx-auto grid max-w-7xl gap-1 sm:grid-cols-2 lg:grid-cols-3"><button onClick={() => goTo("explorar")} className="tap rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4] focus-visible:bg-[#EDE0C4]">Explorar destinos</button><Link href="/cidades/teresina" onClick={() => setMenuOpen(false)} className="tap rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4] focus-visible:bg-[#EDE0C4]">Cidades-piloto</Link><Link href="/patrimonios" onClick={() => setMenuOpen(false)} className="tap rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4] focus-visible:bg-[#EDE0C4]">Patrimônios</Link><Link href="/sabores" onClick={() => setMenuOpen(false)} className="tap rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4] focus-visible:bg-[#EDE0C4]">Sabores</Link><Link href="/agenda" onClick={() => setMenuOpen(false)} className="tap rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4] focus-visible:bg-[#EDE0C4]">Agenda cultural</Link><Link href="/dados" onClick={() => setMenuOpen(false)} className="tap rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4] focus-visible:bg-[#EDE0C4]">Dados oficiais</Link><button onClick={() => goTo("mapa")} className="tap rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4] focus-visible:bg-[#EDE0C4]">Mapa do estado</button><button onClick={() => goTo("como-funciona")} className="tap rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4] focus-visible:bg-[#EDE0C4]">Como funciona</button><Link href="/parceiros" onClick={() => setMenuOpen(false)} className="tap rounded-xl px-3 py-3 text-left text-sm font-bold text-[#B9572D] hover:bg-[#EDE0C4] focus-visible:bg-[#EDE0C4]">Seja parceiro</Link><Link href="/admin/destinos" onClick={() => setMenuOpen(false)} className="tap rounded-xl px-3 py-3 text-left text-sm font-bold text-[#566B37] hover:bg-[#EDE0C4] focus-visible:bg-[#EDE0C4]">Painel demonstrativo</Link><button onClick={() => { setPlannerOpen(true); setMenuOpen(false); }} className="tap rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4] focus-visible:bg-[#EDE0C4]">Meu roteiro</button></div></nav>}
+        {menuOpen && <div className="home-theme-control border-t border-[#3C482D]/10 bg-[#F5ECD8] px-4 pb-4 sm:px-6 lg:px-8"><div className="mx-auto flex max-w-7xl items-center justify-between gap-4 rounded-xl bg-[#FFFDF6] px-3 py-3"><div><p className="text-sm font-extrabold">Modo escuro</p><p className="mt-0.5 text-xs text-[#68705C]">Use o tema que for mais confortável para você.</p></div><button type="button" role="switch" aria-checked={theme === "dark"} aria-label={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"} onClick={() => toggleTheme?.()} className="tap inline-flex h-10 items-center gap-2 rounded-full border border-[#3C482D]/15 bg-[#F5ECD8] px-3 text-xs font-extrabold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B9572D] focus-visible:ring-offset-2"><span>{theme === "dark" ? "Claro" : "Escuro"}</span>{theme === "dark" ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}</button></div></div>}
       </header>
 
       <main id="inicio">
