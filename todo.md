@@ -177,3 +177,13 @@
 - [x] Validar e publicar a navegação entre cidades no domínio público.
 - [x] Salvar um checkpoint com o seletor de cidades-piloto e suas evidências de validação.
 - [x] Confirmar no domínio publicado o destaque da cidade ativa e os links para as outras duas cidades.
+- [x] Adicionar data de término opcional ao formulário de programação da Revisão Editorial.
+- [x] Exibir o período completo do evento na Revisão Editorial e preservar a leitura na Agenda pública.
+- [x] Criar remoção persistida de eventos com confirmação explícita, sem remover publicar e despublicar.
+- [x] Cobrir período, publicação e remoção de programação com testes automatizados e jornada de navegador.
+- [ ] Validar o painel editorial e a Agenda em desktop e celular e publicar a atualização.
+- [x] Confirmar fontes institucionais para os blocos de Cultura e História de Teresina.
+- [x] Remover os diretórios de restaurantes e serviços das páginas das cidades-piloto.
+- [x] Adicionar os blocos editoriais de Cultura e História somente em Teresina, com fonte acessível.
+- [x] Atualizar testes para assegurar a ausência dos diretórios e a presença dos novos blocos em Teresina.
+- [ ] Validar e publicar a substituição editorial em desktop, celular e no domínio público.

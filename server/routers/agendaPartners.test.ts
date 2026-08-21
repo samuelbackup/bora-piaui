@@ -21,6 +21,10 @@ describe("camada editorial de agenda e parceiros", () => {
     expect(culturalEventFields.parse(validEvent)).toMatchObject(validEvent);
   });
 
+  it("aceita programação de um dia sem data de término", () => {
+    expect(culturalEventFields.parse({ ...validEvent, endsAt: null })).toMatchObject({ endsAt: null });
+  });
+
   it("rejeita evento sem URL de fonte", () => {
     expect(() => culturalEventFields.parse({ ...validEvent, sourceUrl: "sem-fonte" })).toThrow();
   });

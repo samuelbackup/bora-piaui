@@ -176,6 +176,15 @@ export async function updateCulturalEvent(id: number, data: Partial<InsertCultur
   return getCulturalEventById(id);
 }
 
+export async function removeCulturalEvent(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  const current = await getCulturalEventById(id);
+  if (!current) return null;
+  await db.delete(culturalEvents).where(eq(culturalEvents.id, id));
+  return current;
+}
+
 export async function createPartnerSubmission(data: InsertPartnerSubmission) {
   const db = await getDb();
   if (!db) throw new Error("Banco de dados indisponível");

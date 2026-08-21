@@ -80,10 +80,19 @@ export type PilotCurationTopic = {
   status: "curating";
 };
 
+export type PilotEditorialHighlight = {
+  id: string;
+  citySlug: string;
+  title: string;
+  description: string;
+  source: SourceReference;
+};
+
 export type PilotCatalog = {
   cities: PilotCity[];
   items: PilotItem[];
   curatedBusinesses: CuratedBusiness[];
+  editorialHighlights: PilotEditorialHighlight[];
   itineraries: PilotItinerary[];
   proximityRelations: PilotProximityRelation[];
   curationTopics: PilotCurationTopic[];
@@ -92,6 +101,12 @@ export type PilotCatalog = {
 const teresinaSource: SourceReference = {
   name: "Visit Brasil · Teresina",
   url: "https://visitbrasil.com/en/location/teresina/",
+  verifiedAt: "Consulta editorial 2026",
+};
+
+const g20TeresinaSource: SourceReference = {
+  name: "Presidência da República · G20 Brasil · Teresina - PI",
+  url: "https://www.gov.br/g20/en/about-the-g20/host-cities/teresina",
   verifiedAt: "Consulta editorial 2026",
 };
 
@@ -355,6 +370,23 @@ export const curatedBusinesses: CuratedBusiness[] = [
   },
 ];
 
+export const pilotEditorialHighlights: PilotEditorialHighlight[] = [
+  {
+    id: "teresina-cultura",
+    citySlug: "teresina",
+    title: "Cultura",
+    description: "Tradições nordestinas, patrimônio local e artesanato piauiense compõem a cena cultural da capital. O Polo Cerâmico de Teresina é uma das referências desse percurso.",
+    source: g20TeresinaSource,
+  },
+  {
+    id: "teresina-historia",
+    citySlug: "teresina",
+    title: "História",
+    description: "Fundada em 1852 como capital do Piauí e concebida como cidade planejada, Teresina se desenvolveu na confluência dos rios Poti e Parnaíba.",
+    source: g20TeresinaSource,
+  },
+];
+
 export const pilotItineraries: PilotItinerary[] = [
   {
     slug: "teresina-ponto-de-partida",
@@ -392,6 +424,7 @@ export const pilotCatalog: PilotCatalog = {
   cities: pilotCities,
   items: pilotItems,
   curatedBusinesses,
+  editorialHighlights: pilotEditorialHighlights,
   itineraries: pilotItineraries,
   proximityRelations: pilotProximityRelations,
   curationTopics: pilotCurationTopics,
@@ -434,6 +467,10 @@ export function getPilotCurationTopics(citySlug: string, catalog: PilotCatalog =
 
 export function getPilotCuratedBusinesses(citySlug: string, kind: CuratedBusinessKind, catalog: PilotCatalog = pilotCatalog) {
   return catalog.curatedBusinesses.filter((entry) => entry.citySlug === citySlug && entry.kind === kind && entry.status === "published");
+}
+
+export function getPilotEditorialHighlights(citySlug: string, catalog: PilotCatalog = pilotCatalog) {
+  return catalog.editorialHighlights.filter((entry) => entry.citySlug === citySlug);
 }
 
 export function getPilotCategories(citySlug: string, kind: PilotItemKind | "all" = "all", catalog: PilotCatalog = pilotCatalog) {

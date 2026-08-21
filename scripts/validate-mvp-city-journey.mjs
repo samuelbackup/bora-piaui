@@ -11,6 +11,17 @@ async function assertSimplifiedCards(page, cityName) {
   assert(await page.getByText("Contato não publicado", { exact: true }).count() === 0, `${cityName} ainda exibe o aviso de contato removido dos cartões.`);
 }
 
+async function assertTeresinaEditorialHighlights(page) {
+  await page.getByRole("heading", { name: "Cultura e História", exact: true }).scrollIntoViewIfNeeded();
+  await page.getByRole("heading", { name: "Cultura", exact: true }).waitFor({ state: "visible" });
+  await page.getByRole("heading", { name: "História", exact: true }).waitFor({ state: "visible" });
+  await page.getByText("Curadoria responsável:", { exact: false }).waitFor({ state: "visible" });
+  assert(await page.getByRole("heading", { name: "Restaurantes curados", exact: true }).count() === 0, "Teresina ainda exibe o diretório de restaurantes removido.");
+  assert(await page.getByRole("heading", { name: "Serviços curados", exact: true }).count() === 0, "Teresina ainda exibe o diretório de serviços removido.");
+  const source = page.getByRole("link", { name: "Presidência da República · G20 Brasil · Teresina - PI", exact: true }).first();
+  assert((await source.getAttribute("href"))?.includes("gov.br/g20"), "Os blocos editoriais de Teresina não apontam para a fonte pública esperada.");
+}
+
 async function selectCityFromHome(page, index, expectedSlug, expectedName) {
   await page.goto(baseUrl, { waitUntil: "domcontentloaded" });
   const cityLinks = page.getByRole("link", { name: "Explorar cidade" });
@@ -63,6 +74,7 @@ async function runDesktop(browser) {
   await page.getByText("Negócios em curadoria", { exact: true }).waitFor({ state: "visible" });
   await page.getByLabel("Tipo de item").selectOption("all");
   await assertSimplifiedCards(page, "Teresina");
+  await assertTeresinaEditorialHighlights(page);
   await page.getByRole("link", { name: "Ver detalhes", exact: true }).first().waitFor({ state: "visible" });
 
   await page.locator("#mapa-destino-ativo").scrollIntoViewIfNeeded();
@@ -88,19 +100,6 @@ async function runContact(browser) {
   assert(await contactLink.getAttribute("target") === "_blank", "O contato institucional deveria abrir em nova aba.");
   const [contactPage] = await Promise.all([page.waitForEvent("popup"), contactLink.click()]);
   await contactPage.close();
-  await page.close();
-}
-
-async function runCuratedServiceDirectory(browser) {
-  const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
-  await selectCityFromHome(page, 2, "sao-raimundo-nonato", "São Raimundo Nonato");
-
-  await page.getByRole("heading", { name: "Serviços curados", exact: true }).scrollIntoViewIfNeeded();
-  await page.getByRole("heading", { name: "Canais de atendimento do ICMBio", exact: true }).waitFor({ state: "visible" });
-  const serviceContact = page.getByRole("link", { name: "Contato com Canais de atendimento do ICMBio", exact: true });
-  const serviceSource = page.getByRole("link", { name: "Ver fonte sobre Canais de atendimento do ICMBio", exact: true });
-  assert(await serviceContact.getAttribute("href") === "https://www.gov.br/icmbio/pt-br/canais_atendimento", "O diretório de serviços não manteve o contato institucional publicado.");
-  assert(await serviceSource.getAttribute("href") === "https://www.gov.br/icmbio/pt-br/canais_atendimento", "O diretório de serviços não manteve a fonte publicada.");
   await page.close();
 }
 
@@ -139,6 +138,9 @@ async function runMobile(browser) {
   await selectCityFromHome(page, 1, "cajueiro-da-praia", "Cajueiro da Praia");
   await assertCityNavigator(page, "Cajueiro da Praia", ["Teresina", "São Raimundo Nonato"]);
   await assertSimplifiedCards(page, "Cajueiro da Praia");
+  await switchPilotCity(page, "teresina", "Teresina");
+  await assertTeresinaEditorialHighlights(page);
+  await switchPilotCity(page, "cajueiro-da-praia", "Cajueiro da Praia");
   await page.locator("#por-perto").scrollIntoViewIfNeeded();
   await page.getByRole("heading", { name: "O que há por perto de Barra Grande", exact: true }).waitFor({ state: "visible" });
   await page.locator("#por-perto").getByRole("heading", { name: "Cajueiro-rei do Piauí", exact: true }).waitFor({ state: "visible" });
@@ -155,11 +157,10 @@ try {
   await runLoadingState(browser);
   await runDesktop(browser);
   await runContact(browser);
-  await runCuratedServiceDirectory(browser);
   await runProximity(browser);
   await runSerraProximity(browser);
   await runMobile(browser);
-  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", cityNavigator: ["Teresina → Cajueiro da Praia", "Cajueiro da Praia → São Raimundo Nonato", "São Raimundo Nonato → Teresina"], simplifiedCards: ["Teresina", "São Raimundo Nonato", "Cajueiro da Praia"], contact: "ICMBio", curatedService: "Canais de atendimento do ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Cajueiro da Praia" }, null, 2));
+  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", cityNavigator: ["Teresina → Cajueiro da Praia", "Cajueiro da Praia → São Raimundo Nonato", "São Raimundo Nonato → Teresina"], simplifiedCards: ["Teresina", "São Raimundo Nonato", "Cajueiro da Praia"], teresinaEditorialHighlights: ["Cultura", "História"], contact: "ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Teresina" }, null, 2));
 } finally {
   await browser.close();
 }

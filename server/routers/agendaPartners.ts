@@ -8,6 +8,7 @@ import {
   listAllCulturalEvents,
   listPartnerSubmissions,
   listPublishedCulturalEvents,
+  removeCulturalEvent,
   updateCulturalEvent,
   updatePartnerSubmission,
 } from "../db";
@@ -87,6 +88,16 @@ export const agendaRouter = router({
       endsAt: changes.endsAt ?? current.endsAt?.toISOString() ?? null,
     });
     return updateCulturalEvent(id, normalizeCulturalEvent(complete));
+  }),
+  demoDelete: publicProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ input }) => {
+    const event = await removeCulturalEvent(input.id);
+    if (!event) throw new TRPCError({ code: "NOT_FOUND", message: "Evento não encontrado." });
+    return event;
+  }),
+  delete: adminProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ input }) => {
+    const event = await removeCulturalEvent(input.id);
+    if (!event) throw new TRPCError({ code: "NOT_FOUND", message: "Evento não encontrado." });
+    return event;
   }),
 });
 

@@ -8,6 +8,7 @@ const db = vi.hoisted(() => ({
   listAllCulturalEvents: vi.fn(),
   listPartnerSubmissions: vi.fn(),
   listPublishedCulturalEvents: vi.fn(),
+  removeCulturalEvent: vi.fn(),
   updateCulturalEvent: vi.fn(),
   updatePartnerSubmission: vi.fn(),
 }));
@@ -55,6 +56,27 @@ describe("fluxo demonstrativo persistido de agenda e parceiros", () => {
     await expect(caller.demoCreate(eventInput)).resolves.toMatchObject({ id: 12, title: eventInput.title });
     await expect(caller.demoUpdate({ id: 12, published: true })).resolves.toMatchObject({ published: true });
     expect(db.updateCulturalEvent).toHaveBeenCalledWith(12, expect.objectContaining({ published: true, confirmationStatus: "confirmado" }));
+  });
+
+  it("preserva período de vários dias e rejeita término anterior ao início", async () => {
+    const storedEvent = { id: 13, ...eventInput, startsAt: new Date(eventInput.startsAt), endsAt: new Date("2026-09-14T18:00:00.000Z") };
+    db.createCulturalEvent.mockResolvedValue(storedEvent);
+    const caller = agendaRouter.createCaller({} as never);
+
+    await expect(caller.demoCreate({ ...eventInput, endsAt: "2026-09-14T18:00:00.000Z" })).resolves.toMatchObject({ id: 13 });
+    await expect(caller.demoCreate({ ...eventInput, endsAt: "2026-09-11T18:00:00.000Z" })).rejects.toMatchObject({ message: "A data de término precisa ser posterior à data de início." });
+  });
+
+  it("remove evento persistido e informa quando o registro não existe", async () => {
+    const storedEvent = { id: 12, ...eventInput, startsAt: new Date(eventInput.startsAt), endsAt: null };
+    db.removeCulturalEvent.mockResolvedValue(storedEvent);
+    const caller = agendaRouter.createCaller({} as never);
+
+    await expect(caller.demoDelete({ id: 12 })).resolves.toMatchObject({ id: 12, title: eventInput.title });
+    expect(db.removeCulturalEvent).toHaveBeenCalledWith(12);
+
+    db.removeCulturalEvent.mockResolvedValue(null);
+    await expect(caller.demoDelete({ id: 999 })).rejects.toMatchObject({ message: "Evento não encontrado." });
   });
 
   it("registra proposta pública como pendente e persiste sua revisão", async () => {

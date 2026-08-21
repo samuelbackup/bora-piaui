@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getPilotCategories, getPilotCity, getPilotCurationTopics, getPilotCuratedBusinesses, getPilotItems, getPilotNearbyItems, loadPilotCatalog } from "./mvpPilot";
+import { getPilotCategories, getPilotCity, getPilotCurationTopics, getPilotCuratedBusinesses, getPilotEditorialHighlights, getPilotItems, getPilotNearbyItems, loadPilotCatalog } from "./mvpPilot";
 
 describe("catálogo do MVP de front-end", () => {
   it("mantém três cidades-piloto com identificadores estáveis", () => {
@@ -16,6 +16,15 @@ describe("catálogo do MVP de front-end", () => {
       "cajueiro-da-praia",
       "sao-raimundo-nonato",
     ]);
+  });
+
+  it("oferece Cultura e História somente para a leitura editorial de Teresina", () => {
+    const highlights = getPilotEditorialHighlights("teresina");
+
+    expect(highlights.map((entry) => entry.title)).toEqual(["Cultura", "História"]);
+    expect(highlights.every((entry) => entry.source.url.includes("gov.br/g20"))).toBe(true);
+    expect(getPilotEditorialHighlights("cajueiro-da-praia")).toEqual([]);
+    expect(getPilotEditorialHighlights("sao-raimundo-nonato")).toEqual([]);
   });
 
   it("não inventa negócios quando ainda não há registros validados", () => {
