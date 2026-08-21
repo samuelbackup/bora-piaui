@@ -136,3 +136,17 @@
 - [x] Salvar um novo checkpoint e publicar a versão final do MVP após os ajustes de carregamento controlável e contato institucional.
 - [x] Atualizar o contrato de integração com o adaptador local, contato institucional e fallbacks do catálogo piloto.
 - [x] Confirmar no checklist a publicação final após o checkpoint com adaptador local, contato institucional e handoff atualizado.
+- [x] Mapear necessidades prioritárias de visitantes nas três cidades-piloto e lacunas da jornada atual.
+- [x] Definir uma matriz de prioridade e critérios de aceite por cidade-piloto para o front-end.
+- [x] Implementar os refinamentos de interface aprovados para as necessidades prioritárias.
+- [x] Validar as jornadas refinadas em desktop e celular.
+- [ ] Publicar a evolução das cidades-piloto e atualizar o handoff de integração.
+- [x] Mapear âncoras de visita e categorias próximas prioritárias em Teresina, Cajueiro da Praia e São Raimundo Nonato.
+- [x] Definir critérios de distância, fonte e confirmação para recomendações de locais próximos.
+- [x] Implementar a descoberta “por perto” com história, gastronomia e serviços curados no front-end.
+- [x] Validar o recorte Encontro dos Rios–Poti Velho e equivalentes nas demais cidades-piloto.
+- [x] Implementar relações editoriais de proximidade para Cajueiro da Praia e São Raimundo Nonato, com fonte pública e ficha local navegável.
+- [x] Definir cobertura rastreável de gastronomia e serviços na descoberta por proximidade, sem criar negócios ou condições operacionais fictícias.
+- [x] Validar em desktop e celular as três cidades-piloto, incluindo relações próximas, detalhes, rota, estados vazios e fallback de contato.
+- [ ] Salvar um novo checkpoint com a evolução das cidades-piloto após as mudanças de proximidade e curadoria.
+- [ ] Confirmar a versão publicada com a descoberta por proximidade nas três cidades e registrar a evidência na validação.

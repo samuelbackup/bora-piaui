@@ -11,7 +11,7 @@ Este documento organiza a futura integração do Bora Piauí sem deslocar a resp
 | Rota ou fluxo | Responsabilidade de front-end | Recurso a integrar | Estado atual de experiência |
 |---|---|---|---|
 | `/` — Atlas | Descoberta, filtros, cards, mapa, destino ativo e links de detalhes | lista resumida de destinos | A interface já mantém filtros, marcador ativo e feedback acessível. |
-| `/cidades/:slug` | Descoberta por cidade, filtros por tipo e categoria, cards, fontes, mapa e acesso ao roteiro | cidade-piloto, itens publicados e referências operacionais | A primeira versão funciona com modelos de apresentação locais e já expõe estados vazio, pendente, imagem ausente e rota indisponível. |
+| `/cidades/:slug` | Descoberta por cidade, filtros por tipo e categoria, cards, fontes, mapa, acesso ao roteiro e relações editoriais próximas | cidade-piloto, itens publicados, referências operacionais e relações de proximidade publicadas | A primeira versão funciona com modelos de apresentação locais e já expõe estados vazio, pendente, imagem ausente e rota indisponível. |
 | `/roteiros/:slug` | Ordem de paradas, foco sincronizado no mapa, links de detalhe e rota | roteiro publicado, paradas ordenadas e avisos de confirmação | O cliente não presume duração, condução ou disponibilidade operacional. |
 | `/destinos/:slug` | Ficha, galeria, contexto, fonte e condições de visitação | detalhe de destino por `slug` | A página já prevê carregamento, não encontrado, galeria vazia e ausência de informação operacional. |
 | `/patrimonios` | Leitura editorial, mapa e navegação territorial | conteúdos patrimoniais e referências geográficas | A camada de apresentação deve continuar independente da forma de armazenamento. |
@@ -127,9 +127,28 @@ type PilotItinerary = {
   stopIds: string[];
   publicationStatus: "published";
 };
+
+type PilotProximityRelation = {
+  id: string;
+  anchorItemId: string;
+  relatedItemId: string;
+  category: string;
+  editorialReason: string;
+  source: { name: string; url: string; verifiedAt?: string };
+  publicationStatus: "published";
+};
+
+type PilotCurationTopic = {
+  citySlug: string;
+  group: "gastronomy" | "services";
+  title: string;
+  summary: string;
+  state: "curation_pending";
+  source?: { name: string; url: string; verifiedAt?: string };
+};
 ```
 
-O campo `dayScope: "one-day"` classifica a proposta editorial como roteiro de um dia, sem substituir a confirmação operacional de horários, deslocamentos ou fornecedores. O contrato deve devolver apenas negócios aprovados para a descoberta pública. Se não houver negócio curado em uma cidade, a resposta válida é uma lista vazia; o cliente apresenta um estado editorial de curadoria, sem criar registros de exemplo.
+O campo `dayScope: "one-day"` classifica a proposta editorial como roteiro de um dia, sem substituir a confirmação operacional de horários, deslocamentos ou fornecedores. `PilotProximityRelation` representa uma associação editorial rastreável — e não uma estimativa de tempo, distância ou disponibilidade. `PilotCurationTopic` comunica uma necessidade editorial ainda pendente, sem expor negócio, horário, contato ou avaliação fictícios. O contrato deve devolver apenas negócios aprovados para a descoberta pública. Se não houver negócio curado em uma cidade, a resposta válida é uma lista vazia; o cliente apresenta um estado editorial de curadoria, sem criar registros de exemplo.
 
 ### Adaptador local atual e substituição futura
 
@@ -186,6 +205,8 @@ A resposta pública de envio deve retornar somente o recibo necessário para a c
 | Atlas e mapa | `listDestinations({ pole?, category? })` | Lista de itens publicados; o primeiro item elegível pode se tornar ativo | Sem resultados, manter o mapa e explicar a seleção vazia; em falha, oferecer tentativa novamente. |
 | Ficha | `getDestinationBySlug({ slug })` | Detalhe completo e galeria ordenada | `NOT_FOUND` exibe rota de retorno; demais falhas mostram indisponibilidade temporária. |
 | Cidade-piloto | `getPilotCity({ slug })` e `listPilotItems({ citySlug, kind?, category? })` | Cidade, itens publicados e fontes correspondentes | Enquanto não há API, `loadPilotCatalog` mantém o mesmo modelo de retorno local; sem itens em um filtro, manter a cidade e apresentar estado vazio. |
+| Locais próximos | `listPilotProximityRelations({ anchorItemId })` | Relações publicadas, item relacionado e fonte editorial | Sem relações, manter a cidade e exibir estado de curadoria; sem tempo ou distância, não inferir proximidade operacional. |
+| Curadoria por cidade | `listPilotCurationTopics({ citySlug })` | Tópicos de gastronomia e serviços aguardando confirmação editorial | O cliente informa a pendência sem listar negócios ou dados operacionais não publicados. |
 | Roteiro | `getPilotItinerary({ slug })` | Roteiro publicado, parada ordenada e aviso de confirmação | `NOT_FOUND` exibe retorno para a cidade; se a rota externa não existir, ocultar a ação e explicar a indisponibilidade. |
 | Agenda | `listPublishedEvents({ city?, category?, month? })` | Eventos publicados por período | Sem eventos, preservar filtros e permitir limpá-los. |
 | Proposta | `submitPartnerProposal(input)` | Recibo de recebimento com estado editorial inicial | Erro de validação deve identificar o campo, sem perder os dados não sensíveis do formulário. |
@@ -206,6 +227,7 @@ Cada consumo de dados deverá ter estados previsíveis. Durante o carregamento, 
 | Paginação | Listas que puderem crescer devem prever `cursor` e `nextCursor`, mesmo que o front-end inicialmente apresente poucos itens. |
 | Versão | Mudanças incompatíveis exigem nova versão de contrato ou período de compatibilidade. |
 | Eventos de interface | O cliente já normaliza `search`, `view_item`, `open_route`, `open_external_link`, `add_to_itinerary` e `ui_error` localmente. A integração futura poderá encaminhar somente `name`, `occurredAt` e contexto não pessoal aprovado. |
+| Curadoria pendente | Gastronomia e serviços podem retornar somente tópicos `curation_pending`; itens e contatos só entram no público após fonte e publicação editorial. |
 
 ## Checklist de integração conjunta
 
@@ -215,6 +237,8 @@ Cada consumo de dados deverá ter estados previsíveis. Durante o carregamento, 
 | Dados publicados | Back-end | O atlas e a agenda pública não recebem rascunhos ou registros sem fonte exigida. |
 | Estados de interface | Front-end | Carregamento, vazio, erro e não encontrado são testados em desktop e 375 px. |
 | Mapa | Front-end e back-end | Cada destino mapeável tem coordenadas ou consulta geocodificável; marcador, card e ficha mantêm o mesmo `id`. |
+| Proximidade editorial | Front-end e curadoria | Toda relação parte de uma âncora publicada, aponta para item publicado e contém justificativa e fonte; a ausência de relações aciona estado de curadoria. |
+| Gastronomia e serviços | Curadoria e back-end | Negócios, contatos e condições operacionais só são publicados após confirmação editorial e fonte correspondente; antes disso, o cliente mostra apenas a pendência de curadoria. |
 | Acessibilidade | Front-end | Todos os controles são operáveis por teclado e toque, com foco visível e rótulos disponíveis. |
 | Segurança | Back-end | Ações editoriais dependem de autenticação e autorização; dados pessoais não vazam para rotas públicas. |
 

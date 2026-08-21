@@ -14,12 +14,14 @@ import Home from "./pages/Home";
 import ItineraryPage from "./pages/ItineraryPage";
 import PatrimoniosPage from "./pages/PatrimoniosPage";
 import PartnersPage from "./pages/PartnersPage";
+import PilotPlacePage from "./pages/PilotPlacePage";
 import SaboresPage from "./pages/SaboresPage";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/cidades/:citySlug/locais/:itemSlug" component={PilotPlacePage} />
       <Route path="/cidades/:slug" component={CityPage} />
       <Route path="/roteiros/:slug" component={ItineraryPage} />
       <Route path="/destinos/:slug" component={DestinationPage} />

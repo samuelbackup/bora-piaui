@@ -47,10 +47,30 @@ export type PilotItinerary = {
   stopIds: string[];
 };
 
+export type PilotProximityRelation = {
+  id: string;
+  anchorItemId: string;
+  relatedItemId: string;
+  category: string;
+  editorialReason: string;
+  source: SourceReference;
+};
+
+export type PilotCurationTopic = {
+  id: string;
+  citySlug: string;
+  category: "gastronomy" | "service";
+  title: string;
+  description: string;
+  status: "curating";
+};
+
 export type PilotCatalog = {
   cities: PilotCity[];
   items: PilotItem[];
   itineraries: PilotItinerary[];
+  proximityRelations: PilotProximityRelation[];
+  curationTopics: PilotCurationTopic[];
 };
 
 const teresinaSource: SourceReference = {
@@ -69,6 +89,24 @@ const capivaraSource: SourceReference = {
   name: "UNESCO · Parque Nacional Serra da Capivara",
   url: "https://whc.unesco.org/en/list/606/",
   verifiedAt: "Referência de visitação 2024",
+};
+
+const potiVelhoSource: SourceReference = {
+  name: "SEMDEC Teresina · Polo Cerâmico do Poti Velho",
+  url: "https://semdec.pmt.pi.gov.br/secretario-municipal-de-turismo-visita-polo-ceramico-de-teresina/",
+  verifiedAt: "Publicação institucional: 2023",
+};
+
+const cajueiroMunicipalSource: SourceReference = {
+  name: "Prefeitura de Cajueiro da Praia · História e atrações",
+  url: "https://cajueirodapraia.pi.gov.br/cidade",
+  verifiedAt: "Consulta editorial 2026",
+};
+
+const fumdhamMuseumSource: SourceReference = {
+  name: "FUMDHAM · Museu do Homem Americano",
+  url: "https://fumdham.org.br/cpt_home/museu-do-homem-americano/",
+  verifiedAt: "Consulta editorial 2026",
 };
 
 export const pilotCities: PilotCity[] = [
@@ -121,6 +159,22 @@ export const pilotItems: PilotItem[] = [
     status: "published",
   },
   {
+    id: "polo-ceramico-poti-velho",
+    slug: "polo-ceramico-poti-velho",
+    citySlug: "teresina",
+    kind: "attraction",
+    title: "Polo Cerâmico do Poti Velho",
+    category: "História e artesanato",
+    summary: "Um percurso de cerâmica e memória local, conectado às tradições do bairro Poti Velho.",
+    routeUrl: "https://www.google.com/maps/dir/?api=1&destination=Polo%20Ceramico%20do%20Poti%20Velho%2C%20Teresina%2C%20PI",
+    externalUrl: potiVelhoSource.url,
+    mapQuery: "Polo Cerâmico do Poti Velho, Teresina",
+    accent: "#2E6C76",
+    operationalStatus: "verify",
+    source: potiVelhoSource,
+    status: "published",
+  },
+  {
     id: "barra-grande",
     slug: "barra-grande",
     citySlug: "cajueiro-da-praia",
@@ -152,6 +206,116 @@ export const pilotItems: PilotItem[] = [
     operationalStatus: "verify",
     source: capivaraSource,
     status: "published",
+  },
+  {
+    id: "cajueiro-rei",
+    slug: "cajueiro-rei",
+    citySlug: "cajueiro-da-praia",
+    kind: "attraction",
+    title: "Cajueiro-rei do Piauí",
+    category: "Natureza e memória",
+    summary: "Uma atração do município que amplia a descoberta do litoral para além da praia de Barra Grande.",
+    routeUrl: "https://www.google.com/maps/dir/?api=1&destination=Cajueiro%20Rei%20do%20Piau%C3%AD%2C%20Cajueiro%20da%20Praia%2C%20PI",
+    externalUrl: cajueiroMunicipalSource.url,
+    mapQuery: "Cajueiro Rei do Piauí, Cajueiro da Praia",
+    accent: "#D9A640",
+    operationalStatus: "verify",
+    source: cajueiroMunicipalSource,
+    status: "published",
+  },
+  {
+    id: "museu-homem-americano",
+    slug: "museu-do-homem-americano",
+    citySlug: "sao-raimundo-nonato",
+    kind: "attraction",
+    title: "Museu do Homem Americano",
+    category: "Memória e arqueologia",
+    summary: "Espaço da FUMDHAM dedicado a divulgar o patrimônio cultural e pesquisas realizadas na região da Serra da Capivara.",
+    routeUrl: "https://www.google.com/maps/dir/?api=1&destination=Museu%20do%20Homem%20Americano%2C%20S%C3%A3o%20Raimundo%20Nonato%2C%20PI",
+    externalUrl: fumdhamMuseumSource.url,
+    mapQuery: "Museu do Homem Americano, São Raimundo Nonato",
+    accent: "#B9572D",
+    operationalStatus: "verify",
+    source: fumdhamMuseumSource,
+    status: "published",
+  },
+];
+
+export const pilotProximityRelations: PilotProximityRelation[] = [
+  {
+    id: "encontro-dos-rios-poti-velho",
+    anchorItemId: "encontro-dos-rios",
+    relatedItemId: "polo-ceramico-poti-velho",
+    category: "História e artesanato",
+    editorialReason: "Uma continuidade territorial para conhecer a cerâmica, as tradições do Poti Velho e as narrativas ligadas ao encontro dos rios.",
+    source: potiVelhoSource,
+  },
+  {
+    id: "barra-grande-cajueiro-rei",
+    anchorItemId: "barra-grande",
+    relatedItemId: "cajueiro-rei",
+    category: "Natureza e memória",
+    editorialReason: "Uma continuidade territorial para conhecer uma atração municipal que amplia o recorte de litoral de Barra Grande.",
+    source: cajueiroMunicipalSource,
+  },
+  {
+    id: "serra-capivara-museu-homem-americano",
+    anchorItemId: "serra-da-capivara",
+    relatedItemId: "museu-homem-americano",
+    category: "Memória e arqueologia",
+    editorialReason: "Um complemento editorial para contextualizar o patrimônio cultural e as pesquisas da região da Serra da Capivara.",
+    source: fumdhamMuseumSource,
+  },
+];
+
+export const pilotCurationTopics: PilotCurationTopic[] = [
+  {
+    id: "teresina-gastronomia",
+    citySlug: "teresina",
+    category: "gastronomy",
+    title: "Gastronomia perto do percurso em curadoria",
+    description: "Restaurantes e pontos de alimentação só serão indicados após fonte, canal público e confirmação editorial.",
+    status: "curating",
+  },
+  {
+    id: "teresina-servicos",
+    citySlug: "teresina",
+    category: "service",
+    title: "Serviços de visita em curadoria",
+    description: "Informações de apoio ao visitante serão incluídas quando houver canal oficial e condição operacional confirmada.",
+    status: "curating",
+  },
+  {
+    id: "cajueiro-gastronomia",
+    citySlug: "cajueiro-da-praia",
+    category: "gastronomy",
+    title: "Gastronomia de Barra Grande em curadoria",
+    description: "A interface não nomeia restaurantes ou condições de atendimento sem publicação editorial e canal confirmado.",
+    status: "curating",
+  },
+  {
+    id: "cajueiro-servicos",
+    citySlug: "cajueiro-da-praia",
+    category: "service",
+    title: "Serviços de litoral em curadoria",
+    description: "Passeios, apoio e demais serviços serão exibidos somente após confirmação de operação e fonte pública.",
+    status: "curating",
+  },
+  {
+    id: "serra-gastronomia",
+    citySlug: "sao-raimundo-nonato",
+    category: "gastronomy",
+    title: "Gastronomia da região em curadoria",
+    description: "A descoberta não indica estabelecimentos sem fonte, contato publicado e confirmação editorial.",
+    status: "curating",
+  },
+  {
+    id: "serra-servicos",
+    citySlug: "sao-raimundo-nonato",
+    category: "service",
+    title: "Serviços de visita em curadoria",
+    description: "Condução, transporte e apoio à visita dependem de informações públicas atualizadas e confirmação operacional.",
+    status: "curating",
   },
 ];
 
@@ -192,6 +356,8 @@ export const pilotCatalog: PilotCatalog = {
   cities: pilotCities,
   items: pilotItems,
   itineraries: pilotItineraries,
+  proximityRelations: pilotProximityRelations,
+  curationTopics: pilotCurationTopics,
 };
 
 export async function loadPilotCatalog(options: { delayMs?: number } = {}): Promise<PilotCatalog> {
@@ -216,6 +382,17 @@ export function getPilotItinerary(citySlug: string, catalog: PilotCatalog = pilo
 
 export function getPilotItem(id: string, catalog: PilotCatalog = pilotCatalog) {
   return catalog.items.find((item) => item.id === id) ?? null;
+}
+
+export function getPilotNearbyItems(anchorItemId: string, catalog: PilotCatalog = pilotCatalog) {
+  return catalog.proximityRelations
+    .filter((relation) => relation.anchorItemId === anchorItemId)
+    .map((relation) => ({ relation, item: getPilotItem(relation.relatedItemId, catalog) }))
+    .filter((entry): entry is { relation: PilotProximityRelation; item: PilotItem } => entry.item !== null && entry.item.status === "published");
+}
+
+export function getPilotCurationTopics(citySlug: string, catalog: PilotCatalog = pilotCatalog) {
+  return catalog.curationTopics.filter((topic) => topic.citySlug === citySlug);
 }
 
 export function getPilotCategories(citySlug: string, kind: PilotItemKind | "all" = "all", catalog: PilotCatalog = pilotCatalog) {

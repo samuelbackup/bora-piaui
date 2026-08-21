@@ -32,12 +32,12 @@ async function runDesktop(browser) {
   await page.getByLabel("Tipo de item").selectOption("business");
   await page.getByText("Negócios em curadoria", { exact: true }).waitFor({ state: "visible" });
   await page.getByLabel("Tipo de item").selectOption("all");
-  await page.getByText("Contato não publicado", { exact: true }).waitFor({ state: "visible" });
-  await page.getByRole("link", { name: "Ver detalhes", exact: true }).waitFor({ state: "visible" });
+  await page.getByText("Contato não publicado", { exact: true }).first().waitFor({ state: "visible" });
+  await page.getByRole("link", { name: "Ver detalhes", exact: true }).first().waitFor({ state: "visible" });
 
   await page.locator("#mapa-destino-ativo").scrollIntoViewIfNeeded();
   await page.waitForFunction(() => document.querySelector("#mapa-destino-ativo")?.textContent?.includes("Encontro dos Rios"), null, { timeout: 10_000 });
-  const routeLink = page.getByRole("link", { name: /Abrir rota/ });
+  const routeLink = page.getByRole("link", { name: "Abrir rota", exact: true }).first();
   assert((await routeLink.getAttribute("href"))?.includes("google.com/maps/dir"), "A rota prática de Teresina não usa a URL pública esperada.");
 
   await Promise.all([
@@ -60,15 +60,47 @@ async function runContact(browser) {
   await page.close();
 }
 
+async function runProximity(browser) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+  await selectCityFromHome(page, 0, "teresina", "Teresina");
+
+  await page.locator("#por-perto").scrollIntoViewIfNeeded();
+  await page.getByRole("heading", { name: "O que há por perto de Encontro dos Rios", exact: true }).waitFor({ state: "visible" });
+  await page.locator("#por-perto").getByRole("heading", { name: "Polo Cerâmico do Poti Velho", exact: true }).waitFor({ state: "visible" });
+  const proximityRoute = page.locator("#por-perto").getByRole("link", { name: "Abrir rota", exact: true });
+  assert((await proximityRoute.getAttribute("href"))?.includes("Polo%20Ceramico%20do%20Poti%20Velho"), "A relação de proximidade não aponta para a rota pública do Poti Velho.");
+
+  await Promise.all([
+    page.waitForURL(/\/cidades\/teresina\/locais\/polo-ceramico-poti-velho$/, { timeout: 10_000 }),
+    page.getByRole("link", { name: "Conhecer o local", exact: true }).click(),
+  ]);
+  await page.getByRole("heading", { name: "Polo Cerâmico do Poti Velho", exact: true }).waitFor({ state: "visible" });
+  await page.close();
+}
+
+async function runSerraProximity(browser) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+  await selectCityFromHome(page, 2, "sao-raimundo-nonato", "São Raimundo Nonato");
+
+  await page.locator("#por-perto").scrollIntoViewIfNeeded();
+  await page.getByRole("heading", { name: "O que há por perto de Parque Nacional Serra da Capivara", exact: true }).waitFor({ state: "visible" });
+  await page.locator("#por-perto").getByRole("heading", { name: "Museu do Homem Americano", exact: true }).waitFor({ state: "visible" });
+  const sourceLink = page.locator("#por-perto").getByRole("link", { name: /FUMDHAM/ });
+  assert((await sourceLink.getAttribute("href"))?.includes("fumdham.org.br"), "A relação da Serra da Capivara não mantém a fonte institucional do museu.");
+  await page.close();
+}
+
 async function runMobile(browser) {
   const page = await browser.newPage({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
   await selectCityFromHome(page, 1, "cajueiro-da-praia", "Cajueiro da Praia");
-  await page.getByRole("link", { name: "Ver detalhes", exact: true }).scrollIntoViewIfNeeded();
+  await page.locator("#por-perto").scrollIntoViewIfNeeded();
+  await page.getByRole("heading", { name: "O que há por perto de Barra Grande", exact: true }).waitFor({ state: "visible" });
+  await page.locator("#por-perto").getByRole("heading", { name: "Cajueiro-rei do Piauí", exact: true }).waitFor({ state: "visible" });
   await Promise.all([
-    page.waitForURL(/\/destinos\/barra-grande$/, { timeout: 10_000 }),
-    page.getByRole("link", { name: "Ver detalhes", exact: true }).click(),
+    page.waitForURL(/\/cidades\/cajueiro-da-praia\/locais\/cajueiro-rei$/, { timeout: 10_000 }),
+    page.locator("#por-perto").getByRole("link", { name: "Conhecer o local", exact: true }).click(),
   ]);
-  await page.getByRole("heading", { name: "Barra Grande", exact: true }).waitFor({ state: "visible", timeout: 10_000 });
+  await page.getByRole("heading", { name: "Cajueiro-rei do Piauí", exact: true }).waitFor({ state: "visible", timeout: 10_000 });
   await page.close();
 }
 
@@ -77,8 +109,10 @@ try {
   await runLoadingState(browser);
   await runDesktop(browser);
   await runContact(browser);
+  await runProximity(browser);
+  await runSerraProximity(browser);
   await runMobile(browser);
-  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", contact: "ICMBio", mobile: "Cajueiro da Praia" }, null, 2));
+  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", contact: "ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Cajueiro da Praia" }, null, 2));
 } finally {
   await browser.close();
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getPilotCategories, getPilotCity, getPilotItems, loadPilotCatalog } from "./mvpPilot";
+import { getPilotCategories, getPilotCity, getPilotCurationTopics, getPilotItems, getPilotNearbyItems, loadPilotCatalog } from "./mvpPilot";
 
 describe("catálogo do MVP de front-end", () => {
   it("mantém três cidades-piloto com identificadores estáveis", () => {
@@ -13,7 +13,7 @@ describe("catálogo do MVP de front-end", () => {
   });
 
   it("expõe categorias a partir dos itens publicados da cidade", () => {
-    expect(getPilotCategories("sao-raimundo-nonato")).toEqual(["Patrimônio"]);
+    expect(getPilotCategories("sao-raimundo-nonato")).toEqual(["Memória e arqueologia", "Patrimônio"]);
   });
 
   it("expõe um adaptador assíncrono local e o contato institucional confirmado", async () => {
@@ -21,5 +21,23 @@ describe("catálogo do MVP de front-end", () => {
     const serra = catalog.items.find((item) => item.id === "serra-da-capivara");
 
     expect(serra?.contactUrl).toBe("https://www.gov.br/icmbio/pt-br/canais_atendimento");
+  });
+
+  it("mantém relações editoriais de proximidade com fonte para a âncora visitada", () => {
+    const nearby = getPilotNearbyItems("encontro-dos-rios");
+
+    expect(nearby).toHaveLength(1);
+    expect(nearby[0]?.item.title).toBe("Polo Cerâmico do Poti Velho");
+    expect(nearby[0]?.relation.source.url).toContain("semdec.pmt.pi.gov.br");
+  });
+
+  it("expõe relações próximas publicadas em todas as cidades-piloto", () => {
+    expect(getPilotNearbyItems("barra-grande")[0]?.item.title).toBe("Cajueiro-rei do Piauí");
+    expect(getPilotNearbyItems("serra-da-capivara")[0]?.item.title).toBe("Museu do Homem Americano");
+  });
+
+  it("mantém gastronomia e serviços como curadoria transparente sem inventar negócios", () => {
+    expect(getPilotCurationTopics("cajueiro-da-praia")).toHaveLength(2);
+    expect(getPilotItems("cajueiro-da-praia", "business")).toEqual([]);
   });
 });
