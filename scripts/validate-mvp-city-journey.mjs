@@ -11,20 +11,41 @@ async function assertSimplifiedCards(page, cityName) {
   assert(await page.getByText("Contato não publicado", { exact: true }).count() === 0, `${cityName} ainda exibe o aviso de contato removido dos cartões.`);
 }
 
+async function assertEditorialHighlights(page, cityName, expectedSources) {
+  const editorialHighlights = page.getByTestId("editorial-highlights");
+  await editorialHighlights.getByRole("heading", { name: "Cultura e História", exact: true }).scrollIntoViewIfNeeded();
+  await editorialHighlights.getByRole("heading", { name: "Cultura", exact: true }).waitFor({ state: "visible" });
+  await editorialHighlights.getByRole("heading", { name: "História", exact: true }).waitFor({ state: "visible" });
+  await editorialHighlights.getByText(`Leituras de ${cityName}`, { exact: true }).waitFor({ state: "visible" });
+  await editorialHighlights.getByText("Curadoria responsável:", { exact: false }).waitFor({ state: "visible" });
+
+  for (const sourceExpectation of expectedSources) {
+    const source = editorialHighlights.getByTestId(`editorial-source-${sourceExpectation.highlightId}`);
+    await source.waitFor({ state: "visible" });
+    const sourceLink = source.getByRole("link", { name: sourceExpectation.name, exact: true });
+    assert((await sourceLink.getAttribute("href"))?.includes(sourceExpectation.urlFragment), `${cityName} não aponta para a fonte pública esperada em ${sourceExpectation.highlightId}.`);
+    const supportsHover = await page.evaluate(() => window.matchMedia("(hover: hover)").matches);
+    if (supportsHover) {
+      await source.locator("xpath=ancestor::article").hover();
+      await page.waitForTimeout(220);
+      const background = await source.evaluate((element) => getComputedStyle(element).backgroundColor);
+      assert(background === "rgb(233, 220, 192)", `${cityName} não destaca a fonte no hover do cartão ${sourceExpectation.highlightId}.`);
+    }
+  }
+}
+
 async function assertTeresinaEditorialHighlights(page) {
   const basicTopics = page.getByRole("complementary", { name: "Categorias em curadoria" });
   await basicTopics.getByText("Para comer", { exact: true }).waitFor({ state: "visible" });
   await basicTopics.getByText("Para organizar a visita", { exact: true }).waitFor({ state: "visible" });
   await basicTopics.getByRole("heading", { name: "Gastronomia perto do percurso em curadoria", exact: true }).waitFor({ state: "visible" });
   await basicTopics.getByRole("heading", { name: "Serviços de visita em curadoria", exact: true }).waitFor({ state: "visible" });
-  await page.getByRole("heading", { name: "Cultura e História", exact: true }).scrollIntoViewIfNeeded();
-  await page.getByRole("heading", { name: "Cultura", exact: true }).waitFor({ state: "visible" });
-  await page.getByRole("heading", { name: "História", exact: true }).waitFor({ state: "visible" });
-  await page.getByText("Curadoria responsável:", { exact: false }).waitFor({ state: "visible" });
   assert(await page.getByRole("heading", { name: "Restaurantes curados", exact: true }).count() === 0, "Teresina ainda exibe o diretório de restaurantes removido.");
   assert(await page.getByRole("heading", { name: "Serviços curados", exact: true }).count() === 0, "Teresina ainda exibe o diretório de serviços removido.");
-  const source = page.getByRole("link", { name: "Presidência da República · G20 Brasil · Teresina - PI", exact: true }).first();
-  assert((await source.getAttribute("href"))?.includes("gov.br/g20"), "Os blocos editoriais de Teresina não apontam para a fonte pública esperada.");
+  await assertEditorialHighlights(page, "Teresina", [
+    { highlightId: "teresina-cultura", name: "Presidência da República · G20 Brasil · Teresina - PI", urlFragment: "gov.br/g20" },
+    { highlightId: "teresina-historia", name: "Presidência da República · G20 Brasil · Teresina - PI", urlFragment: "gov.br/g20" },
+  ]);
 }
 
 async function selectCityFromHome(page, index, expectedSlug, expectedName) {
@@ -71,8 +92,16 @@ async function runDesktop(browser) {
   await assertCityNavigator(page, "Teresina", ["Cajueiro da Praia", "São Raimundo Nonato"]);
   await switchPilotCity(page, "cajueiro-da-praia", "Cajueiro da Praia");
   await assertCityNavigator(page, "Cajueiro da Praia", ["Teresina", "São Raimundo Nonato"]);
+  await assertEditorialHighlights(page, "Cajueiro da Praia", [
+    { highlightId: "cajueiro-da-praia-cultura", name: "Prefeitura de Cajueiro da Praia · História e atrações", urlFragment: "cajueirodapraia.pi.gov.br/cidade" },
+    { highlightId: "cajueiro-da-praia-historia", name: "Prefeitura de Cajueiro da Praia · História e atrações", urlFragment: "cajueirodapraia.pi.gov.br/cidade" },
+  ]);
   await switchPilotCity(page, "sao-raimundo-nonato", "São Raimundo Nonato");
   await assertCityNavigator(page, "São Raimundo Nonato", ["Teresina", "Cajueiro da Praia"]);
+  await assertEditorialHighlights(page, "São Raimundo Nonato", [
+    { highlightId: "sao-raimundo-nonato-cultura", name: "UNESCO · Parque Nacional Serra da Capivara", urlFragment: "whc.unesco.org/en/list/606" },
+    { highlightId: "sao-raimundo-nonato-historia", name: "Prefeitura de São Raimundo Nonato · Histórico da cidade", urlFragment: "saoraimundononato.pi.gov.br/2025/10/16/historico" },
+  ]);
   await switchPilotCity(page, "teresina", "Teresina");
 
   await page.getByLabel("Tipo de item").selectOption("business");
@@ -143,6 +172,10 @@ async function runMobile(browser) {
   await selectCityFromHome(page, 1, "cajueiro-da-praia", "Cajueiro da Praia");
   await assertCityNavigator(page, "Cajueiro da Praia", ["Teresina", "São Raimundo Nonato"]);
   await assertSimplifiedCards(page, "Cajueiro da Praia");
+  await assertEditorialHighlights(page, "Cajueiro da Praia", [
+    { highlightId: "cajueiro-da-praia-cultura", name: "Prefeitura de Cajueiro da Praia · História e atrações", urlFragment: "cajueirodapraia.pi.gov.br/cidade" },
+    { highlightId: "cajueiro-da-praia-historia", name: "Prefeitura de Cajueiro da Praia · História e atrações", urlFragment: "cajueirodapraia.pi.gov.br/cidade" },
+  ]);
   await switchPilotCity(page, "teresina", "Teresina");
   await assertTeresinaEditorialHighlights(page);
   await switchPilotCity(page, "cajueiro-da-praia", "Cajueiro da Praia");
@@ -165,7 +198,7 @@ try {
   await runProximity(browser);
   await runSerraProximity(browser);
   await runMobile(browser);
-  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", cityNavigator: ["Teresina → Cajueiro da Praia", "Cajueiro da Praia → São Raimundo Nonato", "São Raimundo Nonato → Teresina"], simplifiedCards: ["Teresina", "São Raimundo Nonato", "Cajueiro da Praia"], teresinaBasicTopics: ["Para comer", "Para organizar a visita"], teresinaEditorialHighlights: ["Cultura", "História"], contact: "ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Teresina" }, null, 2));
+  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", cityNavigator: ["Teresina → Cajueiro da Praia", "Cajueiro da Praia → São Raimundo Nonato", "São Raimundo Nonato → Teresina"], simplifiedCards: ["Teresina", "São Raimundo Nonato", "Cajueiro da Praia"], teresinaBasicTopics: ["Para comer", "Para organizar a visita"], editorialHighlights: ["Teresina", "Cajueiro da Praia", "São Raimundo Nonato"], sourceHighlight: "hover visual em desktop", contact: "ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Cajueiro da Praia" }, null, 2));
 } finally {
   await browser.close();
 }

@@ -18,13 +18,23 @@ describe("catálogo do MVP de front-end", () => {
     ]);
   });
 
-  it("oferece Cultura e História somente para a leitura editorial de Teresina", () => {
-    const highlights = getPilotEditorialHighlights("teresina");
+  it("oferece Cultura e História para as três leituras editoriais com fontes verificáveis", () => {
+    const expectedCultureSources = {
+      teresina: "Presidência da República · G20 Brasil · Teresina - PI",
+      "cajueiro-da-praia": "Prefeitura de Cajueiro da Praia · História e atrações",
+      "sao-raimundo-nonato": "UNESCO · Parque Nacional Serra da Capivara",
+    };
 
-    expect(highlights.map((entry) => entry.title)).toEqual(["Cultura", "História"]);
-    expect(highlights.every((entry) => entry.source.url.includes("gov.br/g20"))).toBe(true);
-    expect(getPilotEditorialHighlights("cajueiro-da-praia")).toEqual([]);
-    expect(getPilotEditorialHighlights("sao-raimundo-nonato")).toEqual([]);
+    for (const [citySlug, cultureSource] of Object.entries(expectedCultureSources)) {
+      const highlights = getPilotEditorialHighlights(citySlug);
+      expect(highlights.map((entry) => entry.title)).toEqual(["Cultura", "História"]);
+      expect(highlights.every((entry) => entry.source.url.startsWith("https://"))).toBe(true);
+      expect(highlights.find((entry) => entry.title === "Cultura")?.source.name).toBe(cultureSource);
+    }
+
+    const saoRaimundoHistory = getPilotEditorialHighlights("sao-raimundo-nonato").find((entry) => entry.title === "História");
+    expect(saoRaimundoHistory?.source.name).toBe("Prefeitura de São Raimundo Nonato · Histórico da cidade");
+    expect(saoRaimundoHistory?.source.url).toContain("saoraimundononato.pi.gov.br");
   });
 
   it("não inventa negócios quando ainda não há registros validados", () => {

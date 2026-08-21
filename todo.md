@@ -195,3 +195,5 @@
 - [x] Preservar Cultura e História como seção editorial complementar, sem cadastrar negócios não verificados.
 - [x] Atualizar a jornada automatizada para exigir os quatro conteúdos na página de Teresina.
 - [x] Validar e publicar o layout corrigido em desktop, celular e domínio público.
+- [x] Adicionar blocos editoriais de Cultura e História em Cajueiro da Praia e São Raimundo Nonato com fontes verificáveis.
+- [x] Melhorar o hover e o foco dos cartões editoriais para destacar a fonte da informação.

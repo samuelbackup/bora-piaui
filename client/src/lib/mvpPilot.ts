@@ -119,7 +119,13 @@ const deltaSource: SourceReference = {
 const capivaraSource: SourceReference = {
   name: "UNESCO · Parque Nacional Serra da Capivara",
   url: "https://whc.unesco.org/en/list/606/",
-  verifiedAt: "Referência de visitação 2024",
+  verifiedAt: "Consulta editorial 2026",
+};
+
+const saoRaimundoMunicipalSource: SourceReference = {
+  name: "Prefeitura de São Raimundo Nonato · Histórico da cidade",
+  url: "https://saoraimundononato.pi.gov.br/2025/10/16/historico-da-cidade-de-sao-raimundo-nonato/",
+  verifiedAt: "Consulta editorial 2026",
 };
 
 const potiVelhoSource: SourceReference = {
@@ -384,6 +390,34 @@ export const pilotEditorialHighlights: PilotEditorialHighlight[] = [
     title: "História",
     description: "Fundada em 1852 como capital do Piauí e concebida como cidade planejada, Teresina se desenvolveu na confluência dos rios Poti e Parnaíba.",
     source: g20TeresinaSource,
+  },
+  {
+    id: "cajueiro-da-praia-cultura",
+    citySlug: "cajueiro-da-praia",
+    title: "Cultura",
+    description: "A pesca artesanal aparece na história municipal como prática associada à herança dos Tremembé e exercida pela população local.",
+    source: cajueiroMunicipalSource,
+  },
+  {
+    id: "cajueiro-da-praia-historia",
+    citySlug: "cajueiro-da-praia",
+    title: "História",
+    description: "A origem do nome do município é ligada aos cajueiros nativos; o portal municipal registra sua fundação em 15 de dezembro de 1995.",
+    source: cajueiroMunicipalSource,
+  },
+  {
+    id: "sao-raimundo-nonato-cultura",
+    citySlug: "sao-raimundo-nonato",
+    title: "Cultura",
+    description: "São Raimundo Nonato integra o conjunto de municípios parcialmente abrangidos pela Serra da Capivara, onde registros rupestres preservam evidências de antigas comunidades humanas na América do Sul.",
+    source: capivaraSource,
+  },
+  {
+    id: "sao-raimundo-nonato-historia",
+    citySlug: "sao-raimundo-nonato",
+    title: "História",
+    description: "O histórico municipal registra a formação administrativa que elevou São Raimundo Nonato à condição de cidade em 1912.",
+    source: saoRaimundoMunicipalSource,
   },
 ];
 
