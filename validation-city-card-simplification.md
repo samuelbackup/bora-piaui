@@ -17,3 +17,11 @@ O rótulo discreto **“Operação a confirmar”** permanece como contexto mín
 ## Regressão
 
 `pnpm check`, Vitest com 32 testes, build de produção e `scripts/validate-mvp-city-journey.mjs` concluíram sem erros. O cenário automatizado confirma a ausência dos dois avisos removidos em Teresina, São Raimundo Nonato e Cajueiro da Praia.
+
+## Confirmação no domínio publicado
+
+| Cidade | URL | Situação |
+|---|---|---|
+| Teresina | `https://borapiaui-ffk8iyz3.manus.space/cidades/teresina?publication=7ba33499` | A rota pública ainda respondeu com os blocos removidos em `2026-08-21`; a confirmação permanece pendente até a propagação da nova versão. |
+| Cajueiro da Praia | `https://borapiaui-ffk8iyz3.manus.space/cidades/cajueiro-da-praia?publication=7ba33499&probe=cajueiro` | A rota pública ainda respondeu com os blocos removidos em `2026-08-21`; a confirmação permanece pendente até a propagação da nova versão. |
+| São Raimundo Nonato | `https://borapiaui-ffk8iyz3.manus.space/cidades/sao-raimundo-nonato?publication=7ba33499&probe=sao-raimundo` | A rota pública ainda respondeu com os blocos removidos em `2026-08-21`; a confirmação permanece pendente até a propagação da nova versão. |
