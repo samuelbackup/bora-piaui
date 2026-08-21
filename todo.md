@@ -199,3 +199,5 @@
 - [x] Melhorar o hover e o foco dos cartões editoriais para destacar a fonte da informação.
 - [x] Compactar a navegação da home em um menu de três barras visível também no desktop.
 - [x] Validar acessibilidade, responsividade e publicação do menu compacto na home.
+- [x] Preparar a configuração de deploy externo do Bora Piauí na Vercel.
+- [x] Executar e validar o deploy na Vercel sem interromper a versão já publicada.
