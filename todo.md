@@ -99,4 +99,4 @@
 - [x] Validar em viewport móvel o toque em polos, a prévia contextual, os cards filtrados e o foco do mapa.
 - [x] Registrar evidência explícita da sincronização móvel entre seleção de polo, mapa e cards visíveis.
 - [x] Publicar a experiência contextual dos polos turísticos.
-- [ ] Confirmar no domínio publicado os microtextos e a prévia visual sincronizada dos polos turísticos.
+- [x] Confirmar no domínio publicado os microtextos e a prévia visual sincronizada dos polos turísticos.
