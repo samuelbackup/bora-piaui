@@ -211,3 +211,4 @@
 - [x] Produzir blueprint de back-end com domínio de dados, segurança, APIs e implantação.
 - [x] Produzir documento de integração front-end–back-end com contratos, migração e validação.
 - [x] Consolidar relatório resumido de entregas, estado atual e pendências do Bora Piauí.
+- [ ] Enviar a documentação técnica e o relatório pendentes para a branch staging no GitHub.
