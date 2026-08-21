@@ -23,6 +23,7 @@ export function PiauiMap({ places, activePlaceId, onSelect }: PiauiMapProps) {
   const markers = useRef(new Map<string, { marker: google.maps.Marker; position: google.maps.LatLngLiteral }>());
   const onSelectRef = useRef(onSelect);
   const [ready, setReady] = useState(false);
+  const activePlace = activePlaceId ? places.find((place) => place.id === activePlaceId) ?? null : null;
 
   useEffect(() => {
     onSelectRef.current = onSelect;
@@ -135,6 +136,13 @@ export function PiauiMap({ places, activePlaceId, onSelect }: PiauiMapProps) {
       <div className="pointer-events-none absolute left-4 top-4 flex items-center gap-2 rounded-full bg-[#FFFDF6]/95 px-3 py-2 text-xs font-extrabold text-[#3C482D] shadow-sm backdrop-blur">
         {ready ? <MapPin className="h-4 w-4 text-[#B9572D]" /> : <LoaderCircle className="h-4 w-4 animate-spin text-[#B9572D]" />}
         {ready ? `${places.length} ${places.length === 1 ? "destino" : "destinos"} no mapa` : "Atualizando mapa"}
+      </div>
+      <div id="mapa-destino-ativo" role="status" aria-live="polite" aria-atomic="true" className="pointer-events-none absolute bottom-4 left-4 right-4 flex max-w-md items-start gap-2 rounded-2xl border border-[#FFFDF6]/15 bg-[#3C482D]/95 px-3 py-2.5 text-[#FFFDF6] shadow-[0_12px_28px_rgba(45,54,34,.28)] backdrop-blur sm:right-auto">
+        <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#D9A640]" aria-hidden="true" />
+        <div className="min-w-0">
+          <p className="text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#D9A640]">Destino ativo no mapa</p>
+          <p className="mt-0.5 truncate text-xs font-bold leading-5">{activePlace ? `${activePlace.title} · ${activePlace.municipality}` : "Selecione um destino para localizar no mapa."}</p>
+        </div>
       </div>
     </div>
   );

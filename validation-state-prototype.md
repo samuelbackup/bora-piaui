@@ -24,5 +24,7 @@
 | Transição entre prévias — desktop | O cenário automatizado alternou Teresina, Costa do Delta e Aventura e Mistério. A troca por hover exibiu a animação `pole-preview-enter`; ao aplicar o último polo, filtro, prévia e o mapa convergiram para **2 destinos**, em **112 ms**. |
 | Transição entre prévias — móvel | Em 375 × 812 px com toque, a troca de Teresina para Costa do Delta preservou a prévia e o estado ativo do filtro; o mapa passou a anunciar **2 destinos**, concluindo em **164 ms**. |
 | Regressão de interface | Após a implementação, `pnpm check`, a suíte Vitest com 22 testes e a compilação de produção foram concluídos sem erros. |
+| Indicador de destino ativo | O mapa agora exibe um painel textual persistente com o rótulo “Destino ativo no mapa” e o nome do destino mais município. O cenário automatizado confirmou que o texto acompanha a prévia em desktop e em 375 × 812 px. |
+| Indicador — marcadores | No cenário automatizado, o clique direto em **Serra dos Matões** no desktop e em **Barra Grande** no viewport móvel atualizou o indicador para o destino e município correspondentes, preservando o recorte ativo do mapa. |
 
 **Nota:** Rotas externas, regras de visitação, operação de atrativos e condições climáticas devem ser confirmadas pelo visitante nos canais responsáveis antes da viagem.

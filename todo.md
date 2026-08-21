@@ -108,3 +108,8 @@
 - [x] Executar e registrar a validação interativa em viewport móvel alternando polos por toque, incluindo prévia, filtros e mapa.
 - [x] Registrar evidências da validação pós-transição no documento de estado do protótipo.
 - [x] Verificar após a troca de prévia as contagens do mapa em desktop e celular por meio de rótulo acessível.
+- [x] Incluir um indicador textual persistente do destino ativo no mapa estadual.
+- [x] Validar o indicador ativo com filtros, polos, marcadores e viewport móvel.
+- [x] Publicar o indicador de destino ativo no mapa.
+- [x] Comprovar por interação direta com um marcador que o indicador textual acompanha a seleção no mapa.
+- [x] Registrar a evidência da sincronia entre marcador e indicador textual no estado de validação.
