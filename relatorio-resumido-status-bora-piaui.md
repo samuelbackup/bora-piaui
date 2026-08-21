@@ -71,4 +71,4 @@ O projeto publicado continua sendo um **protótipo de front-end**. Embora a inte
 2. `frontend-backend-integration-bora-piaui.md` — contratos, feature flags e plano de migração.
 3. `validation-staging-theme-loading.md` — validação de staging, tema e prévia Vercel.
 4. `validation-github-vercel-autodeploy.md` — integração GitHub–Vercel.
-5. `todo.md` — histórico consolidado das entregas e verificações.
+5. Checklist do projeto — histórico consolidado das entregas e verificações.

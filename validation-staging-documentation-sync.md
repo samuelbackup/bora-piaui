@@ -10,3 +10,5 @@ Em 21 de agosto de 2026, os commits de documentação pendentes foram enviados p
 | Estado | **Ready** em 12 segundos |
 
 O painel da Vercel confirma que a prévia foi criada automaticamente a partir da branch `staging`. A branch `main` não foi alterada neste envio.
+
+Após o registro desta evidência, o commit [`dc3b423`](https://github.com/samuelbackup/bora-piaui/commit/dc3b42324ac0c080fdee8b9e4620c52cc90f6d24) também foi recebido pela Vercel e iniciou uma nova prévia. O acompanhamento final dessa compilação será mantido no histórico da branch `staging`.

@@ -95,7 +95,7 @@ O painel deve substituir procedimentos `demo*` por procedimentos `admin*`; um bo
 
 ## 5. Migração de dados e rollout
 
-O seed inicial deve importar as três cidades e todo conteúdo que hoje vive em `mvpPilot.ts`. Essa operação é uma **migração de conteúdo**, não um scraper: cada item conserva a fonte, a URL e o estado editorial originais. Nenhum registro novo deve ser inventado para preencher lacunas.
+O seed inicial deve importar as três cidades e a totalidade do conteúdo que hoje vive em `mvpPilot.ts`. Essa operação é uma **migração de conteúdo**, não um scraper: cada item conserva a fonte, a URL e o estado editorial originais. Nenhum registro novo deve ser inventado para preencher lacunas.
 
 | Etapa | Alteração | Verificação | Rollback |
 |---|---|---|---|
