@@ -204,6 +204,25 @@ const places: Place[] = [
 
 const categories = ["Todos", "Natureza", "Patrimônio", "Litoral", "Cultura", "Cidade"] as const;
 const regions = ["Todos", "Polo Teresina", "Aventura e Mistério", "Costa do Delta", "Águas", "Nascentes", "Origens", "Histórico Cultural"] as const;
+
+export function getAvailablePoles(
+  catalog: Pick<Place, "region" | "category" | "title" | "municipality">[],
+  selectedCategory: (typeof categories)[number],
+  searchQuery: string,
+) {
+  const normalizedQuery = searchQuery.toLowerCase();
+
+  return (regions.slice(1) as Region[]).flatMap((item) => {
+    const total = catalog.filter((place) =>
+      place.region === item
+      && (selectedCategory === "Todos" || place.category === selectedCategory)
+      && `${place.title} ${place.category} ${place.region} ${place.municipality}`.toLowerCase().includes(normalizedQuery),
+    ).length;
+
+    return total ? [{ region: item, total }] : [];
+  });
+}
+
 const supplyData = [
   { name: "Restaurantes", total: 378 },
   { name: "Agências", total: 323 },
@@ -349,15 +368,18 @@ export default function Home() {
         <section id="explorar" className="scroll-mt-20 px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><div><span className="stop-chip">Parada 01 · escolha o território</span><h2 className="display-font mt-4 max-w-3xl text-4xl leading-none tracking-[-0.05em] sm:text-5xl">Comece pelo polo. Siga pelo que faz sentido para você.</h2></div><button onClick={() => goTo("mapa")} className="tap inline-flex items-center gap-2 self-start rounded-full bg-[#B9572D] px-4 py-3 text-sm font-extrabold text-white hover:bg-[#cd6d45]"><MapPinned className="h-4 w-4" /> Abrir mapa estadual</button></div>
-            <div className="mt-9 rounded-[1.75rem] border border-[#3C482D]/10 bg-[#FFFDF6] p-4 sm:p-5"><div className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#566B37]"><Compass className="h-4 w-4" /> Polos do Observatório de Turismo</div><div className="mt-3 flex flex-wrap gap-2">{regions.map((item) => <button key={item} onClick={() => applyRegion(item)} className={`tap rounded-full px-3 py-2 text-xs font-extrabold ${region === item ? "bg-[#3C482D] text-white" : "bg-[#E9DCC0] text-[#465039] hover:bg-[#DECDA9]"}`}>{item}</button>)}</div></div>
-            <div className="mt-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"><div className="flex flex-wrap gap-2">{categories.map((item) => <button key={item} onClick={() => applyCategory(item)} className={`tap rounded-full px-4 py-2.5 text-sm font-extrabold ${category === item ? "bg-[#B9572D] text-white" : "bg-[#E9DCC0] text-[#465039] hover:bg-[#DECDA9]"}`}>{item}</button>)}</div><label className="flex h-11 items-center gap-2 rounded-full border border-[#3C482D]/15 bg-[#FFFDF6] px-4 text-[#6B7057] md:w-72"><Search className="h-4 w-4" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar destino ou município" className="w-full bg-transparent text-sm font-semibold outline-none placeholder:text-[#9A9B84]" /></label></div>
-            <div className="mt-4 flex items-center gap-2 text-xs text-[#6A715D]"><Info className="h-4 w-4 shrink-0 text-[#B9572D]" /><span>Seleção de destinos prioritários do protótipo, organizada pelos polos do Observatório. Não representa ranking de visitação.</span></div>
-            <div className="atlas-rail mt-5" aria-label="Percurso entre polos turísticos">
-              {(regions.slice(1) as Region[]).map((item) => {
-                const total = visiblePlaces.filter((place) => place.region === item).length;
-                if (!total) return null;
-                return <button key={item} type="button" data-active={region === item} onClick={() => applyRegion(item)} className="atlas-node tap"><span className="atlas-node-label">{item.replace("Polo ", "")}</span><span className="atlas-node-count">{total} {total === 1 ? "âncora" : "âncoras"} neste recorte</span></button>;
-              })}
+            <div className="mt-9 border-y border-[#3C482D]/12 bg-[#FFFDF6] px-4 py-5 sm:px-6">
+              <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+                <div><div className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#566B37]"><Compass className="h-4 w-4" /> Refine o percurso</div><p className="mt-2 text-sm leading-6 text-[#68705C]">{visiblePlaces.length} {visiblePlaces.length === 1 ? "destino disponível" : "destinos disponíveis"} neste recorte editorial.</p></div>
+                {(region !== "Todos" || category !== "Todos" || query) && <button onClick={() => { setCategory("Todos"); setRegion("Todos"); setQuery(""); }} className="tap self-start text-xs font-extrabold text-[#B9572D] underline decoration-[#B9572D]/35 underline-offset-4 hover:text-[#8C3D20] sm:self-auto">Limpar seleção</button>}
+              </div>
+              <div className="mt-5 grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(220px,1.15fr)]">
+                <label className="block"><span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#68705C]">Polo turístico</span><select value={region} onChange={(event) => applyRegion(event.target.value as (typeof regions)[number])} className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/14 bg-[#F5ECD8] px-4 text-sm font-bold text-[#35402B] outline-none focus:border-[#B9572D] focus:ring-2 focus:ring-[#B9572D]/15"><option value="Todos">Todo o estado</option>{regions.slice(1).map((item) => <option key={item} value={item}>{item.replace("Polo ", "")}</option>)}</select></label>
+                <label className="block"><span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#68705C]">Interesse principal</span><select value={category} onChange={(event) => applyCategory(event.target.value as (typeof categories)[number])} className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/14 bg-[#F5ECD8] px-4 text-sm font-bold text-[#35402B] outline-none focus:border-[#B9572D] focus:ring-2 focus:ring-[#B9572D]/15"><option value="Todos">Todos os interesses</option>{categories.slice(1).map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
+                <label className="block"><span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#68705C]">Buscar no atlas</span><span className="mt-2 flex h-11 items-center gap-2 rounded-full border border-[#3C482D]/14 bg-[#F5ECD8] px-4 text-[#6B7057] focus-within:border-[#B9572D] focus-within:ring-2 focus-within:ring-[#B9572D]/15"><Search className="h-4 w-4 shrink-0" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Destino ou município" className="w-full bg-transparent text-sm font-semibold outline-none placeholder:text-[#9A9B84]" /></span></label>
+              </div>
+              <div className="mt-5 border-t border-[#3C482D]/10 pt-4"><div className="flex flex-col gap-3 lg:flex-row lg:items-baseline lg:justify-between"><p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#68705C]">Polos disponíveis</p><p className="text-xs text-[#68705C]">Selecione um polo para concentrar a descoberta.</p></div><div className="mt-3 flex flex-wrap gap-x-5 gap-y-2" aria-label="Acessos rápidos por polo turístico">{getAvailablePoles(catalogPlaces, category, query).map(({ region: item, total }) => <button key={item} type="button" onClick={() => applyRegion(item)} className={`tap border-b-2 pb-1 text-left text-xs font-extrabold transition-colors ${region === item ? "border-[#B9572D] text-[#B9572D]" : "border-transparent text-[#566B37] hover:border-[#566B37]/35 hover:text-[#3C482D]"}`}>{item.replace("Polo ", "")} <span className="ml-1 text-[#8A8D79]">{total}</span></button>)}</div></div>
+              <div className="mt-4 flex items-start gap-2 text-xs leading-5 text-[#6A715D]"><Info className="mt-0.5 h-4 w-4 shrink-0 text-[#B9572D]" /><span>Seleção de destinos prioritários do protótipo, organizada pelos polos do Observatório. Não representa ranking de visitação.</span></div>
             </div>
             <div className="discovery-route mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">{visiblePlaces.map((place, index) => <article key={place.id} className={`route-card place-card flex min-h-[315px] flex-col overflow-hidden rounded-[1.75rem] border border-[#3C482D]/12 bg-[#FFFDF6] shadow-[0_12px_32px_rgba(59,70,42,.06)] ${index === 0 ? "md:col-span-2 xl:row-span-2 xl:min-h-[640px]" : index === 4 ? "xl:col-span-2" : ""}`}><div className={`relative overflow-hidden ${index === 0 ? "h-44 xl:h-72" : "h-32"}`} style={{ backgroundColor: `${place.accent}18` }}>{place.image ? <img src={place.image} alt={`Ilustração editorial para ${place.title}`} className="place-image h-full w-full object-cover" /> : <div className="map-tile"><span>{place.region.toUpperCase()} · PARADA {index + 1}</span></div>}<span className="absolute left-4 top-4 grid h-8 w-8 place-items-center rounded-full bg-[#B9572D] text-xs font-extrabold text-white shadow-sm">{String(index + 1).padStart(2, "0")}</span></div><div className="flex flex-1 flex-col p-5"><p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#B9572D]">{place.region} · {place.category}</p><h3 className="display-font mt-2 text-3xl leading-[0.95] tracking-[-0.045em]">{place.title}</h3><p className="mt-1 text-xs font-bold text-[#70745F]">{place.municipality}</p><p className="mt-3 text-sm leading-6 text-[#66705E]">{place.text}</p><div className="mt-auto flex flex-wrap gap-2 pt-5"><button onClick={() => showPlaceOnMap(place)} className="tap inline-flex items-center gap-1.5 rounded-full bg-[#B9572D] px-3 py-2 text-xs font-extrabold text-white hover:bg-[#cd6d45]"><MapPinned className="h-3.5 w-3.5" /> Ver no mapa</button><Link href={`/destinos/${place.id}`} className="tap rounded-full border border-[#3C482D]/15 px-3 py-2 text-xs font-extrabold">Detalhes</Link></div><span className="route-connector" aria-hidden="true" /></div></article>)}</div>
             {visiblePlaces.length === 0 && <div className="mt-8 rounded-[1.5rem] border border-dashed border-[#3C482D]/20 p-10 text-center"><SlidersHorizontal className="mx-auto h-7 w-7 text-[#B9572D]" /><p className="mt-3 font-bold">Nenhum destino encontrado nesse recorte.</p><button onClick={() => { setCategory("Todos"); setRegion("Todos"); setQuery(""); }} className="mt-4 text-sm font-extrabold text-[#566B37]">Limpar filtros</button></div>}

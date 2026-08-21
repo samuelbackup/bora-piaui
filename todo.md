@@ -76,3 +76,7 @@
 - [x] Testar a serialização CSV, o estado vazio e a proteção de dados pessoais.
 - [x] Validar o download no navegador e o estado vazio após a limpeza.
 - [x] Publicar a exportação CSV demonstrativa no Painel Editorial.
+- [x] Revisar o bloco atual de polos, categorias e busca da descoberta.
+- [x] Aplicar a Opção 1 com faixa principal de filtros, resumo editorial e polos discretos.
+- [x] Validar filtros e layout da descoberta em desktop e celular.
+- [ ] Publicar o ajuste da interface de descoberta.
