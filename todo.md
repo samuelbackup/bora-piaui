@@ -126,13 +126,13 @@
 - [x] Implementar estados reutilizáveis de carregamento, erro, imagem ausente, operação pendente e link indisponível.
 - [x] Instrumentar eventos locais tipados sem envio de dados ou alteração de back-end.
 - [x] Validar jornada pública, acessibilidade e responsividade a partir de 360 px.
-- [ ] Publicar a fatia de front-end do MVP e atualizar o handoff de integração.
+- [x] Publicar a fatia de front-end do MVP e atualizar o handoff de integração.
 - [x] Adicionar suporte visual e fallback transparente para contato não publicado nos cartões de cidade e roteiro.
 - [x] Explicitar o enquadramento de roteiro de um dia sem presumir duração operacional.
 - [x] Usar estados reutilizáveis verificáveis para carregamento e link indisponível na jornada MVP.
 - [x] Adicionar ao menos um canal institucional confirmado e testar a navegação da ação de contato.
 - [x] Substituir o carregamento artificial por um adaptador local assíncrono e controlável.
 - [x] Validar por teste o carregamento e os estados de link disponível e indisponível do catálogo piloto.
-- [ ] Salvar um novo checkpoint e publicar a versão final do MVP após os ajustes de carregamento controlável e contato institucional.
+- [x] Salvar um novo checkpoint e publicar a versão final do MVP após os ajustes de carregamento controlável e contato institucional.
 - [x] Atualizar o contrato de integração com o adaptador local, contato institucional e fallbacks do catálogo piloto.
-- [ ] Confirmar no checklist a publicação final após o checkpoint com adaptador local, contato institucional e handoff atualizado.
+- [x] Confirmar no checklist a publicação final após o checkpoint com adaptador local, contato institucional e handoff atualizado.
