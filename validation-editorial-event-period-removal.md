@@ -15,3 +15,7 @@ O formulário da Revisão Editorial agora permite informar uma **data de términ
 ## Regressão
 
 `pnpm check`, Vitest, build de produção e `scripts/validate-editorial-agenda.mjs` concluíram sem erros. O cenário automatizado percorre criação com data final, publicação, despublicação, remoção confirmada e limpeza do registro temporário.
+
+## Confirmação pública e limpeza
+
+O painel público confirmou o campo **“Data de término (opcional)”**. Após a validação, os dois registros temporários usados no teste foram removidos seletivamente e a [Revisão Editorial](https://borapiaui-ffk8iyz3.manus.space/admin/editorial?publication=7bb8b5e3&probe=cleanup-confirmed) voltou a apresentar o estado vazio de programações. A jornada foi corrigida para aguardar as respostas persistidas de listagem e remoção; sua última execução terminou com **zero** registros temporários no banco.

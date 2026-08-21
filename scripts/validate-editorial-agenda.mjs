@@ -7,20 +7,41 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-async function removeTemporaryEvent(page) {
+async function removeTemporaryEvents(page) {
+  const eventsLoaded = page.waitForResponse(
+    response => response.url().includes("agenda.demoList") && response.status() === 200,
+    { timeout: 10_000 },
+  );
   await page.goto(new URL("/admin/editorial", baseUrl).href, { waitUntil: "domcontentloaded" });
-  const eventCard = page.locator("article").filter({ hasText: title });
-  if (await eventCard.count() === 0) return;
-  await eventCard.getByRole("button", { name: "Remover", exact: true }).click();
-  await page.getByRole("alertdialog").getByRole("button", { name: "Remover programação", exact: true }).click();
-  await eventCard.waitFor({ state: "hidden", timeout: 10_000 });
+  await eventsLoaded;
+  for (let attempt = 0; attempt < 10; attempt += 1) {
+    const eventCards = page.locator("article").filter({ hasText: title });
+    const countBeforeRemoval = await eventCards.count();
+    if (countBeforeRemoval === 0) return;
+
+    const deletionPersisted = page.waitForResponse(
+      response => response.url().includes("agenda.demoDelete") && response.status() === 200,
+      { timeout: 10_000 },
+    );
+    await eventCards.first().getByRole("button", { name: "Remover", exact: true }).click();
+    await page.getByRole("alertdialog").getByRole("button", { name: "Remover programação", exact: true }).click();
+    await deletionPersisted;
+    await page.waitForFunction(
+      ({ expectedTitle, countBefore }) =>
+        [...document.querySelectorAll("article")].filter(article => article.textContent?.includes(expectedTitle)).length < countBefore,
+      { expectedTitle: title, countBefore: countBeforeRemoval },
+      { timeout: 10_000 },
+    );
+  }
+
+  throw new Error("A limpeza deixou registros temporários da Agenda após dez tentativas.");
 }
 
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 
 try {
-  await removeTemporaryEvent(page);
+  await removeTemporaryEvents(page);
   await page.goto(new URL("/admin/editorial", baseUrl).href, { waitUntil: "domcontentloaded" });
 
   await page.getByLabel("Título").fill(title);
@@ -41,16 +62,16 @@ try {
   await eventCard.getByRole("button", { name: "Despublicar", exact: true }).waitFor({ state: "visible" });
 
   await page.goto(new URL("/agenda", baseUrl).href, { waitUntil: "domcontentloaded" });
-  await page.getByRole("heading", { name: title, exact: true }).waitFor({ state: "visible", timeout: 10_000 });
+  await page.getByRole("heading", { name: title, exact: true }).first().waitFor({ state: "visible", timeout: 10_000 });
 
-  await removeTemporaryEvent(page);
+  await removeTemporaryEvents(page);
   await page.goto(new URL("/agenda", baseUrl).href, { waitUntil: "domcontentloaded" });
   assert(await page.getByRole("heading", { name: title, exact: true }).count() === 0, "A programação removida ainda aparece na Agenda pública.");
 
   console.log(JSON.stringify({ status: "ok", period: "12/09/2026 — 14/09/2026", publication: "publicar e despublicar preservados", removal: "evento removido da Revisão Editorial e da Agenda" }, null, 2));
 } finally {
   try {
-    await removeTemporaryEvent(page);
+    await removeTemporaryEvents(page);
   } finally {
     await browser.close();
   }

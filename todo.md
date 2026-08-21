@@ -181,9 +181,13 @@
 - [x] Exibir o período completo do evento na Revisão Editorial e preservar a leitura na Agenda pública.
 - [x] Criar remoção persistida de eventos com confirmação explícita, sem remover publicar e despublicar.
 - [x] Cobrir período, publicação e remoção de programação com testes automatizados e jornada de navegador.
-- [ ] Validar o painel editorial e a Agenda em desktop e celular e publicar a atualização.
+- [x] Validar o painel editorial e a Agenda em desktop e celular e publicar a atualização.
 - [x] Confirmar fontes institucionais para os blocos de Cultura e História de Teresina.
 - [x] Remover os diretórios de restaurantes e serviços das páginas das cidades-piloto.
 - [x] Adicionar os blocos editoriais de Cultura e História somente em Teresina, com fonte acessível.
 - [x] Atualizar testes para assegurar a ausência dos diretórios e a presença dos novos blocos em Teresina.
-- [ ] Validar e publicar a substituição editorial em desktop, celular e no domínio público.
+- [x] Validar e publicar a substituição editorial em desktop, celular e no domínio público.
+- [x] Remover os registros temporários “Validação temporária da Agenda Bora Piauí” criados durante os testes do fluxo editorial.
+- [x] Confirmar no painel público que a Revisão Editorial não mantém dados temporários de validação.
+- [x] Corrigir a limpeza automática de registros temporários no cenário de validação editorial.
+- [ ] Salvar um checkpoint final com as validações e a correção da limpeza automática.

@@ -15,3 +15,7 @@ Os diretórios **“Restaurantes curados”** e **“Serviços curados”** não
 ## Regressão
 
 `pnpm check`, Vitest com 37 testes, build de produção e `scripts/validate-mvp-city-journey.mjs` concluíram sem erros. O cenário verifica Cultura, História, a fonte do G20 Brasil e a ausência dos dois diretórios removidos.
+
+## Confirmação pública
+
+A página publicada de [Teresina](https://borapiaui-ffk8iyz3.manus.space/cidades/teresina?publication=7bb8b5e3&probe=propagated) confirmou os dois blocos, suas fontes acessíveis e a ausência de “Restaurantes curados” e “Serviços curados”.
