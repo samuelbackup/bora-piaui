@@ -22,6 +22,6 @@ O rótulo discreto **“Operação a confirmar”** permanece como contexto mín
 
 | Cidade | URL | Situação |
 |---|---|---|
-| Teresina | `https://borapiaui-ffk8iyz3.manus.space/cidades/teresina?publication=7ba33499` | A rota pública ainda respondeu com os blocos removidos em `2026-08-21`; a confirmação permanece pendente até a propagação da nova versão. |
-| Cajueiro da Praia | `https://borapiaui-ffk8iyz3.manus.space/cidades/cajueiro-da-praia?publication=7ba33499&probe=cajueiro` | A rota pública ainda respondeu com os blocos removidos em `2026-08-21`; a confirmação permanece pendente até a propagação da nova versão. |
-| São Raimundo Nonato | `https://borapiaui-ffk8iyz3.manus.space/cidades/sao-raimundo-nonato?publication=7ba33499&probe=sao-raimundo` | A rota pública ainda respondeu com os blocos removidos em `2026-08-21`; a confirmação permanece pendente até a propagação da nova versão. |
+| Teresina | `https://borapiaui-ffk8iyz3.manus.space/cidades/teresina?publication=f77c6bfa&probe=publish-retry-2` | Confirmado após a propagação: os cartões de Encontro dos Rios e Polo Cerâmico do Poti Velho não exibem “Confirmação necessária” nem “Contato não publicado”. |
+| Cajueiro da Praia | `https://borapiaui-ffk8iyz3.manus.space/cidades/cajueiro-da-praia?publication=f77c6bfa&probe=publish-confirmed` | Confirmado após a propagação: os cartões de Barra Grande e Cajueiro-rei do Piauí não exibem “Confirmação necessária” nem “Contato não publicado”. |
+| São Raimundo Nonato | `https://borapiaui-ffk8iyz3.manus.space/cidades/sao-raimundo-nonato?publication=f77c6bfa&probe=publish-confirmed` | Confirmado após a propagação: os cartões do Parque Nacional Serra da Capivara e Museu do Homem Americano não exibem os dois avisos; o contato institucional do ICMBio permanece disponível. |
