@@ -87,4 +87,5 @@
 - [x] Melhorar o feedback visual de foco, teclado e passagem do mouse nos polos turísticos.
 - [x] Inserir a imagem do Encontro dos Rios no card correspondente sem alterar a informação editorial.
 - [x] Testar interações e validar o atlas em desktop e celular.
-- [ ] Publicar os refinamentos de polos e do Encontro dos Rios.
+- [x] Publicar os refinamentos de polos e do Encontro dos Rios.
+- [ ] Confirmar no domínio publicado a imagem do Encontro dos Rios e os novos estados visuais dos polos.
