@@ -14,3 +14,11 @@
 ## Decisão editorial
 
 O componente aceita restaurantes e serviços por contrato tipado, mas somente mostra registros com `status: "published"`, fonte e contato quando existirem. A lista vazia é um resultado editorial válido: ela preserva o espaço visual e informa a curadoria pendente, sem inventar negócios, horários, preços, contatos ou avaliações.
+
+## Confirmação no domínio publicado
+
+| Cidade | URL validada | Resultado observado |
+|---|---|---|
+| Teresina | `https://borapiaui-ffk8iyz3.manus.space/cidades/teresina?publication=f71a8fba` | Diretórios “Restaurantes curados” e “Serviços curados” confirmados explicitamente, ambos nos estados “em curadoria”, sem registros, contatos ou ações operacionais fictícias. |
+| São Raimundo Nonato | `https://borapiaui-ffk8iyz3.manus.space/cidades/sao-raimundo-nonato?publication=f71a8fba` | Diretório “Restaurantes curados” confirmado no estado “em curadoria”. No diretório “Serviços curados”, “Canais de atendimento do ICMBio” foi confirmado no DOM público, com ações “Contato” e “Ver fonte” para o canal institucional. |
+| Cajueiro da Praia | `https://borapiaui-ffk8iyz3.manus.space/cidades/cajueiro-da-praia?publication=f71a8fba` | Diretórios “Restaurantes curados” e “Serviços curados” confirmados explicitamente, ambos nos estados “em curadoria”, sem inserir negócios, contatos ou condições operacionais não verificados. |

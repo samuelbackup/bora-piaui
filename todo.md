@@ -160,5 +160,8 @@
 - [x] Implementar ações de contato, rota e fonte com fallback para dados não publicados.
 - [x] Validar os novos componentes em desktop e celular sem cadastrar negócios não verificados.
 - [x] Publicar os componentes e atualizar o contrato de integração de curadoria.
-- [ ] Salvar um novo checkpoint com `CuratedBusinessDirectory`, validações e contrato de curadoria atualizado.
-- [ ] Confirmar no domínio publicado os diretórios curados em Teresina, Cajueiro da Praia e São Raimundo Nonato após a publicação.
+- [x] Salvar um novo checkpoint com `CuratedBusinessDirectory`, validações e contrato de curadoria atualizado.
+- [x] Confirmar no domínio publicado os diretórios curados em Teresina, Cajueiro da Praia e São Raimundo Nonato após a publicação.
+- [x] Registrar evidência explícita no domínio publicado dos diretórios de restaurantes e serviços em Teresina, incluindo ambos os estados editoriais.
+- [x] Registrar evidência explícita no domínio publicado do diretório de serviços e do estado de restaurantes em São Raimundo Nonato.
+- [x] Registrar evidência explícita no domínio publicado dos diretórios de restaurantes e serviços em Cajueiro da Praia, mostrando os estados de curadoria.
