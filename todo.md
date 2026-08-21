@@ -140,7 +140,7 @@
 - [x] Definir uma matriz de prioridade e critérios de aceite por cidade-piloto para o front-end.
 - [x] Implementar os refinamentos de interface aprovados para as necessidades prioritárias.
 - [x] Validar as jornadas refinadas em desktop e celular.
-- [ ] Publicar a evolução das cidades-piloto e atualizar o handoff de integração.
+- [x] Publicar a evolução das cidades-piloto e atualizar o handoff de integração.
 - [x] Mapear âncoras de visita e categorias próximas prioritárias em Teresina, Cajueiro da Praia e São Raimundo Nonato.
 - [x] Definir critérios de distância, fonte e confirmação para recomendações de locais próximos.
 - [x] Implementar a descoberta “por perto” com história, gastronomia e serviços curados no front-end.
@@ -148,5 +148,10 @@
 - [x] Implementar relações editoriais de proximidade para Cajueiro da Praia e São Raimundo Nonato, com fonte pública e ficha local navegável.
 - [x] Definir cobertura rastreável de gastronomia e serviços na descoberta por proximidade, sem criar negócios ou condições operacionais fictícias.
 - [x] Validar em desktop e celular as três cidades-piloto, incluindo relações próximas, detalhes, rota, estados vazios e fallback de contato.
-- [ ] Salvar um novo checkpoint com a evolução das cidades-piloto após as mudanças de proximidade e curadoria.
-- [ ] Confirmar a versão publicada com a descoberta por proximidade nas três cidades e registrar a evidência na validação.
+- [x] Salvar um novo checkpoint com a evolução das cidades-piloto após as mudanças de proximidade e curadoria.
+- [x] Confirmar a versão publicada com a descoberta por proximidade nas três cidades e registrar a evidência na validação.
+- [x] Confirmar no domínio publicado a descoberta por proximidade em Cajueiro da Praia e São Raimundo Nonato e registrar a evidência no documento de validação.
+- [x] Atualizar o registro de validação publicada com links e checagens explícitas das três cidades-piloto após a propagação do checkpoint `f8ab607c`.
+- [x] Registrar com sucesso em `validation-city-proximity.md` a confirmação publicada de Cajueiro da Praia e São Raimundo Nonato, com links e checagens explícitas.
+- [x] Revalidar o conteúdo final de `validation-city-proximity.md` após o patch, garantindo que as três cidades-piloto estejam documentadas no arquivo.
+- [x] Só então remarcar no `todo.md` os itens de confirmação publicada e atualização do registro de validação.
