@@ -201,3 +201,5 @@
 - [x] Validar acessibilidade, responsividade e publicação do menu compacto na home.
 - [x] Preparar a configuração de deploy externo do Bora Piauí na Vercel.
 - [x] Executar e validar o deploy na Vercel sem interromper a versão já publicada.
+- [x] Publicar o código atual do Bora Piauí em um repositório GitHub acessível.
+- [x] Vincular o repositório GitHub ao projeto Vercel para habilitar deploys automáticos.
