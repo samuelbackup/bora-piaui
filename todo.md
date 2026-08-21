@@ -190,4 +190,4 @@
 - [x] Remover os registros temporários “Validação temporária da Agenda Bora Piauí” criados durante os testes do fluxo editorial.
 - [x] Confirmar no painel público que a Revisão Editorial não mantém dados temporários de validação.
 - [x] Corrigir a limpeza automática de registros temporários no cenário de validação editorial.
-- [ ] Salvar um checkpoint final com as validações e a correção da limpeza automática.
+- [x] Salvar um checkpoint final com as validações e a correção da limpeza automática.
