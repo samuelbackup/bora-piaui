@@ -1,0 +1,9 @@
+flowchart LR
+  U[Visitante ou editor] --> FE[Front-end React na Vercel]
+  FE -->|tRPC HTTPS| API[API Node Express no Railway]
+  API --> AUTH[OIDC e regras de acesso]
+  API --> DB[(MySQL ou TiDB)]
+  API --> S3[Armazenamento S3]
+  API --> OBS[Health checks e logs]
+  GITHUB[GitHub: staging/main] --> FE
+  GITHUB --> API

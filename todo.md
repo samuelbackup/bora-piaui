@@ -207,3 +207,6 @@
 - [x] Adicionar alternância persistente de modo escuro no menu compacto.
 - [x] Adicionar animação inicial suave, respeitando redução de movimento.
 - [x] Validar e confirmar a prévia automática da Vercel para a branch staging.
+- [x] Mapear os contratos atuais do front-end para orientar o back-end do Bora Piauí.
+- [x] Produzir blueprint de back-end com domínio de dados, segurança, APIs e implantação.
+- [x] Produzir documento de integração front-end–back-end com contratos, migração e validação.
