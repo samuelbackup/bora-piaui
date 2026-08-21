@@ -15,3 +15,7 @@ O seletor **Cidades-piloto** foi incluído abaixo da abertura de cada página de
 ## Regressão
 
 `pnpm check`, Vitest com 33 testes, build de produção e `scripts/validate-mvp-city-journey.mjs` concluíram sem erros. O cenário automatizado confirma o ciclo Teresina → Cajueiro da Praia → São Raimundo Nonato → Teresina e a disponibilidade do seletor em celular.
+
+## Confirmação pública
+
+O checkpoint `bf164c28` foi criado para publicação automática. Durante as duas primeiras consultas públicas de Teresina, o domínio ainda respondeu com a versão anterior, sem o seletor; a confirmação foi mantida como pendente enquanto a propagação da versão publicada é concluída.
