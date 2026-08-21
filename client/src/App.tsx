@@ -7,9 +7,11 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import AdminDestinations from "./pages/AdminDestinations";
 import AdminEditorial from "./pages/AdminEditorial";
 import AgendaPage from "./pages/AgendaPage";
+import CityPage from "./pages/CityPage";
 import DadosPage from "./pages/DadosPage";
 import DestinationPage from "./pages/DestinationPage";
 import Home from "./pages/Home";
+import ItineraryPage from "./pages/ItineraryPage";
 import PatrimoniosPage from "./pages/PatrimoniosPage";
 import PartnersPage from "./pages/PartnersPage";
 import SaboresPage from "./pages/SaboresPage";
@@ -18,6 +20,8 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/cidades/:slug" component={CityPage} />
+      <Route path="/roteiros/:slug" component={ItineraryPage} />
       <Route path="/destinos/:slug" component={DestinationPage} />
       <Route path="/admin/destinos" component={AdminDestinations} />
       <Route path="/admin/editorial" component={AdminEditorial} />

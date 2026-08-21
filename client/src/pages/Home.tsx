@@ -26,6 +26,8 @@ import {
 import { toast } from "sonner";
 import { PiauiMap } from "@/components/PiauiMap";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { getPilotItinerary, pilotCities } from "@/lib/mvpPilot";
+import { trackMvpEvent } from "@/lib/mvpEvents";
 
 const heroImage = "/manus-storage/bora-piaui-atlas-hero_eff0e2e7.jpg";
 const deltaImage = "/manus-storage/bora-piaui-delta-editorial_93dc13d8.jpg";
@@ -369,6 +371,7 @@ export default function Home() {
           </button>
           <nav className="hidden items-center gap-5 text-xs font-bold lg:flex xl:gap-6 xl:text-sm">
             <button onClick={() => goTo("explorar")} className="tap hover:text-[#B9572D]">Explorar</button>
+            <Link href="/cidades/teresina" className="tap hover:text-[#B9572D]">Cidades-piloto</Link>
             <Link href="/patrimonios" className="tap hover:text-[#B9572D]">Patrimônios</Link>
             <Link href="/sabores" className="tap hover:text-[#B9572D]">Sabores</Link>
             <Link href="/agenda" className="tap hover:text-[#B9572D]">Agenda</Link>
@@ -383,7 +386,7 @@ export default function Home() {
             <button onClick={() => setMenuOpen((value) => !value)} className="tap grid h-10 w-10 place-items-center rounded-full border border-[#3C482D]/15 lg:hidden" aria-label="Abrir menu">{menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
           </div>
         </div>
-        {menuOpen && <nav className="border-t border-[#3C482D]/10 bg-[#F5ECD8] px-5 py-4 lg:hidden"><div className="mx-auto flex max-w-7xl flex-col gap-1"><button onClick={() => goTo("explorar")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Explorar destinos</button><Link href="/patrimonios" className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Patrimônios</Link><Link href="/sabores" className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Sabores</Link><Link href="/agenda" className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Agenda cultural</Link><Link href="/dados" className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Dados oficiais</Link><button onClick={() => goTo("mapa")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Mapa do estado</button><Link href="/parceiros" className="rounded-xl px-3 py-3 text-left text-sm font-bold text-[#B9572D] hover:bg-[#EDE0C4]">Seja parceiro</Link><Link href="/admin/destinos" className="rounded-xl px-3 py-3 text-left text-sm font-bold text-[#566B37] hover:bg-[#EDE0C4]">Painel demonstrativo</Link><button onClick={() => setPlannerOpen(true)} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Meu roteiro</button></div></nav>}
+        {menuOpen && <nav className="border-t border-[#3C482D]/10 bg-[#F5ECD8] px-5 py-4 lg:hidden"><div className="mx-auto flex max-w-7xl flex-col gap-1"><button onClick={() => goTo("explorar")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Explorar destinos</button><Link href="/cidades/teresina" className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Cidades-piloto</Link><Link href="/patrimonios" className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Patrimônios</Link><Link href="/sabores" className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Sabores</Link><Link href="/agenda" className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Agenda cultural</Link><Link href="/dados" className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Dados oficiais</Link><button onClick={() => goTo("mapa")} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Mapa do estado</button><Link href="/parceiros" className="rounded-xl px-3 py-3 text-left text-sm font-bold text-[#B9572D] hover:bg-[#EDE0C4]">Seja parceiro</Link><Link href="/admin/destinos" className="rounded-xl px-3 py-3 text-left text-sm font-bold text-[#566B37] hover:bg-[#EDE0C4]">Painel demonstrativo</Link><button onClick={() => setPlannerOpen(true)} className="rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4]">Meu roteiro</button></div></nav>}
       </header>
 
       <main id="inicio">
@@ -398,6 +401,13 @@ export default function Home() {
             <div className="relative min-h-[340px] overflow-hidden rounded-[2.25rem] border border-white/18 bg-[#556B37] sm:min-h-[430px]"><img src={heroImage} alt="Ilustração editorial de uma paisagem do Piauí" className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-[#2E3222]/75 via-transparent to-transparent" /><div className="absolute bottom-5 left-5 right-5 flex items-end justify-between"><div><p className="text-[10px] font-extrabold uppercase tracking-[0.17em] text-white/65">Do litoral à Caatinga</p><p className="mt-1 text-base font-bold">Nove âncoras para começar a explorar</p></div><span className="grid h-12 w-12 place-items-center rounded-full bg-[#FFFDF6] text-[#B9572D]"><MapPinned className="h-5 w-5" /></span></div></div>
           </div>
           <div className="route-line absolute bottom-0 left-0 h-[3px] w-full" />
+        </section>
+
+        <section id="cidades-mvp" className="scroll-mt-20 border-b border-[#3C482D]/10 bg-[#FFFDF6] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+          <div className="mx-auto max-w-7xl">
+            <div className="grid gap-6 lg:grid-cols-[.78fr_1.22fr] lg:items-end"><div><span className="stop-chip">MVP · três cidades-piloto</span><h2 className="display-font mt-4 text-4xl leading-none tracking-[-0.055em] sm:text-5xl">Escolha uma cidade e avance com contexto.</h2></div><p className="max-w-2xl text-sm leading-6 text-[#68705C]">Este recorte prepara a jornada pública por cidade. Atrações só aparecem com fonte; negócios entram quando houver curadoria e dados operacionais permitidos.</p></div>
+            <div className="mt-8 grid gap-4 md:grid-cols-3">{pilotCities.map((city, index) => { const itinerary = getPilotItinerary(city.slug); return <article key={city.slug} className="flex min-h-[260px] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-[#3C482D]/13 bg-[#F5ECD8] p-5" style={{ background: `linear-gradient(155deg, ${city.accent}18, #FFFDF6 58%)` }}><div><div className="flex items-center justify-between"><span className="grid h-8 w-8 place-items-center rounded-full bg-[#3C482D] text-xs font-extrabold text-white">0{index + 1}</span><span className="text-[10px] font-extrabold uppercase tracking-[0.13em] text-[#566B37]">{city.eyebrow}</span></div><h3 className="display-font mt-8 text-3xl tracking-[-0.05em]">{city.name}</h3><p className="mt-3 text-sm leading-6 text-[#66705E]">{city.summary}</p></div><div className="mt-6"><p className="text-[11px] leading-5 text-[#66705E]">Fonte: <a href={city.source.url} target="_blank" rel="noopener noreferrer" className="font-bold underline decoration-[#566B37]/35 underline-offset-2">{city.source.name}</a></p><Link href={`/cidades/${city.slug}`} onClick={() => trackMvpEvent("search", { scope: "mvp_city_card", city: city.slug })} className="tap mt-4 inline-flex items-center gap-2 rounded-full bg-[#3C482D] px-4 py-2.5 text-sm font-extrabold text-white hover:bg-[#566B37]">Explorar cidade <ArrowRight className="h-4 w-4" /></Link>{itinerary && <Link href={`/roteiros/${itinerary.slug}`} onClick={() => trackMvpEvent("add_to_itinerary", { itinerary: itinerary.slug, city: city.slug })} className="tap ml-3 inline-flex items-center gap-1 text-xs font-extrabold text-[#566B37] underline decoration-[#566B37]/35 underline-offset-4">Roteiro</Link>}</div></article>;})}</div>
+          </div>
         </section>
 
         <section id="explorar" className="scroll-mt-20 px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
