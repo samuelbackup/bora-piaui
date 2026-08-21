@@ -72,6 +72,11 @@
   .soft-grid { background-image: linear-gradient(rgba(84, 107, 55, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(84, 107, 55, 0.1) 1px, transparent 1px); background-size: 28px 28px; }
   .place-image { transition: transform 500ms cubic-bezier(0.23, 1, 0.32, 1); }
   .place-card:hover .place-image { transform: scale(1.045); }
+  .pole-preview-enter { animation: pole-preview-enter 180ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+  @keyframes pole-preview-enter {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   .tap { transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 180ms cubic-bezier(0.23, 1, 0.32, 1); }
   .tap:active { transform: scale(0.97); }
   .stop-chip { display: inline-flex; align-items: center; gap: 0.45rem; border-radius: 9999px; background: #FFFDF6; color: #B9572D; padding: 0.38rem 0.65rem 0.38rem 0.42rem; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.11em; text-transform: uppercase; }
@@ -113,4 +118,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+  .pole-preview-enter { animation: none !important; }
 }

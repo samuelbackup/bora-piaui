@@ -97,7 +97,7 @@ export function PiauiMap({ places, activePlaceId, onSelect }: PiauiMapProps) {
   }, [activePlaceId, ready]);
 
   return (
-    <div className="relative overflow-hidden rounded-[1.8rem] border border-[#3C482D]/15 bg-[#E6D4AA] shadow-[0_18px_55px_rgba(59,70,42,.14)]">
+    <div role="region" aria-label={`Mapa com ${places.length} ${places.length === 1 ? "destino" : "destinos"}`} aria-busy={!ready} className="relative overflow-hidden rounded-[1.8rem] border border-[#3C482D]/15 bg-[#E6D4AA] shadow-[0_18px_55px_rgba(59,70,42,.14)]">
       <MapView
         initialCenter={{ lat: -6.45, lng: -42.75 }}
         initialZoom={6}

@@ -100,3 +100,11 @@
 - [x] Registrar evidência explícita da sincronização móvel entre seleção de polo, mapa e cards visíveis.
 - [x] Publicar a experiência contextual dos polos turísticos.
 - [x] Confirmar no domínio publicado os microtextos e a prévia visual sincronizada dos polos turísticos.
+- [x] Revisar o painel de prévia contextual e os estados de troca entre destinos.
+- [x] Aplicar transição curta de opacidade e deslocamento entre prévias, respeitando redução de movimento.
+- [x] Validar a alternância entre polos em desktop e celular sem atrasar filtros ou mapa.
+- [x] Publicar a transição contextual dos destinos.
+- [x] Executar e registrar a validação interativa em desktop alternando entre três polos, incluindo prévia, filtros e mapa.
+- [x] Executar e registrar a validação interativa em viewport móvel alternando polos por toque, incluindo prévia, filtros e mapa.
+- [x] Registrar evidências da validação pós-transição no documento de estado do protótipo.
+- [x] Verificar após a troca de prévia as contagens do mapa em desktop e celular por meio de rótulo acessível.
