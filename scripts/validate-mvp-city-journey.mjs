@@ -22,6 +22,25 @@ async function selectCityFromHome(page, index, expectedSlug, expectedName) {
   await page.getByRole("heading", { name: expectedName, exact: true }).waitFor({ state: "visible" });
 }
 
+async function assertCityNavigator(page, currentName, otherNames) {
+  const navigator = page.getByRole("navigation", { name: "Cidades-piloto" });
+  await navigator.waitFor({ state: "visible" });
+  const activeCity = navigator.getByText(currentName, { exact: true });
+  assert(await activeCity.getAttribute("aria-current") === "page", `${currentName} não está marcada como cidade ativa no seletor.`);
+  for (const cityName of otherNames) {
+    await navigator.getByRole("link", { name: cityName, exact: true }).waitFor({ state: "visible" });
+  }
+}
+
+async function switchPilotCity(page, slug, cityName) {
+  const navigator = page.getByRole("navigation", { name: "Cidades-piloto" });
+  await Promise.all([
+    page.waitForURL(new RegExp(`/cidades/${slug}$`), { timeout: 10_000 }),
+    navigator.getByRole("link", { name: cityName, exact: true }).click(),
+  ]);
+  await page.getByRole("heading", { name: cityName, exact: true }).waitFor({ state: "visible" });
+}
+
 async function runLoadingState(browser) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   await page.goto(new URL("/cidades/teresina?mvpLoading=1", baseUrl).href, { waitUntil: "domcontentloaded" });
@@ -33,6 +52,12 @@ async function runLoadingState(browser) {
 async function runDesktop(browser) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   await selectCityFromHome(page, 0, "teresina", "Teresina");
+  await assertCityNavigator(page, "Teresina", ["Cajueiro da Praia", "São Raimundo Nonato"]);
+  await switchPilotCity(page, "cajueiro-da-praia", "Cajueiro da Praia");
+  await assertCityNavigator(page, "Cajueiro da Praia", ["Teresina", "São Raimundo Nonato"]);
+  await switchPilotCity(page, "sao-raimundo-nonato", "São Raimundo Nonato");
+  await assertCityNavigator(page, "São Raimundo Nonato", ["Teresina", "Cajueiro da Praia"]);
+  await switchPilotCity(page, "teresina", "Teresina");
 
   await page.getByLabel("Tipo de item").selectOption("business");
   await page.getByText("Negócios em curadoria", { exact: true }).waitFor({ state: "visible" });
@@ -112,6 +137,7 @@ async function runSerraProximity(browser) {
 async function runMobile(browser) {
   const page = await browser.newPage({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
   await selectCityFromHome(page, 1, "cajueiro-da-praia", "Cajueiro da Praia");
+  await assertCityNavigator(page, "Cajueiro da Praia", ["Teresina", "São Raimundo Nonato"]);
   await assertSimplifiedCards(page, "Cajueiro da Praia");
   await page.locator("#por-perto").scrollIntoViewIfNeeded();
   await page.getByRole("heading", { name: "O que há por perto de Barra Grande", exact: true }).waitFor({ state: "visible" });
@@ -133,7 +159,7 @@ try {
   await runProximity(browser);
   await runSerraProximity(browser);
   await runMobile(browser);
-  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", simplifiedCards: ["Teresina", "São Raimundo Nonato", "Cajueiro da Praia"], contact: "ICMBio", curatedService: "Canais de atendimento do ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Cajueiro da Praia" }, null, 2));
+  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", cityNavigator: ["Teresina → Cajueiro da Praia", "Cajueiro da Praia → São Raimundo Nonato", "São Raimundo Nonato → Teresina"], simplifiedCards: ["Teresina", "São Raimundo Nonato", "Cajueiro da Praia"], contact: "ICMBio", curatedService: "Canais de atendimento do ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Cajueiro da Praia" }, null, 2));
 } finally {
   await browser.close();
 }

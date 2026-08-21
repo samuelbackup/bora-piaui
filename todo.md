@@ -171,3 +171,9 @@
 - [x] Publicar a simplificação e registrar como evolução futura os avisos operacionais detalhados.
 - [x] Salvar um novo checkpoint após a simplificação dos cartões das três cidades-piloto.
 - [x] Confirmar no domínio publicado que os blocos “Confirmação necessária” e “Contato não publicado” não aparecem mais nas três cidades.
+- [x] Criar uma navegação contextual entre Teresina, Cajueiro da Praia e São Raimundo Nonato nas páginas de cidade.
+- [x] Destacar a cidade ativa e garantir acessibilidade e responsividade do seletor em desktop e celular.
+- [x] Atualizar a jornada automatizada para trocar diretamente entre as três cidades-piloto.
+- [ ] Validar e publicar a navegação entre cidades no domínio público.
+- [ ] Salvar um checkpoint com o seletor de cidades-piloto e suas evidências de validação.
+- [ ] Confirmar no domínio publicado o destaque da cidade ativa e os links para as outras duas cidades.

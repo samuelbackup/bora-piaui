@@ -8,6 +8,16 @@ describe("catálogo do MVP de front-end", () => {
     expect(getPilotCity("sao-raimundo-nonato")?.name).toBe("São Raimundo Nonato");
   });
 
+  it("fornece os três destinos e slugs que alimentam a navegação contextual", async () => {
+    const catalog = await loadPilotCatalog();
+
+    expect(catalog.cities.map((city) => city.slug)).toEqual([
+      "teresina",
+      "cajueiro-da-praia",
+      "sao-raimundo-nonato",
+    ]);
+  });
+
   it("não inventa negócios quando ainda não há registros validados", () => {
     expect(getPilotItems("teresina", "business")).toEqual([]);
   });

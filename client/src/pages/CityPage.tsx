@@ -4,6 +4,7 @@ import { Link, useRoute } from "wouter";
 import { MvpContentState } from "@/components/MvpContentState";
 import { CuratedBusinessDirectory } from "@/components/CuratedBusinessDirectory";
 import { PiauiMap } from "@/components/PiauiMap";
+import { PilotCityNavigator } from "@/components/PilotCityNavigator";
 import { getPilotCategories, getPilotCity, getPilotCurationTopics, getPilotCuratedBusinesses, getPilotItem, getPilotItems, getPilotItinerary, getPilotNearbyItems, loadPilotCatalog, type PilotCatalog, type PilotItemKind } from "@/lib/mvpPilot";
 import { trackMvpEvent } from "@/lib/mvpEvents";
 
@@ -79,6 +80,8 @@ export default function CityPage() {
             {itinerary && <Link href={`/roteiros/${itinerary.slug}`} onClick={() => trackMvpEvent("add_to_itinerary", { city: city.slug, itinerary: itinerary.slug })} className="tap inline-flex items-center justify-center gap-2 rounded-full bg-[#FFFDF6] px-5 py-3 text-sm font-extrabold text-[#3C482D] hover:bg-[#F5ECD8]"><Route className="h-4 w-4 text-[#B9572D]" /> Ver roteiro de 1 dia</Link>}
           </div>
         </section>
+
+        <PilotCityNavigator cities={catalog.cities} currentSlug={city.slug} />
 
         <section className="px-4 py-10 sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
           <div className="grid gap-6 border-y border-[#3C482D]/12 py-5 lg:grid-cols-[1fr_auto] lg:items-end"><div><p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#566B37]">Descoberta por cidade</p><h2 className="display-font mt-3 text-3xl tracking-[-0.05em] sm:text-4xl">Atrações primeiro. Negócios somente quando houver curadoria.</h2></div><SourceLine {...city.source} /></div>
