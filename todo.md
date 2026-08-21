@@ -206,4 +206,4 @@
 - [x] Criar e publicar a branch staging para testes antes da produção.
 - [x] Adicionar alternância persistente de modo escuro no menu compacto.
 - [x] Adicionar animação inicial suave, respeitando redução de movimento.
-- [ ] Validar e confirmar a prévia automática da Vercel para a branch staging.
+- [x] Validar e confirmar a prévia automática da Vercel para a branch staging.

@@ -12,6 +12,6 @@ O controle de tema usa `role="switch"`, informa o estado com `aria-checked` e al
 
 Foram concluídos com sucesso `pnpm check`, `pnpm test` e `pnpm build`, com **42 testes** aprovados. A home foi inspecionada em **1280 × 720** e **375 × 812**, confirmando o cabeçalho compacto, a marca, Meu roteiro e o menu sem sobreposição.
 
-## Pendência de publicação
+## Prévia Vercel confirmada
 
-A etapa restante é enviar a branch `staging` ao GitHub e confirmar a URL de prévia criada pela Vercel. A branch `main` não será alterada nesta entrega.
+O commit `18e4f50` foi enviado para [samuelbackup/bora-piaui/tree/staging](https://github.com/samuelbackup/bora-piaui/tree/staging). A Vercel criou automaticamente uma implantação de prévia em estado **Ready**: [bora-piaui-1lange4wf-samuel-levi.vercel.app](https://bora-piaui-1lange4wf-samuel-levi.vercel.app). A branch `main` e a implantação de produção permanecem inalteradas.
