@@ -197,3 +197,5 @@
 - [x] Validar e publicar o layout corrigido em desktop, celular e domínio público.
 - [x] Adicionar blocos editoriais de Cultura e História em Cajueiro da Praia e São Raimundo Nonato com fontes verificáveis.
 - [x] Melhorar o hover e o foco dos cartões editoriais para destacar a fonte da informação.
+- [x] Compactar a navegação da home em um menu de três barras visível também no desktop.
+- [x] Validar acessibilidade, responsividade e publicação do menu compacto na home.

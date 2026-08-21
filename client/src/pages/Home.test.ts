@@ -1,5 +1,8 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { getAvailablePoles, getPolePreview } from "./Home";
+
+const homeSource = readFileSync(new URL("./Home.tsx", import.meta.url), "utf8");
 
 describe("acessos territoriais da descoberta", () => {
   const catalog = [
@@ -31,5 +34,19 @@ describe("acessos territoriais da descoberta", () => {
     expect(getPolePreview(previewCatalog, "Costa do Delta", "Litoral", "Barra")?.id).toBe("barra-grande");
     expect(getPolePreview(previewCatalog, "Polo Teresina", "Todos", "")?.title).toBe("Encontro dos Rios");
     expect(getPolePreview(previewCatalog, null, "Todos", "")).toBeNull();
+  });
+
+  it("concentra a navegação em um menu acessível também no desktop", () => {
+    expect(homeSource).toContain('aria-controls="home-navigation-menu"');
+    expect(homeSource).toContain("aria-expanded={menuOpen}");
+    expect(homeSource).toContain('aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}');
+    expect(homeSource).toContain("lg:grid-cols-3");
+    expect(homeSource).not.toContain('hidden items-center gap-5 text-xs font-bold lg:flex');
+  });
+
+  it("mantém as rotas públicas disponíveis dentro do menu recolhido", () => {
+    ["Explorar destinos", "Cidades-piloto", "Patrimônios", "Sabores", "Agenda cultural", "Dados oficiais", "Mapa do estado", "Como funciona", "Seja parceiro", "Painel demonstrativo"].forEach((label) => {
+      expect(homeSource).toContain(label);
+    });
   });
 });
