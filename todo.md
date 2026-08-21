@@ -165,3 +165,9 @@
 - [x] Registrar evidência explícita no domínio publicado dos diretórios de restaurantes e serviços em Teresina, incluindo ambos os estados editoriais.
 - [x] Registrar evidência explícita no domínio publicado do diretório de serviços e do estado de restaurantes em São Raimundo Nonato.
 - [x] Registrar evidência explícita no domínio publicado dos diretórios de restaurantes e serviços em Cajueiro da Praia, mostrando os estados de curadoria.
+- [x] Remover dos cartões de atrações os blocos “Confirmação necessária” e “Contato não publicado” nas três cidades-piloto.
+- [x] Preservar apenas ações e dados realmente publicados, sem aumentar o escopo do protótipo estudantil.
+- [x] Validar a apresentação simplificada em desktop e celular para Teresina, Cajueiro da Praia e São Raimundo Nonato.
+- [ ] Publicar a simplificação e registrar como evolução futura os avisos operacionais detalhados.
+- [ ] Salvar um novo checkpoint após a simplificação dos cartões das três cidades-piloto.
+- [ ] Confirmar no domínio publicado que os blocos “Confirmação necessária” e “Contato não publicado” não aparecem mais nas três cidades.

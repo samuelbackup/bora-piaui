@@ -167,7 +167,7 @@ O campo `dayScope: "one-day"` classifica a proposta editorial como roteiro de um
 
 Enquanto a integração não estiver habilitada, as páginas de cidade consomem `loadPilotCatalog`, um adaptador assíncrono **somente local**. Ele devolve os modelos de apresentação tipados e permite exercitar carregamento controlável com `?mvpLoading=1`, sem enviar eventos, consultar API ou alterar o servidor. Na integração, a implementação desse adaptador deverá ser substituída por operações de contrato com a mesma forma de retorno.
 
-`contactUrl` permanece opcional. A interface só exibe a ação **Contato** quando receber uma URL institucional publicada; sem esse campo, apresenta “Contato não publicado”. No catálogo atual, a Serra da Capivara aponta para os [Canais de Atendimento do ICMBio](https://www.gov.br/icmbio/pt-br/canais_atendimento), confirmados editorialmente para esta demonstração.
+`contactUrl` permanece opcional. A interface só exibe a ação **Contato** quando receber uma URL institucional publicada; sem esse campo, ela simplesmente omite a ação nos cartões. No catálogo atual, a Serra da Capivara aponta para os [Canais de Atendimento do ICMBio](https://www.gov.br/icmbio/pt-br/canais_atendimento), confirmados editorialmente para esta demonstração. Avisos operacionais detalhados e fluxos de confirmação ficam reservados para uma versão futura, quando houver capacidade de curadoria contínua.
 
 ### Evento cultural — Agenda
 

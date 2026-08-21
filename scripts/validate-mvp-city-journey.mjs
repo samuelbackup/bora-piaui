@@ -6,6 +6,11 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+async function assertSimplifiedCards(page, cityName) {
+  assert(await page.getByText("Confirmação necessária", { exact: true }).count() === 0, `${cityName} ainda exibe o aviso operacional removido dos cartões.`);
+  assert(await page.getByText("Contato não publicado", { exact: true }).count() === 0, `${cityName} ainda exibe o aviso de contato removido dos cartões.`);
+}
+
 async function selectCityFromHome(page, index, expectedSlug, expectedName) {
   await page.goto(baseUrl, { waitUntil: "domcontentloaded" });
   const cityLinks = page.getByRole("link", { name: "Explorar cidade" });
@@ -32,7 +37,7 @@ async function runDesktop(browser) {
   await page.getByLabel("Tipo de item").selectOption("business");
   await page.getByText("Negócios em curadoria", { exact: true }).waitFor({ state: "visible" });
   await page.getByLabel("Tipo de item").selectOption("all");
-  await page.getByText("Contato não publicado", { exact: true }).first().waitFor({ state: "visible" });
+  await assertSimplifiedCards(page, "Teresina");
   await page.getByRole("link", { name: "Ver detalhes", exact: true }).first().waitFor({ state: "visible" });
 
   await page.locator("#mapa-destino-ativo").scrollIntoViewIfNeeded();
@@ -51,6 +56,7 @@ async function runDesktop(browser) {
 async function runContact(browser) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   await selectCityFromHome(page, 2, "sao-raimundo-nonato", "São Raimundo Nonato");
+  await assertSimplifiedCards(page, "São Raimundo Nonato");
   const contactLink = page.getByRole("link", { name: "Contato", exact: true });
   await contactLink.waitFor({ state: "visible" });
   assert(await contactLink.getAttribute("href") === "https://www.gov.br/icmbio/pt-br/canais_atendimento", "O contato institucional do ICMBio não corresponde ao canal público confirmado.");
@@ -106,6 +112,7 @@ async function runSerraProximity(browser) {
 async function runMobile(browser) {
   const page = await browser.newPage({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
   await selectCityFromHome(page, 1, "cajueiro-da-praia", "Cajueiro da Praia");
+  await assertSimplifiedCards(page, "Cajueiro da Praia");
   await page.locator("#por-perto").scrollIntoViewIfNeeded();
   await page.getByRole("heading", { name: "O que há por perto de Barra Grande", exact: true }).waitFor({ state: "visible" });
   await page.locator("#por-perto").getByRole("heading", { name: "Cajueiro-rei do Piauí", exact: true }).waitFor({ state: "visible" });
@@ -126,7 +133,7 @@ try {
   await runProximity(browser);
   await runSerraProximity(browser);
   await runMobile(browser);
-  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", contact: "ICMBio", curatedService: "Canais de atendimento do ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Cajueiro da Praia" }, null, 2));
+  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", simplifiedCards: ["Teresina", "São Raimundo Nonato", "Cajueiro da Praia"], contact: "ICMBio", curatedService: "Canais de atendimento do ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Cajueiro da Praia" }, null, 2));
 } finally {
   await browser.close();
 }
