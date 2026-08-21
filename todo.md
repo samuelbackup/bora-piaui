@@ -92,3 +92,10 @@
 - [x] Validar no domínio publicado o estado ativo e o filtro associado dos polos turísticos.
 - [x] Registrar evidência verificável do estado hover dos polos turísticos no domínio publicado.
 - [x] Registrar evidência verificável do foco por teclado nos polos turísticos no domínio publicado.
+- [x] Revisar dados, foco e seleção dos polos em relação ao mapa e aos cards de destino.
+- [x] Adicionar microtextos contextuais aos polos turísticos para hover e foco por teclado.
+- [x] Exibir uma prévia visual do destino ao focar ou selecionar um polo turístico.
+- [x] Testar em desktop a sincronização entre polos, prévia, filtros e mapa.
+- [x] Validar em viewport móvel o toque em polos, a prévia contextual, os cards filtrados e o foco do mapa.
+- [x] Registrar evidência explícita da sincronização móvel entre seleção de polo, mapa e cards visíveis.
+- [ ] Publicar a experiência contextual dos polos turísticos.
