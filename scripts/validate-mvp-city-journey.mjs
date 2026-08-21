@@ -12,6 +12,11 @@ async function assertSimplifiedCards(page, cityName) {
 }
 
 async function assertTeresinaEditorialHighlights(page) {
+  const basicTopics = page.getByRole("complementary", { name: "Categorias em curadoria" });
+  await basicTopics.getByText("Para comer", { exact: true }).waitFor({ state: "visible" });
+  await basicTopics.getByText("Para organizar a visita", { exact: true }).waitFor({ state: "visible" });
+  await basicTopics.getByRole("heading", { name: "Gastronomia perto do percurso em curadoria", exact: true }).waitFor({ state: "visible" });
+  await basicTopics.getByRole("heading", { name: "Serviços de visita em curadoria", exact: true }).waitFor({ state: "visible" });
   await page.getByRole("heading", { name: "Cultura e História", exact: true }).scrollIntoViewIfNeeded();
   await page.getByRole("heading", { name: "Cultura", exact: true }).waitFor({ state: "visible" });
   await page.getByRole("heading", { name: "História", exact: true }).waitFor({ state: "visible" });
@@ -160,7 +165,7 @@ try {
   await runProximity(browser);
   await runSerraProximity(browser);
   await runMobile(browser);
-  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", cityNavigator: ["Teresina → Cajueiro da Praia", "Cajueiro da Praia → São Raimundo Nonato", "São Raimundo Nonato → Teresina"], simplifiedCards: ["Teresina", "São Raimundo Nonato", "Cajueiro da Praia"], teresinaEditorialHighlights: ["Cultura", "História"], contact: "ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Teresina" }, null, 2));
+  console.log(JSON.stringify({ status: "ok", loading: "Teresina", desktop: "Teresina", cityNavigator: ["Teresina → Cajueiro da Praia", "Cajueiro da Praia → São Raimundo Nonato", "São Raimundo Nonato → Teresina"], simplifiedCards: ["Teresina", "São Raimundo Nonato", "Cajueiro da Praia"], teresinaBasicTopics: ["Para comer", "Para organizar a visita"], teresinaEditorialHighlights: ["Cultura", "História"], contact: "ICMBio", proximity: ["Encontro dos Rios → Poti Velho", "Serra da Capivara → Museu do Homem Americano", "Barra Grande → Cajueiro-rei"], mobile: "Teresina" }, null, 2));
 } finally {
   await browser.close();
 }

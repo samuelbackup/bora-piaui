@@ -19,3 +19,16 @@ Os diretórios **“Restaurantes curados”** e **“Serviços curados”** não
 ## Confirmação pública
 
 A página publicada de [Teresina](https://borapiaui-ffk8iyz3.manus.space/cidades/teresina?publication=7bb8b5e3&probe=propagated) confirmou os dois blocos, suas fontes acessíveis e a ausência de “Restaurantes curados” e “Serviços curados”.
+
+## Correção de escopo — tópicos básicos preservados
+
+Após a revisão de escopo, os tópicos **“Para comer”** e **“Para organizar a visita”** foram restaurados antes da seção editorial. Eles continuam descrevendo a curadoria pendente sem inventar negócios, enquanto **Cultura** e **História** ocupam a área complementar abaixo.
+
+| Conteúdo em Teresina | Desktop, 1280 × 720 px | Celular, 375 × 812 px | Ordem validada |
+|---|---|---|---|
+| Para comer | Validado | Validado | Antes de Cultura e História. |
+| Para organizar a visita | Validado | Validado | Antes de Cultura e História. |
+| Cultura | Validado | Validado | Após os tópicos básicos. |
+| História | Validado | Validado | Após os tópicos básicos. |
+
+`pnpm check`, Vitest com 37 testes, build e a jornada das cidades foram repetidos após a restauração. A jornada confirma os quatro conteúdos sem listar negócios não verificados.

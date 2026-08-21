@@ -191,3 +191,7 @@
 - [x] Confirmar no painel público que a Revisão Editorial não mantém dados temporários de validação.
 - [x] Corrigir a limpeza automática de registros temporários no cenário de validação editorial.
 - [x] Salvar um checkpoint final com as validações e a correção da limpeza automática.
+- [x] Restaurar em Teresina os tópicos “Para comer” e “Para organizar a visita”.
+- [x] Preservar Cultura e História como seção editorial complementar, sem cadastrar negócios não verificados.
+- [x] Atualizar a jornada automatizada para exigir os quatro conteúdos na página de Teresina.
+- [ ] Validar e publicar o layout corrigido em desktop, celular e domínio público.
