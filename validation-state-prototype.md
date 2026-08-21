@@ -19,5 +19,6 @@
 | Encontro dos Rios | O domínio publicado passou a exibir a imagem institucional do Mapa da Cultura PI no card do destino. |
 | Polos turísticos | No domínio publicado, a seleção de Teresina filtrou a lista. O foco por teclado exibiu anel de 4 px e, no polo apontado, o hover alterou fundo, cor, borda e sombra (7 px × 16 px), conforme inspeção dos estilos computados. |
 | Contexto de polos — móvel | Em 375 × 812 px, tocar Teresina exibiu a prévia do Encontro dos Rios, reduziu a lista a esse card e destacou o botão correspondente no mapa. A suíte automatizada concluiu 22 testes e a compilação de produção foi aprovada. |
+| Contexto de polos — seleção local | Ao selecionar Teresina, a interface exibiu o microtexto contextual, a imagem do Encontro dos Rios e o estado ativo do polo; o recorte também reduziu a lista e o mapa ao destino correspondente. |
 
 **Nota:** Rotas externas, regras de visitação, operação de atrativos e condições climáticas devem ser confirmadas pelo visitante nos canais responsáveis antes da viagem.
