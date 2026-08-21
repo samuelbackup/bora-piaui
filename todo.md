@@ -210,3 +210,4 @@
 - [x] Mapear os contratos atuais do front-end para orientar o back-end do Bora Piauí.
 - [x] Produzir blueprint de back-end com domínio de dados, segurança, APIs e implantação.
 - [x] Produzir documento de integração front-end–back-end com contratos, migração e validação.
+- [x] Consolidar relatório resumido de entregas, estado atual e pendências do Bora Piauí.
