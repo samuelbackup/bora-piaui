@@ -32,3 +32,7 @@ Após a revisão de escopo, os tópicos **“Para comer”** e **“Para organiz
 | História | Validado | Validado | Após os tópicos básicos. |
 
 `pnpm check`, Vitest com 37 testes, build e a jornada das cidades foram repetidos após a restauração. A jornada confirma os quatro conteúdos sem listar negócios não verificados.
+
+## Confirmação pública da correção
+
+A [página publicada de Teresina](https://borapiaui-ffk8iyz3.manus.space/cidades/teresina?publication=ef48e7e0&probe=basics-restored) confirmou a sequência **Para comer → Para organizar a visita → Cultura → História**. Os dois primeiros tópicos preservam o planejamento básico com curadoria pendente, enquanto os dois últimos permanecem como contexto editorial com fonte pública.

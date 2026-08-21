@@ -194,4 +194,4 @@
 - [x] Restaurar em Teresina os tópicos “Para comer” e “Para organizar a visita”.
 - [x] Preservar Cultura e História como seção editorial complementar, sem cadastrar negócios não verificados.
 - [x] Atualizar a jornada automatizada para exigir os quatro conteúdos na página de Teresina.
-- [ ] Validar e publicar o layout corrigido em desktop, celular e domínio público.
+- [x] Validar e publicar o layout corrigido em desktop, celular e domínio público.
