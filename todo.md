@@ -82,3 +82,9 @@
 - [x] Publicar o ajuste da interface de descoberta.
 - [x] Publicar a reorganização da descoberta no domínio do Bora Piauí.
 - [x] Confirmar no domínio publicado a faixa de filtros, o resumo editorial e os polos discretos.
+- [x] Revisar os acessos de polos e o card do Encontro dos Rios no atlas.
+- [x] Selecionar uma imagem editorial verificável do Encontro dos Rios e hospedá-la no projeto.
+- [x] Melhorar o feedback visual de foco, teclado e passagem do mouse nos polos turísticos.
+- [x] Inserir a imagem do Encontro dos Rios no card correspondente sem alterar a informação editorial.
+- [x] Testar interações e validar o atlas em desktop e celular.
+- [ ] Publicar os refinamentos de polos e do Encontro dos Rios.
