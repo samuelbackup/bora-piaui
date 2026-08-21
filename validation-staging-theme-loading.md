@@ -10,7 +10,7 @@ O controle de tema usa `role="switch"`, informa o estado com `aria-checked` e al
 
 ## Evidências
 
-Foram concluídos com sucesso `pnpm check`, `pnpm test` e `pnpm build`, com **42 testes** aprovados. A home foi inspecionada em **1280 × 720** e **375 × 812**, confirmando o cabeçalho compacto, a marca, Meu roteiro e o menu sem sobreposição.
+Foram concluídos com sucesso `pnpm check`, `pnpm test` e `pnpm build`, com **42 testes** aprovados. A home foi inspecionada em **1280 × 720** e **375 × 812**, confirmando o cabeçalho compacto, a marca, Meu roteiro e o menu sem sobreposição. Também foi verificado manualmente no navegador que o menu exibe o controle **Escuro** e que, ao acioná-lo, a interface aplica o tema escuro imediatamente e passa a expor a ação inversa **Claro**.
 
 ## Prévia Vercel confirmada
 
