@@ -215,3 +215,5 @@
 - [x] Converter o blueprint, o documento de integração e o relatório resumido em PDFs verificados.
 - [x] Promover o modo escuro e a animação inicial da branch staging para a produção Vercel.
 - [x] Validar no domínio de produção da Vercel o modo escuro e a animação publicados.
+- [x] Corrigir a largura excedente da seção Dados em telas móveis.
+- [ ] Validar a seção Dados corrigida em celular, desktop e domínio publicado.
