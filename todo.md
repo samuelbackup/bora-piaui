@@ -218,4 +218,4 @@
 - [x] Corrigir a largura excedente da seção Dados em telas móveis.
 - [x] Validar a seção Dados corrigida em celular, desktop e domínio publicado.
 - [x] Adicionar preço demonstrativo ao plano Mais visibilidade, sem ativar cobrança.
-- [ ] Validar o plano Mais visibilidade atualizado em desktop, celular e produção.
+- [x] Validar o plano Mais visibilidade atualizado em desktop, celular e produção.
