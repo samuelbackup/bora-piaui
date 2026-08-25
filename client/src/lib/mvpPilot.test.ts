@@ -41,6 +41,22 @@ describe("catálogo do MVP de front-end", () => {
     expect(getPilotItems("teresina", "business")).toEqual([]);
   });
 
+  it("amplia Teresina com cinco atrativos institucionais, rotas e fontes verificáveis", () => {
+    const teresinaItems = getPilotItems("teresina", "attraction");
+    const addedItems = teresinaItems.filter((item) => [
+      "Complexo Turístico Ponte Estaiada",
+      "Theatro 4 de Setembro",
+      "Museu do Piauí – Casa de Odilon Nunes",
+      "Parque Potycabana",
+      "Central de Artesanato Mestre Dezinho",
+    ].includes(item.title));
+
+    expect(addedItems).toHaveLength(5);
+    expect(addedItems.every((item) => item.operationalStatus === "verify")).toBe(true);
+    expect(addedItems.every((item) => item.routeUrl?.startsWith("https://www.google.com/maps/dir/"))).toBe(true);
+    expect(addedItems.every((item) => item.source.url.startsWith("https://"))).toBe(true);
+  });
+
   it("expõe categorias a partir dos itens publicados da cidade", () => {
     expect(getPilotCategories("sao-raimundo-nonato")).toEqual(["Memória e arqueologia", "Patrimônio"]);
   });

@@ -221,3 +221,6 @@
 - [x] Validar o plano Mais visibilidade atualizado em desktop, celular e produção.
 - [x] Remover a precificação do Plano Destaque até haver métricas persistidas que sustentem uma futura monetização.
 - [x] Validar que a página de parceiros permanece institucional, sem preço ou cobrança sugerida.
+- [x] Confirmar fontes institucionais e dados editoriais dos cinco novos pontos turísticos de Teresina.
+- [x] Integrar Ponte Estaiada, Theatro 4 de Setembro, Museu do Piauí, Parque Potycabana e Central Mestre Dezinho à jornada de Teresina.
+- [x] Validar a expansão de Teresina em desktop e celular, sem inserir informações operacionais não confirmadas.
