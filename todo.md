@@ -219,3 +219,5 @@
 - [x] Validar a seção Dados corrigida em celular, desktop e domínio publicado.
 - [x] Adicionar preço demonstrativo ao plano Mais visibilidade, sem ativar cobrança.
 - [x] Validar o plano Mais visibilidade atualizado em desktop, celular e produção.
+- [x] Remover a precificação do Plano Destaque até haver métricas persistidas que sustentem uma futura monetização.
+- [x] Validar que a página de parceiros permanece institucional, sem preço ou cobrança sugerida.
