@@ -227,3 +227,5 @@
 - [x] Modelar relações gastronômicas editoriais por atração, sem cadastrar restaurantes não verificados.
 - [x] Criar o fluxo “Para comer perto deste ponto” a partir do detalhe de cada atração de Teresina.
 - [x] Validar estados de curadoria, navegação contextual e responsividade do fluxo gastronômico.
+- [x] Enviar a jornada contextual de Teresina para a branch principal vinculada à Vercel.
+- [x] Confirmar no domínio da Vercel o fluxo atualizado “Para comer perto deste ponto”.
