@@ -1,4 +1,4 @@
-import { boolean, int, mysqlEnum, mysqlTable, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
+import { boolean, index, int, mysqlEnum, mysqlTable, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
 
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
@@ -100,6 +100,25 @@ export const partnerSubmissions = mysqlTable("partner_submissions", {
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
+export const usageEvents = mysqlTable(
+  "usage_events",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    eventName: varchar("eventName", { length: 48 }).notNull(),
+    sessionId: varchar("sessionId", { length: 36 }).notNull(),
+    citySlug: varchar("citySlug", { length: 80 }),
+    itemId: varchar("itemId", { length: 120 }),
+    anchorItemId: varchar("anchorItemId", { length: 120 }),
+    source: varchar("source", { length: 48 }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => [
+    index("usage_events_created_at_idx").on(table.createdAt),
+    index("usage_events_event_name_idx").on(table.eventName),
+    index("usage_events_city_slug_idx").on(table.citySlug),
+  ]
+);
+
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 export type Destination = typeof destinations.$inferSelect;
@@ -110,3 +129,5 @@ export type CulturalEvent = typeof culturalEvents.$inferSelect;
 export type InsertCulturalEvent = typeof culturalEvents.$inferInsert;
 export type PartnerSubmission = typeof partnerSubmissions.$inferSelect;
 export type InsertPartnerSubmission = typeof partnerSubmissions.$inferInsert;
+export type UsageEvent = typeof usageEvents.$inferSelect;
+export type InsertUsageEvent = typeof usageEvents.$inferInsert;

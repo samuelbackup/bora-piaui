@@ -25,7 +25,7 @@ export type PilotItem = {
   title: string;
   category: string;
   summary: string;
-  image?: { url: string; alt: string; credit?: string };
+  image?: { url: string; alt: string; credit?: string; license?: string; licenseUrl?: string };
   routeUrl?: string;
   contactUrl?: string;
   externalUrl?: string;
@@ -244,6 +244,13 @@ export const pilotItems: PilotItem[] = [
     title: "Complexo Turístico Ponte Estaiada",
     category: "Cidade e paisagem",
     summary: "Referência da paisagem urbana de Teresina, o complexo reúne o mirante associado à Ponte Estaiada.",
+    image: {
+      url: "/manus-storage/ponte-estaiada_94bf97df.jpg",
+      alt: "Complexo Turístico da Ponte Estaiada em Teresina",
+      credit: "Alexandro Dias, via Wikimedia Commons",
+      license: "CC BY-SA 4.0",
+      licenseUrl: "https://commons.wikimedia.org/wiki/File:Ponte_Estaiada_-_Teresina.jpg",
+    },
     routeUrl: "https://www.google.com/maps/dir/?api=1&destination=Complexo%20Tur%C3%ADstico%20Ponte%20Estaiada%2C%20Teresina%2C%20PI",
     externalUrl: semdecTeresinaTourismSource.url,
     mapQuery: "Complexo Turístico Ponte Estaiada, Teresina",
@@ -260,6 +267,13 @@ export const pilotItems: PilotItem[] = [
     title: "Theatro 4 de Setembro",
     category: "Cultura e patrimônio",
     summary: "Teatro histórico de Teresina e uma referência para as artes cênicas do Piauí.",
+    image: {
+      url: "/manus-storage/theatro-4-setembro_8c5fabeb.jpg",
+      alt: "Fachada do Theatro 4 de Setembro em Teresina",
+      credit: "Almanaque Lusofonista, via Wikimedia Commons",
+      license: "CC BY 3.0 BR",
+      licenseUrl: "https://commons.wikimedia.org/wiki/File:Theatro_4_de_setembro_predio.JPG",
+    },
     routeUrl: "https://www.google.com/maps/dir/?api=1&destination=Theatro%204%20de%20Setembro%2C%20Teresina%2C%20PI",
     externalUrl: theatroSource.url,
     mapQuery: "Theatro 4 de Setembro, Teresina",
@@ -276,6 +290,13 @@ export const pilotItems: PilotItem[] = [
     title: "Museu do Piauí – Casa de Odilon Nunes",
     category: "Memória e patrimônio",
     summary: "Espaço cultural de Teresina associado à memória e aos acervos sobre o Piauí.",
+    image: {
+      url: "/manus-storage/museu-piaui_4b89cdf4.jpg",
+      alt: "Prédio do Museu do Piauí em Teresina",
+      credit: "Almanaque Lusofonista, via Wikimedia Commons",
+      license: "CC BY 3.0 BR",
+      licenseUrl: "https://commons.wikimedia.org/wiki/File:Museu_do_Piau%C3%AD_pr%C3%A9dio.JPG",
+    },
     routeUrl: "https://www.google.com/maps/dir/?api=1&destination=Museu%20do%20Piau%C3%AD%20Casa%20de%20Odilon%20Nunes%2C%20Teresina%2C%20PI",
     externalUrl: museuPiauiSource.url,
     mapQuery: "Museu do Piauí Casa de Odilon Nunes, Teresina",
@@ -292,6 +313,13 @@ export const pilotItems: PilotItem[] = [
     title: "Parque Potycabana",
     category: "Lazer e natureza urbana",
     summary: "Parque urbano incluído pela SEMDEC entre os equipamentos de lazer de Teresina.",
+    image: {
+      url: "/manus-storage/parque-potycabana_fb443c74.jpg",
+      alt: "Letreiro do Parque Potycabana em Teresina",
+      credit: "Almanaque Lusofonista, via Wikimedia Commons",
+      license: "Domínio público",
+      licenseUrl: "https://commons.wikimedia.org/wiki/File:Potycabana_2.JPG",
+    },
     routeUrl: "https://www.google.com/maps/dir/?api=1&destination=Parque%20Potycabana%2C%20Teresina%2C%20PI",
     externalUrl: semdecTeresinaTourismSource.url,
     mapQuery: "Parque Potycabana, Teresina",
@@ -308,6 +336,13 @@ export const pilotItems: PilotItem[] = [
     title: "Central de Artesanato Mestre Dezinho",
     category: "História e artesanato",
     summary: "Referência de artesanato em Teresina, incluída pela SEMDEC entre os equipamentos turísticos da cidade.",
+    image: {
+      url: "/manus-storage/central-mestre-dezinho_0fe78696.jpg",
+      alt: "Estátua em barro de Esperança Garcia na Central de Artesanato Mestre Dezinho",
+      credit: "Moacir Ximenes, via Wikimedia Commons",
+      license: "Domínio público",
+      licenseUrl: "https://commons.wikimedia.org/wiki/File:Central_de_Artesanato_Mestre_Dezinho_(Esperan%C3%A7a_Garcia).jpg",
+    },
     routeUrl: "https://www.google.com/maps/dir/?api=1&destination=Central%20de%20Artesanato%20Mestre%20Dezinho%2C%20Teresina%2C%20PI",
     externalUrl: semdecTeresinaTourismSource.url,
     mapQuery: "Central de Artesanato Mestre Dezinho, Teresina",

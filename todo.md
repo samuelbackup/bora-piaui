@@ -229,3 +229,9 @@
 - [x] Validar estados de curadoria, navegação contextual e responsividade do fluxo gastronômico.
 - [x] Enviar a jornada contextual de Teresina para a branch principal vinculada à Vercel.
 - [x] Confirmar no domínio da Vercel o fluxo atualizado “Para comer perto deste ponto”.
+- [x] Criar uma habilidade reutilizável para expansão editorial, curadoria e validação do Bora Piauí.
+- [x] Localizar imagens licenciadas com crédito para os cinco novos atrativos de Teresina.
+- [x] Modelar métricas de uso persistentes e eventos de interação para avaliar demanda.
+- [x] Integrar imagens creditadas e rastreamento de eventos à jornada pública de Teresina.
+- [x] Validar localmente as melhorias de imagem e métricas em desktop, celular, testes e build.
+- [ ] Publicar as melhorias de imagem e métricas e confirmar a versão externa.

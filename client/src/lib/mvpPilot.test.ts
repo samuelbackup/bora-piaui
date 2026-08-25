@@ -56,6 +56,9 @@ describe("catálogo do MVP de front-end", () => {
     expect(addedItems.every((item) => item.operationalStatus === "verify")).toBe(true);
     expect(addedItems.every((item) => item.routeUrl?.startsWith("https://www.google.com/maps/dir/"))).toBe(true);
     expect(addedItems.every((item) => item.source.url.startsWith("https://"))).toBe(true);
+    expect(addedItems.every((item) => item.image?.url.startsWith("/manus-storage/"))).toBe(true);
+    expect(addedItems.every((item) => item.image?.credit?.includes("Wikimedia Commons"))).toBe(true);
+    expect(addedItems.every((item) => item.image?.license && item.image.licenseUrl?.startsWith("https://commons.wikimedia.org/"))).toBe(true);
   });
 
   it("expõe categorias a partir dos itens publicados da cidade", () => {

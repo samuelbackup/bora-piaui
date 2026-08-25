@@ -1,4 +1,4 @@
-import { and, asc, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, isNotNull, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   CulturalEvent,
@@ -14,6 +14,8 @@ import {
   InsertUser,
   PartnerSubmission,
   partnerSubmissions,
+  InsertUsageEvent,
+  usageEvents,
   users,
 } from "../drizzle/schema";
 import { ENV } from "./_core/env";
@@ -210,4 +212,30 @@ export async function updatePartnerSubmission(id: number, data: Partial<InsertPa
   if (!db) throw new Error("Banco de dados indisponível");
   await db.update(partnerSubmissions).set(data).where(eq(partnerSubmissions.id, id));
   return getPartnerSubmissionById(id);
+}
+
+export async function recordUsageEvent(data: InsertUsageEvent) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  await db.insert(usageEvents).values(data);
+  return { success: true } as const;
+}
+
+export async function getUsageMetrics() {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+
+  const [totalRow] = await db.select({ total: sql<number>`count(*)` }).from(usageEvents);
+  const byEvent = await db.select({ eventName: usageEvents.eventName, total: sql<number>`count(*)` }).from(usageEvents).groupBy(usageEvents.eventName);
+  const topCities = await db.select({ citySlug: usageEvents.citySlug, total: sql<number>`count(*)` }).from(usageEvents).where(isNotNull(usageEvents.citySlug)).groupBy(usageEvents.citySlug).orderBy(desc(sql`count(*)`)).limit(5);
+  const topItems = await db.select({ itemId: usageEvents.itemId, total: sql<number>`count(*)` }).from(usageEvents).where(isNotNull(usageEvents.itemId)).groupBy(usageEvents.itemId).orderBy(desc(sql`count(*)`)).limit(5);
+  const countFor = (eventName: string) => Number(byEvent.find(row => row.eventName === eventName)?.total ?? 0);
+
+  return {
+    totalEvents: Number(totalRow?.total ?? 0),
+    foodContextOpens: countFor("food_context_opened"),
+    routeOpens: countFor("route_opened"),
+    topCities: topCities.map(row => ({ citySlug: row.citySlug ?? "", total: Number(row.total) })),
+    topItems: topItems.map(row => ({ itemId: row.itemId ?? "", total: Number(row.total) })),
+  };
 }
