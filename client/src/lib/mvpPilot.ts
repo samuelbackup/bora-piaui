@@ -42,6 +42,7 @@ export type CuratedBusiness = {
   id: string;
   citySlug: string;
   kind: CuratedBusinessKind;
+  anchorItemIds?: string[];
   title: string;
   category: string;
   summary: string;
@@ -599,6 +600,10 @@ export function getPilotCurationTopics(citySlug: string, catalog: PilotCatalog =
 
 export function getPilotCuratedBusinesses(citySlug: string, kind: CuratedBusinessKind, catalog: PilotCatalog = pilotCatalog) {
   return catalog.curatedBusinesses.filter((entry) => entry.citySlug === citySlug && entry.kind === kind && entry.status === "published");
+}
+
+export function getPilotFoodOptions(citySlug: string, anchorItemId: string, catalog: PilotCatalog = pilotCatalog) {
+  return getPilotCuratedBusinesses(citySlug, "restaurant", catalog).filter((entry) => entry.anchorItemIds?.includes(anchorItemId));
 }
 
 export function getPilotEditorialHighlights(citySlug: string, catalog: PilotCatalog = pilotCatalog) {

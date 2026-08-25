@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getPilotCategories, getPilotCity, getPilotCurationTopics, getPilotCuratedBusinesses, getPilotEditorialHighlights, getPilotItems, getPilotNearbyItems, loadPilotCatalog } from "./mvpPilot";
+import { getPilotCategories, getPilotCity, getPilotCurationTopics, getPilotCuratedBusinesses, getPilotEditorialHighlights, getPilotFoodOptions, getPilotItems, getPilotNearbyItems, loadPilotCatalog } from "./mvpPilot";
 
 describe("catálogo do MVP de front-end", () => {
   it("mantém três cidades-piloto com identificadores estáveis", () => {
@@ -39,6 +39,7 @@ describe("catálogo do MVP de front-end", () => {
 
   it("não inventa negócios quando ainda não há registros validados", () => {
     expect(getPilotItems("teresina", "business")).toEqual([]);
+    expect(getPilotFoodOptions("teresina", "theatro-4-de-setembro")).toEqual([]);
   });
 
   it("amplia Teresina com cinco atrativos institucionais, rotas e fontes verificáveis", () => {

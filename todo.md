@@ -224,3 +224,6 @@
 - [x] Confirmar fontes institucionais e dados editoriais dos cinco novos pontos turísticos de Teresina.
 - [x] Integrar Ponte Estaiada, Theatro 4 de Setembro, Museu do Piauí, Parque Potycabana e Central Mestre Dezinho à jornada de Teresina.
 - [x] Validar a expansão de Teresina em desktop e celular, sem inserir informações operacionais não confirmadas.
+- [x] Modelar relações gastronômicas editoriais por atração, sem cadastrar restaurantes não verificados.
+- [x] Criar o fluxo “Para comer perto deste ponto” a partir do detalhe de cada atração de Teresina.
+- [x] Validar estados de curadoria, navegação contextual e responsividade do fluxo gastronômico.
