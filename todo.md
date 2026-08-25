@@ -234,4 +234,4 @@
 - [x] Modelar métricas de uso persistentes e eventos de interação para avaliar demanda.
 - [x] Integrar imagens creditadas e rastreamento de eventos à jornada pública de Teresina.
 - [x] Validar localmente as melhorias de imagem e métricas em desktop, celular, testes e build.
-- [ ] Publicar as melhorias de imagem e métricas e confirmar a versão externa.
+- [x] Publicar as melhorias de imagem e métricas e confirmar a versão externa.
