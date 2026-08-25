@@ -1,37 +1,59 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { getAvailablePoles, getPolePreview } from "./Home";
 
 const homeSource = readFileSync(new URL("./Home.tsx", import.meta.url), "utf8");
 
-describe("home do Polo Origens", () => {
-  it("comunica apenas o recorte territorial aprovado", () => {
-    expect(homeSource).toContain("Polo Origens");
-    expect(homeSource).toContain("São Raimundo Nonato");
-    expect(homeSource).toContain("Coronel José Dias");
-    expect(homeSource).not.toContain("Um estado inteiro de caminhos");
-    expect(homeSource).not.toContain("três cidades-piloto");
-    expect(homeSource).not.toContain("Nove âncoras");
+describe("acessos territoriais da descoberta", () => {
+  const catalog = [
+    { region: "Polo Teresina", category: "Cidade", title: "Encontro dos Rios", municipality: "Teresina" },
+    { region: "Costa do Delta", category: "Litoral", title: "Delta do Parnaíba", municipality: "Ilha Grande" },
+    { region: "Costa do Delta", category: "Litoral", title: "Barra Grande", municipality: "Cajueiro da Praia" },
+  ] as const;
+
+  it("exibe polos sem duplicar o seletor geral e informa suas contagens", () => {
+    expect(getAvailablePoles([...catalog], "Todos", "")).toEqual([
+      { region: "Polo Teresina", total: 1 },
+      { region: "Costa do Delta", total: 2 },
+    ]);
   });
 
-  it("não expõe menus, monetização ou painel editorial na experiência pública", () => {
-    ["Patrimônios", "Sabores", "Agenda cultural", "Dados oficiais", "Seja parceiro", "Painel demonstrativo", "R$ 49"].forEach(label => {
-      expect(homeSource).not.toContain(label);
-    });
-    expect(homeSource).toContain("Em breve");
+  it("mantém somente os polos coerentes com o interesse e a busca", () => {
+    expect(getAvailablePoles([...catalog], "Litoral", "Barra")).toEqual([
+      { region: "Costa do Delta", total: 1 },
+    ]);
   });
 
-  it("evita mídia quebrada e mantém fontes institucionais acessíveis", () => {
-    expect(homeSource).not.toContain("<img");
-    expect(homeSource).not.toContain("NO IMAGE AVAILABLE");
-    expect(homeSource).toContain("whc.unesco.org");
-    expect(homeSource).toContain("fumdham.org.br");
+  it("prepara uma prévia visual coerente com o polo, o interesse e a busca", () => {
+    const previewCatalog = [
+      { ...catalog[0], id: "encontro-dos-rios", text: "Porta de entrada urbana.", image: "/encontro.jpg", accent: "#2E6C76" },
+      { ...catalog[1], id: "delta-do-parnaiba", text: "Canais e mangues.", image: "/delta.jpg", accent: "#2E6C76" },
+      { ...catalog[2], id: "barra-grande", text: "Mar e mangue.", image: undefined, accent: "#D9A640" },
+    ];
+
+    expect(getPolePreview(previewCatalog, "Costa do Delta", "Litoral", "Barra")?.id).toBe("barra-grande");
+    expect(getPolePreview(previewCatalog, "Polo Teresina", "Todos", "")?.title).toBe("Encontro dos Rios");
+    expect(getPolePreview(previewCatalog, null, "Todos", "")).toBeNull();
   });
 
-  it("preserva o menu compacto acessível e a alternância de tema", () => {
+  it("concentra a navegação em um menu acessível também no desktop", () => {
     expect(homeSource).toContain('aria-controls="home-navigation-menu"');
     expect(homeSource).toContain("aria-expanded={menuOpen}");
+    expect(homeSource).toContain('aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}');
+    expect(homeSource).toContain("lg:grid-cols-3");
+    expect(homeSource).not.toContain('hidden items-center gap-5 text-xs font-bold lg:flex');
+  });
+
+  it("mantém as rotas públicas disponíveis dentro do menu recolhido", () => {
+    ["Explorar destinos", "Cidades-piloto", "Patrimônios", "Sabores", "Agenda cultural", "Dados oficiais", "Mapa do estado", "Como funciona", "Seja parceiro", "Painel demonstrativo"].forEach((label) => {
+      expect(homeSource).toContain(label);
+    });
+  });
+
+  it("oferece uma alternância persistente de modo escuro no menu compacto", () => {
     expect(homeSource).toContain('role="switch"');
     expect(homeSource).toContain('aria-checked={theme === "dark"}');
+    expect(homeSource).toContain('"Ativar modo escuro"');
     expect(homeSource).toContain("toggleTheme?.()");
   });
 });
