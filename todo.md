@@ -235,3 +235,4 @@
 - [x] Integrar imagens creditadas e rastreamento de eventos à jornada pública de Teresina.
 - [x] Validar localmente as melhorias de imagem e métricas em desktop, celular, testes e build.
 - [x] Publicar as melhorias de imagem e métricas e confirmar a versão externa.
+- [x] Adicionar imagem licenciada, crédito e fonte ao Polo Cerâmico do Poti Velho.

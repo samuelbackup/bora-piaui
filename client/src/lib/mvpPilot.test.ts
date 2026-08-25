@@ -61,6 +61,18 @@ describe("catálogo do MVP de front-end", () => {
     expect(addedItems.every((item) => item.image?.license && item.image.licenseUrl?.startsWith("https://commons.wikimedia.org/"))).toBe(true);
   });
 
+  it("publica a imagem licenciada do Polo Cerâmico com atribuição verificável", () => {
+    const poloCeramico = getPilotItems("teresina", "attraction").find((item) => item.id === "polo-ceramico-poti-velho");
+
+    expect(poloCeramico?.image).toMatchObject({
+      url: "/manus-storage/polo-ceramico-poti-velho_11ad2e11.jpg",
+      credit: "MTur Destinos, via Wikimedia Commons",
+      license: "Domínio público",
+      licenseUrl: "https://commons.wikimedia.org/wiki/File:MauricioPokemon_PoloCeramico_Teresina_PI_(40062427735).jpg",
+    });
+    expect(poloCeramico?.image?.alt).toContain("cerâmica");
+  });
+
   it("expõe categorias a partir dos itens publicados da cidade", () => {
     expect(getPilotCategories("sao-raimundo-nonato")).toEqual(["Memória e arqueologia", "Patrimônio"]);
   });

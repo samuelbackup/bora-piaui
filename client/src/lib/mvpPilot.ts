@@ -228,6 +228,13 @@ export const pilotItems: PilotItem[] = [
     title: "Polo Cerâmico do Poti Velho",
     category: "História e artesanato",
     summary: "Um percurso de cerâmica e memória local, conectado às tradições do bairro Poti Velho.",
+    image: {
+      url: "/manus-storage/polo-ceramico-poti-velho_11ad2e11.jpg",
+      alt: "Peças de cerâmica alinhadas em uma oficina do Polo Cerâmico de Teresina",
+      credit: "MTur Destinos, via Wikimedia Commons",
+      license: "Domínio público",
+      licenseUrl: "https://commons.wikimedia.org/wiki/File:MauricioPokemon_PoloCeramico_Teresina_PI_(40062427735).jpg",
+    },
     routeUrl: "https://www.google.com/maps/dir/?api=1&destination=Polo%20Ceramico%20do%20Poti%20Velho%2C%20Teresina%2C%20PI",
     externalUrl: potiVelhoSource.url,
     mapQuery: "Polo Cerâmico do Poti Velho, Teresina",
