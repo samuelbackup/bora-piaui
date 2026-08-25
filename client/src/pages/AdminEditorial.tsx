@@ -16,24 +16,24 @@ function slugify(value: string) {
 
 export default function AdminEditorial() {
   const utils = trpc.useUtils();
-  const { data: events = [], isLoading: eventsLoading } = trpc.agenda.demoList.useQuery();
-  const { data: proposals = [], isLoading: proposalsLoading } = trpc.partners.demoList.useQuery();
+  const { data: events = [], isLoading: eventsLoading } = trpc.agenda.adminList.useQuery();
+  const { data: proposals = [], isLoading: proposalsLoading } = trpc.partners.adminList.useQuery();
   const [form, setForm] = useState<EventForm>(emptyEvent);
   const [eventToRemove, setEventToRemove] = useState<{ id: number; title: string } | null>(null);
-  const createEvent = trpc.agenda.demoCreate.useMutation({
-    onSuccess: () => { utils.agenda.demoList.invalidate(); utils.agenda.list.invalidate(); setForm(emptyEvent); toast.success("Evento criado e armazenado para curadoria."); },
+  const createEvent = trpc.agenda.create.useMutation({
+    onSuccess: () => { utils.agenda.adminList.invalidate(); utils.agenda.list.invalidate(); setForm(emptyEvent); toast.success("Evento criado e armazenado para curadoria."); },
     onError: error => toast.error(error.message),
   });
-  const updateEvent = trpc.agenda.demoUpdate.useMutation({
-    onSuccess: () => { utils.agenda.demoList.invalidate(); utils.agenda.list.invalidate(); toast.success("Estado editorial do evento atualizado."); },
+  const updateEvent = trpc.agenda.update.useMutation({
+    onSuccess: () => { utils.agenda.adminList.invalidate(); utils.agenda.list.invalidate(); toast.success("Estado editorial do evento atualizado."); },
     onError: error => toast.error(error.message),
   });
-  const removeEvent = trpc.agenda.demoDelete.useMutation({
-    onSuccess: () => { utils.agenda.demoList.invalidate(); utils.agenda.list.invalidate(); setEventToRemove(null); toast.success("Programação removida do protótipo."); },
+  const removeEvent = trpc.agenda.delete.useMutation({
+    onSuccess: () => { utils.agenda.adminList.invalidate(); utils.agenda.list.invalidate(); setEventToRemove(null); toast.success("Programação removida do protótipo."); },
     onError: error => toast.error(error.message),
   });
-  const updateProposal = trpc.partners.demoUpdateEditorialStatus.useMutation({
-    onSuccess: () => { utils.partners.demoList.invalidate(); toast.success("Status editorial persistido."); },
+  const updateProposal = trpc.partners.updateEditorialStatus.useMutation({
+    onSuccess: () => { utils.partners.adminList.invalidate(); toast.success("Status editorial persistido."); },
     onError: error => toast.error(error.message),
   });
   const addEvent = (event: React.FormEvent) => {

@@ -53,9 +53,9 @@ function normalizeCulturalEvent(input: z.infer<typeof culturalEventFields>) {
 
 export const agendaRouter = router({
   list: publicProcedure.query(() => listPublishedCulturalEvents()),
-  demoList: publicProcedure.query(() => listAllCulturalEvents()),
+  demoList: adminProcedure.query(() => listAllCulturalEvents()),
   adminList: adminProcedure.query(() => listAllCulturalEvents()),
-  demoCreate: publicProcedure.input(culturalEventFields).mutation(async ({ input }) => {
+  demoCreate: adminProcedure.input(culturalEventFields).mutation(async ({ input }) => {
     const event = await createCulturalEvent(normalizeCulturalEvent(input));
     if (!event) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Não foi possível criar o evento." });
     return event;
@@ -65,7 +65,7 @@ export const agendaRouter = router({
     if (!event) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Não foi possível criar o evento." });
     return event;
   }),
-  demoUpdate: publicProcedure.input(culturalEventFields.partial().extend({ id: z.number().int().positive() })).mutation(async ({ input }) => {
+  demoUpdate: adminProcedure.input(culturalEventFields.partial().extend({ id: z.number().int().positive() })).mutation(async ({ input }) => {
     const { id, ...changes } = input;
     const current = await getCulturalEventById(id);
     if (!current) throw new TRPCError({ code: "NOT_FOUND", message: "Evento não encontrado." });
@@ -89,7 +89,7 @@ export const agendaRouter = router({
     });
     return updateCulturalEvent(id, normalizeCulturalEvent(complete));
   }),
-  demoDelete: publicProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ input }) => {
+  demoDelete: adminProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ input }) => {
     const event = await removeCulturalEvent(input.id);
     if (!event) throw new TRPCError({ code: "NOT_FOUND", message: "Evento não encontrado." });
     return event;
@@ -112,9 +112,9 @@ export const partnersRouter = router({
     if (!submission) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Não foi possível registrar sua proposta." });
     return submission;
   }),
-  demoList: publicProcedure.query(() => listPartnerSubmissions()),
+  demoList: adminProcedure.query(() => listPartnerSubmissions()),
   adminList: adminProcedure.query(() => listPartnerSubmissions()),
-  demoUpdateEditorialStatus: publicProcedure.input(z.object({
+  demoUpdateEditorialStatus: adminProcedure.input(z.object({
     id: z.number().int().positive(),
     editorialStatus: z.enum(["pendente", "em_revisao", "aprovado", "recusado"]),
     editorialNotes: optionalText(1500),

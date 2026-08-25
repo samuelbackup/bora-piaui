@@ -1,38 +1,28 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import { AppLoadingOverlay } from "./components/AppLoadingOverlay";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import AdminDestinations from "./pages/AdminDestinations";
-import AdminEditorial from "./pages/AdminEditorial";
-import AgendaPage from "./pages/AgendaPage";
-import CityPage from "./pages/CityPage";
-import DadosPage from "./pages/DadosPage";
-import DestinationPage from "./pages/DestinationPage";
+import ComingSoonPage from "./pages/ComingSoonPage";
 import Home from "./pages/Home";
-import ItineraryPage from "./pages/ItineraryPage";
-import PatrimoniosPage from "./pages/PatrimoniosPage";
-import PartnersPage from "./pages/PartnersPage";
-import PilotPlacePage from "./pages/PilotPlacePage";
-import SaboresPage from "./pages/SaboresPage";
+import NotFound from "./pages/NotFound";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/cidades/:citySlug/locais/:itemSlug" component={PilotPlacePage} />
-      <Route path="/cidades/:slug" component={CityPage} />
-      <Route path="/roteiros/:slug" component={ItineraryPage} />
-      <Route path="/destinos/:slug" component={DestinationPage} />
-      <Route path="/admin/destinos" component={AdminDestinations} />
-      <Route path="/admin/editorial" component={AdminEditorial} />
-      <Route path="/patrimonios" component={PatrimoniosPage} />
-      <Route path="/sabores" component={SaboresPage} />
-      <Route path="/dados" component={DadosPage} />
-      <Route path="/agenda" component={AgendaPage} />
-      <Route path="/parceiros" component={PartnersPage} />
+      <Route path="/cidades/:citySlug/locais/:itemSlug" component={ComingSoonPage} />
+      <Route path="/cidades/:slug" component={ComingSoonPage} />
+      <Route path="/roteiros/:slug" component={ComingSoonPage} />
+      <Route path="/destinos/:slug" component={ComingSoonPage} />
+      <Route path="/admin/destinos" component={ComingSoonPage} />
+      <Route path="/admin/editorial" component={ComingSoonPage} />
+      <Route path="/patrimonios" component={ComingSoonPage} />
+      <Route path="/sabores" component={ComingSoonPage} />
+      <Route path="/dados" component={ComingSoonPage} />
+      <Route path="/agenda" component={ComingSoonPage} />
+      <Route path="/parceiros" component={ComingSoonPage} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
