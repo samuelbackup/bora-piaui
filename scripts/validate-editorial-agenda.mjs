@@ -9,7 +9,7 @@ function assert(condition, message) {
 
 async function removeTemporaryEvents(page) {
   const eventsLoaded = page.waitForResponse(
-    response => response.url().includes("agenda.demoList") && response.status() === 200,
+    response => response.url().includes("agenda.adminList") && response.status() === 200,
     { timeout: 10_000 },
   );
   await page.goto(new URL("/admin/editorial", baseUrl).href, { waitUntil: "domcontentloaded" });
@@ -20,7 +20,7 @@ async function removeTemporaryEvents(page) {
     if (countBeforeRemoval === 0) return;
 
     const deletionPersisted = page.waitForResponse(
-      response => response.url().includes("agenda.demoDelete") && response.status() === 200,
+      response => response.url().includes("agenda.delete") && response.status() === 200,
       { timeout: 10_000 },
     );
     await eventCards.first().getByRole("button", { name: "Remover", exact: true }).click();
