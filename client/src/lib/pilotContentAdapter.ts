@@ -1,4 +1,12 @@
-import type { CuratedBusiness, PilotCity, PilotCurationTopic, PilotEditorialHighlight, PilotItem, PilotProximityRelation, SourceReference } from "@/lib/mvpPilot";
+import type {
+  CuratedBusiness,
+  PilotCity,
+  PilotCurationTopic,
+  PilotEditorialHighlight,
+  PilotItem,
+  PilotProximityRelation,
+  SourceReference,
+} from "@/lib/mvpPilot";
 
 export type SourceFields = {
   sourceName: string;
@@ -79,7 +87,9 @@ function toSource(fields: SourceFields): SourceReference {
     name: fields.sourceName,
     url: fields.sourceUrl,
     verifiedAt: fields.sourceVerifiedAt,
-    ...(fields.sourceResponsible ? { responsible: fields.sourceResponsible } : {}),
+    ...(fields.sourceResponsible
+      ? { responsible: fields.sourceResponsible }
+      : {}),
   };
 }
 
@@ -115,7 +125,10 @@ export function mapPlaceRow(row: PlaceRow, citySlug: string): PilotItem {
   };
 }
 
-export function mapBusinessRow(row: BusinessRow, citySlug: string): CuratedBusiness {
+export function mapBusinessRow(
+  row: BusinessRow,
+  citySlug: string
+): CuratedBusiness {
   return {
     id: row.externalId,
     citySlug,
@@ -131,7 +144,10 @@ export function mapBusinessRow(row: BusinessRow, citySlug: string): CuratedBusin
   };
 }
 
-export function mapTopicRow(row: TopicRow, citySlug: string): PilotCurationTopic {
+export function mapTopicRow(
+  row: TopicRow,
+  citySlug: string
+): PilotCurationTopic {
   return {
     id: row.externalId,
     citySlug,
@@ -142,7 +158,10 @@ export function mapTopicRow(row: TopicRow, citySlug: string): PilotCurationTopic
   };
 }
 
-export function mapHighlightRow(row: HighlightRow, citySlug: string): PilotEditorialHighlight {
+export function mapHighlightRow(
+  row: HighlightRow,
+  citySlug: string
+): PilotEditorialHighlight {
   return {
     id: row.externalId,
     citySlug,
@@ -152,7 +171,9 @@ export function mapHighlightRow(row: HighlightRow, citySlug: string): PilotEdito
   };
 }
 
-export function mapProximityRelationRow(row: ProximityRelationRow): PilotProximityRelation {
+export function mapProximityRelationRow(
+  row: ProximityRelationRow
+): PilotProximityRelation {
   return {
     id: row.externalId,
     anchorItemId: row.anchorExternalId,

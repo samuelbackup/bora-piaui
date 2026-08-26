@@ -3,7 +3,9 @@ import { filterGallery } from "./SaboresPage";
 
 describe("filtro regional de sabores", () => {
   it("mostra somente a Bomba no recorte de Teresina", () => {
-    expect(filterGallery("Teresina").map((item) => item.title)).toEqual(["Bomba"]);
+    expect(filterGallery("Teresina").map(item => item.title)).toEqual([
+      "Bomba",
+    ]);
   });
 
   it("mantém os dois recortes do interior e todos os itens sem filtro", () => {

@@ -1,38 +1,322 @@
 import { useState } from "react";
-import { ArrowLeft, BadgeCheck, Building2, Check, Send, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  BadgeCheck,
+  Building2,
+  Check,
+  Send,
+  ShieldCheck,
+} from "lucide-react";
 import { Link } from "wouter";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
 
 type Plan = "gratuito" | "destaque";
 
-const categories = ["Hospedagem", "Gastronomia", "Experiência", "Guia ou condutor", "Artesanato", "Transporte", "Outro"];
+const categories = [
+  "Hospedagem",
+  "Gastronomia",
+  "Experiência",
+  "Guia ou condutor",
+  "Artesanato",
+  "Transporte",
+  "Outro",
+];
 
 function Topbar() {
-  return <header className="sticky top-0 z-40 border-b border-[#3C482D]/10 bg-[#F5ECD8]/95 backdrop-blur-xl"><div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"><Link href="/" className="flex items-center gap-2 text-sm font-extrabold text-[#3C482D] hover:text-[#B9572D]"><ArrowLeft className="h-4 w-4" /> Voltar ao atlas</Link><nav className="flex items-center gap-3 text-xs font-extrabold sm:gap-5 sm:text-sm"><Link href="/patrimonios" className="hidden hover:text-[#B9572D] sm:inline">Patrimônios</Link><Link href="/sabores" className="hidden hover:text-[#B9572D] sm:inline">Sabores</Link><Link href="/dados" className="hidden hover:text-[#B9572D] sm:inline">Dados</Link><Link href="/agenda" className="hover:text-[#B9572D]">Agenda</Link><Link href="/parceiros" className="rounded-full bg-[#B9572D] px-3 py-2 text-white">Seja parceiro</Link></nav></div></header>;
+  return (
+    <header className="sticky top-0 z-40 border-b border-[#3C482D]/10 bg-[#F5ECD8]/95 backdrop-blur-xl">
+      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-sm font-extrabold text-[#3C482D] hover:text-[#B9572D]"
+        >
+          <ArrowLeft className="h-4 w-4" /> Voltar ao atlas
+        </Link>
+        <nav className="flex items-center gap-3 text-xs font-extrabold sm:gap-5 sm:text-sm">
+          <Link
+            href="/patrimonios"
+            className="hidden hover:text-[#B9572D] sm:inline"
+          >
+            Patrimônios
+          </Link>
+          <Link
+            href="/sabores"
+            className="hidden hover:text-[#B9572D] sm:inline"
+          >
+            Sabores
+          </Link>
+          <Link href="/dados" className="hidden hover:text-[#B9572D] sm:inline">
+            Dados
+          </Link>
+          <Link href="/agenda" className="hover:text-[#B9572D]">
+            Agenda
+          </Link>
+          <Link
+            href="/parceiros"
+            className="rounded-full bg-[#B9572D] px-3 py-2 text-white"
+          >
+            Seja parceiro
+          </Link>
+        </nav>
+      </div>
+    </header>
+  );
 }
 
 export default function PartnersPage() {
   const [plan, setPlan] = useState<Plan>("gratuito");
-  const [form, setForm] = useState({ businessName: "", city: "", category: "Gastronomia", phone: "", address: "", openingHours: "", description: "" });
+  const [form, setForm] = useState({
+    businessName: "",
+    city: "",
+    category: "Gastronomia",
+    phone: "",
+    address: "",
+    openingHours: "",
+    description: "",
+  });
   const submit = trpc.partners.submit.useMutation({
-    onSuccess: (submission) => {
+    onSuccess: submission => {
       const key = "bora-piaui-demo-partner-proposals";
-      const current = (() => { try { return JSON.parse(window.sessionStorage.getItem(key) ?? "[]") as Array<{ id: number }>; } catch { return []; } })();
-      window.sessionStorage.setItem(key, JSON.stringify([{ id: submission.id, businessName: submission.businessName, city: submission.city, category: submission.category, plan: submission.plan, editorialStatus: submission.editorialStatus, createdAt: new Date().toISOString() }, ...current.filter(item => item.id !== submission.id)]));
+      const current = (() => {
+        try {
+          return JSON.parse(
+            window.sessionStorage.getItem(key) ?? "[]"
+          ) as Array<{ id: number }>;
+        } catch {
+          return [];
+        }
+      })();
+      window.sessionStorage.setItem(
+        key,
+        JSON.stringify([
+          {
+            id: submission.id,
+            businessName: submission.businessName,
+            city: submission.city,
+            category: submission.category,
+            plan: submission.plan,
+            editorialStatus: submission.editorialStatus,
+            createdAt: new Date().toISOString(),
+          },
+          ...current.filter(item => item.id !== submission.id),
+        ])
+      );
       toast.success("Proposta enviada para revisão editorial.");
-      setForm({ businessName: "", city: "", category: "Gastronomia", phone: "", address: "", openingHours: "", description: "" });
+      setForm({
+        businessName: "",
+        city: "",
+        category: "Gastronomia",
+        phone: "",
+        address: "",
+        openingHours: "",
+        description: "",
+      });
       setPlan("gratuito");
     },
     onError: error => toast.error(error.message),
   });
-  const setField = (field: keyof typeof form, value: string) => setForm(current => ({ ...current, [field]: value }));
+  const setField = (field: keyof typeof form, value: string) =>
+    setForm(current => ({ ...current, [field]: value }));
 
-  return <div className="min-h-screen bg-[#F5ECD8] text-[#2E3222]"><Topbar /><main>
-    <section className="border-b border-[#3C482D]/10 px-4 py-14 sm:px-6 lg:px-8 lg:py-20"><div className="mx-auto max-w-7xl"><span className="text-[10px] font-extrabold uppercase tracking-[.17em] text-[#B9572D]">Rede local</span><h1 className="display-font mt-4 max-w-3xl text-5xl leading-[.92] tracking-[-.06em] sm:text-6xl">Mostre o que o seu negócio faz pelo Piauí.</h1><p className="mt-6 max-w-2xl text-base leading-7 text-[#66705E] sm:text-lg">Envie uma proposta para integrar o diretório de experiências locais. A publicação acontece somente após revisão editorial.</p></div></section>
-    <section className="px-4 py-10 sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl"><div className="grid gap-5 lg:grid-cols-2"><button type="button" onClick={() => setPlan("gratuito")} className={`rounded-[1.5rem] border p-6 text-left ${plan === "gratuito" ? "border-[#B9572D] bg-[#FFFDF6]" : "border-[#3C482D]/12 bg-[#FFFDF6]"}`}><span className="text-[10px] font-extrabold uppercase tracking-[.15em] text-[#B9572D]">Plano gratuito</span><h2 className="display-font mt-4 text-3xl tracking-[-.04em]">Presença essencial</h2><p className="mt-3 text-sm leading-6 text-[#66705E]">Perfil no diretório, categoria, cidade, contato e informações de atendimento submetidas para curadoria.</p><span className="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-[#566B37]">{plan === "gratuito" && <Check className="h-4 w-4" />} Selecionar</span></button><button type="button" onClick={() => setPlan("destaque")} className={`rounded-[1.5rem] border p-6 text-left text-white ${plan === "destaque" ? "border-[#D9A640] bg-[#3C482D]" : "border-[#3C482D] bg-[#3C482D]/92"}`}><span className="text-[10px] font-extrabold uppercase tracking-[.15em] text-[#D9A640]">Plano destaque</span><h2 className="display-font mt-4 text-3xl tracking-[-.04em]">Mais visibilidade</h2><p className="mt-3 text-sm leading-6 text-white/75">Solicitação de análise para selo editorial e eventual presença em seleções temáticas. Benefícios e condições futuras serão definidos somente após a validação de uso do projeto.</p><span className="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-[#D9A640]">{plan === "destaque" && <Check className="h-4 w-4" />} Selecionar</span></button></div>
-      <form onSubmit={event => { event.preventDefault(); submit.mutate({ ...form, openingHours: form.openingHours || null, plan }); }} className="mt-10 rounded-[1.75rem] border border-[#3C482D]/12 bg-[#FFFDF6] p-5 sm:p-8"><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start"><div><span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-[#B9572D]">Proposta de perfil</span><h2 className="display-font mt-3 text-4xl tracking-[-.05em]">Criar solicitação</h2></div><div className="flex max-w-sm gap-2 rounded-xl bg-[#E9DCC0]/60 p-3 text-xs leading-5 text-[#566457]"><ShieldCheck className="h-4 w-4 shrink-0 text-[#B9572D]" />Dados enviados entram como proposta e não são publicados automaticamente.</div></div><div className="mt-8 grid gap-5 md:grid-cols-2"><label className="text-sm font-bold">Nome do negócio<input required value={form.businessName} onChange={event => setField("businessName", event.target.value)} className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/15 bg-[#FDF9F0] px-4 text-sm font-medium outline-none focus:border-[#B9572D]" /></label><label className="text-sm font-bold">Cidade<input required value={form.city} onChange={event => setField("city", event.target.value)} className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/15 bg-[#FDF9F0] px-4 text-sm font-medium outline-none focus:border-[#B9572D]" /></label><label className="text-sm font-bold">Categoria<select value={form.category} onChange={event => setField("category", event.target.value)} className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/15 bg-[#FDF9F0] px-4 text-sm font-medium outline-none focus:border-[#B9572D]">{categories.map(category => <option key={category} value={category}>{category}</option>)}</select></label><label className="text-sm font-bold">Telefone<input required value={form.phone} onChange={event => setField("phone", event.target.value)} inputMode="tel" className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/15 bg-[#FDF9F0] px-4 text-sm font-medium outline-none focus:border-[#B9572D]" /></label><label className="text-sm font-bold md:col-span-2">Endereço<input required value={form.address} onChange={event => setField("address", event.target.value)} className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/15 bg-[#FDF9F0] px-4 text-sm font-medium outline-none focus:border-[#B9572D]" /></label><label className="text-sm font-bold md:col-span-2">Horário de funcionamento <span className="font-medium text-[#66705E]">(opcional)</span><input value={form.openingHours} onChange={event => setField("openingHours", event.target.value)} placeholder="Ex.: Seg–Sáb, 9h–18h" className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/15 bg-[#FDF9F0] px-4 text-sm font-medium outline-none placeholder:text-[#9A9B84] focus:border-[#B9572D]" /></label><label className="text-sm font-bold md:col-span-2">Sobre o negócio<textarea required value={form.description} onChange={event => setField("description", event.target.value)} minLength={30} rows={5} className="mt-2 w-full resize-y rounded-[1.25rem] border border-[#3C482D]/15 bg-[#FDF9F0] p-4 text-sm font-medium outline-none focus:border-[#B9572D]" /></label></div><div className="mt-7 flex flex-col gap-4 border-t border-[#3C482D]/10 pt-6 sm:flex-row sm:items-center sm:justify-between"><p className="flex max-w-xl gap-2 text-xs leading-5 text-[#66705E]"><BadgeCheck className="h-4 w-4 shrink-0 text-[#566B37]" />Ao enviar, a solicitação fica com status pendente para revisão editorial. Este protótipo não processa pagamentos nem cria contas.</p><button type="submit" disabled={submit.isPending} className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#B9572D] px-5 text-sm font-extrabold text-white hover:bg-[#cd6d45] disabled:cursor-not-allowed disabled:opacity-60">{submit.isPending ? "Enviando proposta…" : "Enviar para revisão"} <Send className="h-4 w-4" /></button></div></form>
-    </div></section>
-    <section className="border-t border-[#3C482D]/10 bg-[#E9DCC0] px-4 py-9 sm:px-6 lg:px-8"><div className="mx-auto flex max-w-7xl items-center gap-3 text-sm font-semibold text-[#566457]"><Building2 className="h-5 w-5 text-[#B9572D]" />A proposta de perfil fortalece uma futura rede local; a decisão editorial permanece humana e verificável.</div></section>
-  </main></div>;
+  return (
+    <div className="min-h-screen bg-[#F5ECD8] text-[#2E3222]">
+      <Topbar />
+      <main>
+        <section className="border-b border-[#3C482D]/10 px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+          <div className="mx-auto max-w-7xl">
+            <span className="text-[10px] font-extrabold uppercase tracking-[.17em] text-[#B9572D]">
+              Rede local
+            </span>
+            <h1 className="display-font mt-4 max-w-3xl text-5xl leading-[.92] tracking-[-.06em] sm:text-6xl">
+              Mostre o que o seu negócio faz pelo Piauí.
+            </h1>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-[#66705E] sm:text-lg">
+              Envie uma proposta para integrar o diretório de experiências
+              locais. A publicação acontece somente após revisão editorial.
+            </p>
+          </div>
+        </section>
+        <section className="px-4 py-10 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <div className="grid gap-5 lg:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => setPlan("gratuito")}
+                className={`rounded-[1.5rem] border p-6 text-left ${plan === "gratuito" ? "border-[#B9572D] bg-[#FFFDF6]" : "border-[#3C482D]/12 bg-[#FFFDF6]"}`}
+              >
+                <span className="text-[10px] font-extrabold uppercase tracking-[.15em] text-[#B9572D]">
+                  Plano gratuito
+                </span>
+                <h2 className="display-font mt-4 text-3xl tracking-[-.04em]">
+                  Presença essencial
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-[#66705E]">
+                  Perfil no diretório, categoria, cidade, contato e informações
+                  de atendimento submetidas para curadoria.
+                </p>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-[#566B37]">
+                  {plan === "gratuito" && <Check className="h-4 w-4" />}{" "}
+                  Selecionar
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setPlan("destaque")}
+                className={`rounded-[1.5rem] border p-6 text-left text-white ${plan === "destaque" ? "border-[#D9A640] bg-[#3C482D]" : "border-[#3C482D] bg-[#3C482D]/92"}`}
+              >
+                <span className="text-[10px] font-extrabold uppercase tracking-[.15em] text-[#D9A640]">
+                  Plano destaque
+                </span>
+                <h2 className="display-font mt-4 text-3xl tracking-[-.04em]">
+                  Mais visibilidade
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-white/75">
+                  Solicitação de análise para selo editorial e eventual presença
+                  em seleções temáticas. Benefícios e condições futuras serão
+                  definidos somente após a validação de uso do projeto.
+                </p>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-[#D9A640]">
+                  {plan === "destaque" && <Check className="h-4 w-4" />}{" "}
+                  Selecionar
+                </span>
+              </button>
+            </div>
+            <form
+              onSubmit={event => {
+                event.preventDefault();
+                submit.mutate({
+                  ...form,
+                  openingHours: form.openingHours || null,
+                  plan,
+                });
+              }}
+              className="mt-10 rounded-[1.75rem] border border-[#3C482D]/12 bg-[#FFFDF6] p-5 sm:p-8"
+            >
+              <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-[#B9572D]">
+                    Proposta de perfil
+                  </span>
+                  <h2 className="display-font mt-3 text-4xl tracking-[-.05em]">
+                    Criar solicitação
+                  </h2>
+                </div>
+                <div className="flex max-w-sm gap-2 rounded-xl bg-[#E9DCC0]/60 p-3 text-xs leading-5 text-[#566457]">
+                  <ShieldCheck className="h-4 w-4 shrink-0 text-[#B9572D]" />
+                  Dados enviados entram como proposta e não são publicados
+                  automaticamente.
+                </div>
+              </div>
+              <div className="mt-8 grid gap-5 md:grid-cols-2">
+                <label className="text-sm font-bold">
+                  Nome do negócio
+                  <input
+                    required
+                    value={form.businessName}
+                    onChange={event =>
+                      setField("businessName", event.target.value)
+                    }
+                    className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/15 bg-[#FDF9F0] px-4 text-sm font-medium outline-none focus:border-[#B9572D]"
+                  />
+                </label>
+                <label className="text-sm font-bold">
+                  Cidade
+                  <input
+                    required
+                    value={form.city}
+                    onChange={event => setField("city", event.target.value)}
+                    className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/15 bg-[#FDF9F0] px-4 text-sm font-medium outline-none focus:border-[#B9572D]"
+                  />
+                </label>
+                <label className="text-sm font-bold">
+                  Categoria
+                  <select
+                    value={form.category}
+                    onChange={event => setField("category", event.target.value)}
+                    className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/15 bg-[#FDF9F0] px-4 text-sm font-medium outline-none focus:border-[#B9572D]"
+                  >
+                    {categories.map(category => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="text-sm font-bold">
+                  Telefone
+                  <input
+                    required
+                    value={form.phone}
+                    onChange={event => setField("phone", event.target.value)}
+                    inputMode="tel"
+                    className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/15 bg-[#FDF9F0] px-4 text-sm font-medium outline-none focus:border-[#B9572D]"
+                  />
+                </label>
+                <label className="text-sm font-bold md:col-span-2">
+                  Endereço
+                  <input
+                    required
+                    value={form.address}
+                    onChange={event => setField("address", event.target.value)}
+                    className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/15 bg-[#FDF9F0] px-4 text-sm font-medium outline-none focus:border-[#B9572D]"
+                  />
+                </label>
+                <label className="text-sm font-bold md:col-span-2">
+                  Horário de funcionamento{" "}
+                  <span className="font-medium text-[#66705E]">(opcional)</span>
+                  <input
+                    value={form.openingHours}
+                    onChange={event =>
+                      setField("openingHours", event.target.value)
+                    }
+                    placeholder="Ex.: Seg–Sáb, 9h–18h"
+                    className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/15 bg-[#FDF9F0] px-4 text-sm font-medium outline-none placeholder:text-[#9A9B84] focus:border-[#B9572D]"
+                  />
+                </label>
+                <label className="text-sm font-bold md:col-span-2">
+                  Sobre o negócio
+                  <textarea
+                    required
+                    value={form.description}
+                    onChange={event =>
+                      setField("description", event.target.value)
+                    }
+                    minLength={30}
+                    rows={5}
+                    className="mt-2 w-full resize-y rounded-[1.25rem] border border-[#3C482D]/15 bg-[#FDF9F0] p-4 text-sm font-medium outline-none focus:border-[#B9572D]"
+                  />
+                </label>
+              </div>
+              <div className="mt-7 flex flex-col gap-4 border-t border-[#3C482D]/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+                <p className="flex max-w-xl gap-2 text-xs leading-5 text-[#66705E]">
+                  <BadgeCheck className="h-4 w-4 shrink-0 text-[#566B37]" />
+                  Ao enviar, a solicitação fica com status pendente para revisão
+                  editorial. Este protótipo não processa pagamentos nem cria
+                  contas.
+                </p>
+                <button
+                  type="submit"
+                  disabled={submit.isPending}
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#B9572D] px-5 text-sm font-extrabold text-white hover:bg-[#cd6d45] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {submit.isPending
+                    ? "Enviando proposta…"
+                    : "Enviar para revisão"}{" "}
+                  <Send className="h-4 w-4" />
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+        <section className="border-t border-[#3C482D]/10 bg-[#E9DCC0] px-4 py-9 sm:px-6 lg:px-8">
+          <div className="mx-auto flex max-w-7xl items-center gap-3 text-sm font-semibold text-[#566457]">
+            <Building2 className="h-5 w-5 text-[#B9572D]" />A proposta de perfil
+            fortalece uma futura rede local; a decisão editorial permanece
+            humana e verificável.
+          </div>
+        </section>
+      </main>
+    </div>
+  );
 }

@@ -5,15 +5,15 @@ export function externalUrl(max: number) {
     .string()
     .url()
     .max(max)
-    .refine(
-      value => {
-        try {
-          const { protocol } = new URL(value);
-          return protocol === "https:" || (process.env.NODE_ENV !== "production" && protocol === "http:");
-        } catch {
-          return false;
-        }
-      },
-      "A URL deve usar o esquema https.",
-    );
+    .refine(value => {
+      try {
+        const { protocol } = new URL(value);
+        return (
+          protocol === "https:" ||
+          (process.env.NODE_ENV !== "production" && protocol === "http:")
+        );
+      } catch {
+        return false;
+      }
+    }, "A URL deve usar o esquema https.");
 }

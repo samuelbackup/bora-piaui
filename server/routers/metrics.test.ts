@@ -25,29 +25,48 @@ describe("métricas de uso minimizadas", () => {
     const caller = metricsRouter.createCaller({} as never);
 
     await expect(caller.track(validEvent)).resolves.toEqual({ success: true });
-    expect(db.recordUsageEvent).toHaveBeenCalledWith(expect.objectContaining({
-      eventName: "route_opened",
-      citySlug: "teresina",
-      itemId: "theatro-4-de-setembro",
-      source: "city_card",
-      createdAt: expect.any(Date),
-    }));
+    expect(db.recordUsageEvent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventName: "route_opened",
+        citySlug: "teresina",
+        itemId: "theatro-4-de-setembro",
+        source: "city_card",
+        createdAt: expect.any(Date),
+      })
+    );
   });
 
   it("rejeita texto livre e nomes de evento não permitidos", async () => {
     const caller = metricsRouter.createCaller({} as never);
 
-    await expect(caller.track({ ...validEvent, source: "Rua com dados pessoais" })).rejects.toMatchObject({ code: "BAD_REQUEST" });
-    await expect(caller.track({ ...validEvent, eventName: "feedback" as never })).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    await expect(
+      caller.track({ ...validEvent, source: "Rua com dados pessoais" })
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    await expect(
+      caller.track({ ...validEvent, eventName: "feedback" as never })
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
     expect(db.recordUsageEvent).not.toHaveBeenCalled();
   });
 
   it("permite leitura agregada apenas para administradores", async () => {
-    db.getUsageMetrics.mockResolvedValue({ totalEvents: 7, foodContextOpens: 2, routeOpens: 3, topCities: [], topItems: [] });
-    const adminCaller = metricsRouter.createCaller({ user: { role: "admin" } } as never);
+    db.getUsageMetrics.mockResolvedValue({
+      totalEvents: 7,
+      foodContextOpens: 2,
+      routeOpens: 3,
+      topCities: [],
+      topItems: [],
+    });
+    const adminCaller = metricsRouter.createCaller({
+      user: { role: "admin" },
+    } as never);
     const publicCaller = metricsRouter.createCaller({} as never);
 
-    await expect(adminCaller.summary()).resolves.toMatchObject({ totalEvents: 7, routeOpens: 3 });
-    await expect(publicCaller.summary()).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(adminCaller.summary()).resolves.toMatchObject({
+      totalEvents: 7,
+      routeOpens: 3,
+    });
+    await expect(publicCaller.summary()).rejects.toMatchObject({
+      code: "FORBIDDEN",
+    });
   });
 });

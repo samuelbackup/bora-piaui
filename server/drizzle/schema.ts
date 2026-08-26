@@ -1,4 +1,15 @@
-import { boolean, index, int, json, mysqlEnum, mysqlTable, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
+import {
+  boolean,
+  index,
+  int,
+  json,
+  mysqlEnum,
+  mysqlTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
@@ -29,7 +40,11 @@ export const destinations = mysqlTable(
     sourceName: varchar("sourceName", { length: 255 }).notNull(),
     sourceUrl: varchar("sourceUrl", { length: 1024 }).notNull(),
     sourceYear: varchar("sourceYear", { length: 48 }).notNull(),
-    operationalStatus: mysqlEnum("operationalStatus", ["confirmado", "verificar", "indisponivel"])
+    operationalStatus: mysqlEnum("operationalStatus", [
+      "confirmado",
+      "verificar",
+      "indisponivel",
+    ])
       .default("verificar")
       .notNull(),
     hours: text("hours"),
@@ -73,7 +88,11 @@ export const culturalEvents = mysqlTable(
     summary: text("summary").notNull(),
     sourceName: varchar("sourceName", { length: 255 }).notNull(),
     sourceUrl: varchar("sourceUrl", { length: 1024 }).notNull(),
-    confirmationStatus: mysqlEnum("confirmationStatus", ["confirmado", "verificar", "cancelado"])
+    confirmationStatus: mysqlEnum("confirmationStatus", [
+      "confirmado",
+      "verificar",
+      "cancelado",
+    ])
       .default("verificar")
       .notNull(),
     published: boolean("published").default(false).notNull(),
@@ -92,8 +111,15 @@ export const partnerSubmissions = mysqlTable("partner_submissions", {
   address: varchar("address", { length: 255 }).notNull(),
   openingHours: varchar("openingHours", { length: 255 }),
   description: text("description").notNull(),
-  plan: mysqlEnum("plan", ["gratuito", "destaque"]).default("gratuito").notNull(),
-  editorialStatus: mysqlEnum("editorialStatus", ["pendente", "em_revisao", "aprovado", "recusado"])
+  plan: mysqlEnum("plan", ["gratuito", "destaque"])
+    .default("gratuito")
+    .notNull(),
+  editorialStatus: mysqlEnum("editorialStatus", [
+    "pendente",
+    "em_revisao",
+    "aprovado",
+    "recusado",
+  ])
     .default("pendente")
     .notNull(),
   editorialNotes: text("editorialNotes"),
@@ -162,7 +188,9 @@ export const cityPlaces = mysqlTable(
       .references(() => cities.id, { onDelete: "cascade" }),
     externalId: varchar("externalId", { length: 140 }).notNull(),
     slug: varchar("slug", { length: 140 }).notNull(),
-    kind: mysqlEnum("kind", ["attraction", "business"]).default("attraction").notNull(),
+    kind: mysqlEnum("kind", ["attraction", "business"])
+      .default("attraction")
+      .notNull(),
     title: varchar("title", { length: 180 }).notNull(),
     category: varchar("category", { length: 100 }).notNull(),
     summary: text("summary").notNull(),
@@ -172,10 +200,16 @@ export const cityPlaces = mysqlTable(
     externalUrl: varchar("externalUrl", { length: 1024 }),
     mapQuery: varchar("mapQuery", { length: 255 }).notNull(),
     accent: varchar("accent", { length: 32 }).notNull(),
-    operationalStatus: mysqlEnum("operationalStatus", ["confirmed", "verify", "unavailable"])
+    operationalStatus: mysqlEnum("operationalStatus", [
+      "confirmed",
+      "verify",
+      "unavailable",
+    ])
       .default("verify")
       .notNull(),
-    editorialStatus: mysqlEnum("editorialStatus", ["published", "pending"]).default("pending").notNull(),
+    editorialStatus: mysqlEnum("editorialStatus", ["published", "pending"])
+      .default("pending")
+      .notNull(),
     sourceName: varchar("sourceName", { length: 255 }).notNull(),
     sourceUrl: varchar("sourceUrl", { length: 1024 }).notNull(),
     sourceVerifiedAt: varchar("sourceVerifiedAt", { length: 96 }).notNull(),
@@ -197,14 +231,18 @@ export const curatedBusinesses = mysqlTable(
       .notNull()
       .references(() => cities.id, { onDelete: "cascade" }),
     externalId: varchar("externalId", { length: 140 }).notNull(),
-    kind: mysqlEnum("kind", ["restaurant", "service"]).default("service").notNull(),
+    kind: mysqlEnum("kind", ["restaurant", "service"])
+      .default("service")
+      .notNull(),
     anchorPlaceIds: json("anchorPlaceIds").$type<string[]>().notNull(),
     title: varchar("title", { length: 180 }).notNull(),
     category: varchar("category", { length: 100 }).notNull(),
     summary: text("summary").notNull(),
     routeUrl: varchar("routeUrl", { length: 1024 }),
     contactUrl: varchar("contactUrl", { length: 1024 }),
-    editorialStatus: mysqlEnum("editorialStatus", ["published", "pending"]).default("pending").notNull(),
+    editorialStatus: mysqlEnum("editorialStatus", ["published", "pending"])
+      .default("pending")
+      .notNull(),
     sourceName: varchar("sourceName", { length: 255 }).notNull(),
     sourceUrl: varchar("sourceUrl", { length: 1024 }).notNull(),
     sourceVerifiedAt: varchar("sourceVerifiedAt", { length: 96 }).notNull(),
@@ -272,7 +310,11 @@ export const placeProximityRelations = mysqlTable(
     sourceResponsible: varchar("sourceResponsible", { length: 255 }),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
   },
-  table => [uniqueIndex("place_proximity_relations_external_id_unique").on(table.externalId)]
+  table => [
+    uniqueIndex("place_proximity_relations_external_id_unique").on(
+      table.externalId
+    ),
+  ]
 );
 
 export const curationTopics = mysqlTable(
@@ -283,14 +325,20 @@ export const curationTopics = mysqlTable(
       .notNull()
       .references(() => cities.id, { onDelete: "cascade" }),
     externalId: varchar("externalId", { length: 140 }).notNull(),
-    category: mysqlEnum("category", ["gastronomy", "service"]).default("service").notNull(),
+    category: mysqlEnum("category", ["gastronomy", "service"])
+      .default("service")
+      .notNull(),
     title: varchar("title", { length: 180 }).notNull(),
     description: text("description").notNull(),
-    status: mysqlEnum("status", ["curating", "published"]).default("curating").notNull(),
+    status: mysqlEnum("status", ["curating", "published"])
+      .default("curating")
+      .notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   },
-  table => [uniqueIndex("curation_topics_external_id_unique").on(table.externalId)]
+  table => [
+    uniqueIndex("curation_topics_external_id_unique").on(table.externalId),
+  ]
 );
 
 export const editorialHighlights = mysqlTable(
@@ -310,7 +358,9 @@ export const editorialHighlights = mysqlTable(
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   },
-  table => [uniqueIndex("editorial_highlights_external_id_unique").on(table.externalId)]
+  table => [
+    uniqueIndex("editorial_highlights_external_id_unique").on(table.externalId),
+  ]
 );
 
 export type PlaceImage = {
@@ -331,8 +381,10 @@ export type Itinerary = typeof itineraries.$inferSelect;
 export type InsertItinerary = typeof itineraries.$inferInsert;
 export type ItineraryStop = typeof itineraryStops.$inferSelect;
 export type InsertItineraryStop = typeof itineraryStops.$inferInsert;
-export type PlaceProximityRelation = typeof placeProximityRelations.$inferSelect;
-export type InsertPlaceProximityRelation = typeof placeProximityRelations.$inferInsert;
+export type PlaceProximityRelation =
+  typeof placeProximityRelations.$inferSelect;
+export type InsertPlaceProximityRelation =
+  typeof placeProximityRelations.$inferInsert;
 export type CurationTopic = typeof curationTopics.$inferSelect;
 export type InsertCurationTopic = typeof curationTopics.$inferInsert;
 export type EditorialHighlight = typeof editorialHighlights.$inferSelect;

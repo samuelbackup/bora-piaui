@@ -1,17 +1,29 @@
 import { describe, expect, it } from "vitest";
-import { getPilotCategories, getPilotCity, getPilotCurationTopics, getPilotCuratedBusinesses, getPilotEditorialHighlights, getPilotFoodOptions, getPilotItems, getPilotNearbyItems, loadPilotCatalog } from "./mvpPilot";
+import {
+  getPilotCategories,
+  getPilotCity,
+  getPilotCurationTopics,
+  getPilotCuratedBusinesses,
+  getPilotEditorialHighlights,
+  getPilotFoodOptions,
+  getPilotItems,
+  getPilotNearbyItems,
+  loadPilotCatalog,
+} from "./mvpPilot";
 
 describe("catálogo do MVP de front-end", () => {
   it("mantém três cidades-piloto com identificadores estáveis", () => {
     expect(getPilotCity("teresina")?.name).toBe("Teresina");
     expect(getPilotCity("cajueiro-da-praia")?.name).toBe("Cajueiro da Praia");
-    expect(getPilotCity("sao-raimundo-nonato")?.name).toBe("São Raimundo Nonato");
+    expect(getPilotCity("sao-raimundo-nonato")?.name).toBe(
+      "São Raimundo Nonato"
+    );
   });
 
   it("fornece os três destinos e slugs que alimentam a navegação contextual", async () => {
     const catalog = await loadPilotCatalog();
 
-    expect(catalog.cities.map((city) => city.slug)).toEqual([
+    expect(catalog.cities.map(city => city.slug)).toEqual([
       "teresina",
       "cajueiro-da-praia",
       "sao-raimundo-nonato",
@@ -21,67 +33,115 @@ describe("catálogo do MVP de front-end", () => {
   it("oferece Cultura e História para as três leituras editoriais com fontes verificáveis", () => {
     const expectedCultureSources = {
       teresina: "Presidência da República · G20 Brasil · Teresina - PI",
-      "cajueiro-da-praia": "Prefeitura de Cajueiro da Praia · História e atrações",
+      "cajueiro-da-praia":
+        "Prefeitura de Cajueiro da Praia · História e atrações",
       "sao-raimundo-nonato": "UNESCO · Parque Nacional Serra da Capivara",
     };
 
-    for (const [citySlug, cultureSource] of Object.entries(expectedCultureSources)) {
+    for (const [citySlug, cultureSource] of Object.entries(
+      expectedCultureSources
+    )) {
       const highlights = getPilotEditorialHighlights(citySlug);
-      expect(highlights.map((entry) => entry.title)).toEqual(["Cultura", "História"]);
-      expect(highlights.every((entry) => entry.source.url.startsWith("https://"))).toBe(true);
-      expect(highlights.find((entry) => entry.title === "Cultura")?.source.name).toBe(cultureSource);
+      expect(highlights.map(entry => entry.title)).toEqual([
+        "Cultura",
+        "História",
+      ]);
+      expect(
+        highlights.every(entry => entry.source.url.startsWith("https://"))
+      ).toBe(true);
+      expect(
+        highlights.find(entry => entry.title === "Cultura")?.source.name
+      ).toBe(cultureSource);
     }
 
-    const saoRaimundoHistory = getPilotEditorialHighlights("sao-raimundo-nonato").find((entry) => entry.title === "História");
-    expect(saoRaimundoHistory?.source.name).toBe("Prefeitura de São Raimundo Nonato · Histórico da cidade");
-    expect(saoRaimundoHistory?.source.url).toContain("saoraimundononato.pi.gov.br");
+    const saoRaimundoHistory = getPilotEditorialHighlights(
+      "sao-raimundo-nonato"
+    ).find(entry => entry.title === "História");
+    expect(saoRaimundoHistory?.source.name).toBe(
+      "Prefeitura de São Raimundo Nonato · Histórico da cidade"
+    );
+    expect(saoRaimundoHistory?.source.url).toContain(
+      "saoraimundononato.pi.gov.br"
+    );
   });
 
   it("não inventa negócios quando ainda não há registros validados", () => {
     expect(getPilotItems("teresina", "business")).toEqual([]);
-    expect(getPilotFoodOptions("teresina", "theatro-4-de-setembro")).toEqual([]);
+    expect(getPilotFoodOptions("teresina", "theatro-4-de-setembro")).toEqual(
+      []
+    );
   });
 
   it("amplia Teresina com cinco atrativos institucionais, rotas e fontes verificáveis", () => {
     const teresinaItems = getPilotItems("teresina", "attraction");
-    const addedItems = teresinaItems.filter((item) => [
-      "Complexo Turístico Ponte Estaiada",
-      "Theatro 4 de Setembro",
-      "Museu do Piauí – Casa de Odilon Nunes",
-      "Parque Potycabana",
-      "Central de Artesanato Mestre Dezinho",
-    ].includes(item.title));
+    const addedItems = teresinaItems.filter(item =>
+      [
+        "Complexo Turístico Ponte Estaiada",
+        "Theatro 4 de Setembro",
+        "Museu do Piauí – Casa de Odilon Nunes",
+        "Parque Potycabana",
+        "Central de Artesanato Mestre Dezinho",
+      ].includes(item.title)
+    );
 
     expect(addedItems).toHaveLength(5);
-    expect(addedItems.every((item) => item.operationalStatus === "verify")).toBe(true);
-    expect(addedItems.every((item) => item.routeUrl?.startsWith("https://www.google.com/maps/dir/"))).toBe(true);
-    expect(addedItems.every((item) => item.source.url.startsWith("https://"))).toBe(true);
-    expect(addedItems.every((item) => item.image?.url.startsWith("/manus-storage/"))).toBe(true);
-    expect(addedItems.every((item) => item.image?.credit?.includes("Wikimedia Commons"))).toBe(true);
-    expect(addedItems.every((item) => item.image?.license && item.image.licenseUrl?.startsWith("https://commons.wikimedia.org/"))).toBe(true);
+    expect(addedItems.every(item => item.operationalStatus === "verify")).toBe(
+      true
+    );
+    expect(
+      addedItems.every(item =>
+        item.routeUrl?.startsWith("https://www.google.com/maps/dir/")
+      )
+    ).toBe(true);
+    expect(
+      addedItems.every(item => item.source.url.startsWith("https://"))
+    ).toBe(true);
+    expect(
+      addedItems.every(item => item.image?.url.startsWith("/manus-storage/"))
+    ).toBe(true);
+    expect(
+      addedItems.every(item =>
+        item.image?.credit?.includes("Wikimedia Commons")
+      )
+    ).toBe(true);
+    expect(
+      addedItems.every(
+        item =>
+          item.image?.license &&
+          item.image.licenseUrl?.startsWith("https://commons.wikimedia.org/")
+      )
+    ).toBe(true);
   });
 
   it("publica a imagem licenciada do Polo Cerâmico com atribuição verificável", () => {
-    const poloCeramico = getPilotItems("teresina", "attraction").find((item) => item.id === "polo-ceramico-poti-velho");
+    const poloCeramico = getPilotItems("teresina", "attraction").find(
+      item => item.id === "polo-ceramico-poti-velho"
+    );
 
     expect(poloCeramico?.image).toMatchObject({
       url: "/manus-storage/polo-ceramico-poti-velho_11ad2e11.jpg",
       credit: "MTur Destinos, via Wikimedia Commons",
       license: "Domínio público",
-      licenseUrl: "https://commons.wikimedia.org/wiki/File:MauricioPokemon_PoloCeramico_Teresina_PI_(40062427735).jpg",
+      licenseUrl:
+        "https://commons.wikimedia.org/wiki/File:MauricioPokemon_PoloCeramico_Teresina_PI_(40062427735).jpg",
     });
     expect(poloCeramico?.image?.alt).toContain("cerâmica");
   });
 
   it("expõe categorias a partir dos itens publicados da cidade", () => {
-    expect(getPilotCategories("sao-raimundo-nonato")).toEqual(["Memória e arqueologia", "Patrimônio"]);
+    expect(getPilotCategories("sao-raimundo-nonato")).toEqual([
+      "Memória e arqueologia",
+      "Patrimônio",
+    ]);
   });
 
   it("expõe um adaptador assíncrono local e o contato institucional confirmado", async () => {
     const catalog = await loadPilotCatalog();
-    const serra = catalog.items.find((item) => item.id === "serra-da-capivara");
+    const serra = catalog.items.find(item => item.id === "serra-da-capivara");
 
-    expect(serra?.contactUrl).toBe("https://www.gov.br/icmbio/pt-br/canais_atendimento");
+    expect(serra?.contactUrl).toBe(
+      "https://www.gov.br/icmbio/pt-br/canais_atendimento"
+    );
   });
 
   it("mantém relações editoriais de proximidade com fonte para a âncora visitada", () => {
@@ -93,8 +153,12 @@ describe("catálogo do MVP de front-end", () => {
   });
 
   it("expõe relações próximas publicadas em todas as cidades-piloto", () => {
-    expect(getPilotNearbyItems("barra-grande")[0]?.item.title).toBe("Cajueiro-rei do Piauí");
-    expect(getPilotNearbyItems("serra-da-capivara")[0]?.item.title).toBe("Museu do Homem Americano");
+    expect(getPilotNearbyItems("barra-grande")[0]?.item.title).toBe(
+      "Cajueiro-rei do Piauí"
+    );
+    expect(getPilotNearbyItems("serra-da-capivara")[0]?.item.title).toBe(
+      "Museu do Homem Americano"
+    );
   });
 
   it("mantém gastronomia e serviços como curadoria transparente sem inventar negócios", () => {
@@ -103,12 +167,19 @@ describe("catálogo do MVP de front-end", () => {
   });
 
   it("expõe somente serviços curados com contato e fonte publicados", () => {
-    expect(getPilotCuratedBusinesses("sao-raimundo-nonato", "restaurant")).toEqual([]);
-    const services = getPilotCuratedBusinesses("sao-raimundo-nonato", "service");
+    expect(
+      getPilotCuratedBusinesses("sao-raimundo-nonato", "restaurant")
+    ).toEqual([]);
+    const services = getPilotCuratedBusinesses(
+      "sao-raimundo-nonato",
+      "service"
+    );
 
     expect(services).toHaveLength(1);
     expect(services[0]?.title).toBe("Canais de atendimento do ICMBio");
-    expect(services[0]?.contactUrl).toBe("https://www.gov.br/icmbio/pt-br/canais_atendimento");
+    expect(services[0]?.contactUrl).toBe(
+      "https://www.gov.br/icmbio/pt-br/canais_atendimento"
+    );
     expect(services[0]?.source.url).toContain("gov.br/icmbio");
   });
 });

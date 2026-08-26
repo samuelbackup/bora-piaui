@@ -1,30 +1,377 @@
 import { useMemo, useState } from "react";
-import { ArrowLeft, ArrowUpRight, Landmark, MapPin, Sparkles } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  Landmark,
+  MapPin,
+  Sparkles,
+} from "lucide-react";
 import { Link } from "wouter";
 import { HeritageMap, type HeritagePlace } from "@/components/HeritageMap";
 
 export const material = [
-  { id: "oeiras", title: "Oeiras: a cidade e seus vestígios", place: "Oeiras", mapQuery: "Igreja Matriz Nossa Senhora da Vitória, Oeiras", text: "Capital da província do Piauí entre 1758 e 1852, a então Vila da Mocha cresceu ao redor da Matriz de Nossa Senhora da Vitória, construída em 1733. A Ponte Grande, de 1846, e o Sobrado Nepomuceno concentram parte dessa memória arquitetônica.", source: "Iphan · Patrimônio Material", url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-material", accent: "#B9572D", image: { url: "/manus-storage/oeiras-matriz_719cd915.jpg", alt: "Fachada da Igreja Matriz de Nossa Senhora das Vitórias, em Oeiras", credit: "Arysson Rios, via Wikimedia Commons", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br", sourceUrl: "https://commons.wikimedia.org/wiki/File:Igreja_Matriz_de_Nossa_Senhora_das_Vit%C3%B3rias_-_Oeiras_-_20240930164907.JPG" } },
-  { id: "parnaiba", title: "Parnaíba: porto, comércio e cidade", place: "Parnaíba", mapQuery: "Porto das Barcas, Parnaíba", text: "Tombado pelo Iphan em 2011, o conjunto histórico e paisagístico reúne cerca de 830 imóveis em cinco setores, entre eles Porto das Barcas, Praças da Graça e Santo Antônio, Estação Ferroviária e Avenida Getúlio Vargas.", source: "Iphan · Patrimônio Material", url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-material", accent: "#3C482D", image: { url: "/manus-storage/parnaiba-porto-das-barcas_44d4b067.jpg", alt: "Parque das Ruínas no Porto das Barcas, em Parnaíba", credit: "GLandovsky, via Wikimedia Commons", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br", sourceUrl: "https://commons.wikimedia.org/wiki/File:Parque_das_Ru%C3%ADnas_-_Porto_das_Barcas.jpg" } },
-  { id: "capivara", title: "Serra da Capivara: paisagem documentada em pedra", place: "São Raimundo Nonato e entorno", mapQuery: "Parque Nacional Serra da Capivara, São Raimundo Nonato", text: "Criado em 1979 para preservar vestígios arqueológicos, o parque reúne centenas de sítios com pinturas e gravuras rupestres. Foi inscrito na Lista do Patrimônio Mundial da UNESCO em 1991 e no Livro do Tombo Arqueológico, Etnográfico e Paisagístico do Iphan em 1993.", source: "Iphan · Patrimônio Arqueológico", url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-arqueologico", accent: "#D9A640", image: { url: "/manus-storage/serra-capivara_e2c5f482.jpg", alt: "Paisagem do Parque Nacional Serra da Capivara, no Piauí", credit: "Mateus S. Figueiredo, via Wikimedia Commons", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br", sourceUrl: "https://commons.wikimedia.org/wiki/File:Parque_Nacional_da_Serra_da_Capivara_Mateussf_(01).jpg" } },
-  { id: "sete-cidades", title: "Sete Cidades: tempo geológico e inscrições rupestres", place: "Piracuruca e Brasileira", mapQuery: "Parque Nacional de Sete Cidades, Piracuruca", text: "O parque foi criado em 1961. Seus monumentos rochosos resultam de processos erosivos de longa duração; no local, o Iphan registra sítios com vestígios pré-coloniais e inscrições rupestres, como as do Salão do Pajé.", source: "Iphan · Patrimônio Arqueológico", url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-arqueologico", accent: "#566B37", image: { url: "/manus-storage/sete-cidades_a8e23770.jpg", alt: "Formação rochosa vista de dentro no Parque Nacional de Sete Cidades, no Piauí", credit: "Otávio Nogueira, via Wikimedia Commons", license: "CC BY 2.0", licenseUrl: "https://creativecommons.org/licenses/by/2.0/deed.pt-br", sourceUrl: "https://commons.wikimedia.org/wiki/File:Parque_Nacional_de_Sete_Cidades_-_Piau%C3%AD_(3704534715).jpg" } },
+  {
+    id: "oeiras",
+    title: "Oeiras: a cidade e seus vestígios",
+    place: "Oeiras",
+    mapQuery: "Igreja Matriz Nossa Senhora da Vitória, Oeiras",
+    text: "Capital da província do Piauí entre 1758 e 1852, a então Vila da Mocha cresceu ao redor da Matriz de Nossa Senhora da Vitória, construída em 1733. A Ponte Grande, de 1846, e o Sobrado Nepomuceno concentram parte dessa memória arquitetônica.",
+    source: "Iphan · Patrimônio Material",
+    url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-material",
+    accent: "#B9572D",
+    image: {
+      url: "/manus-storage/oeiras-matriz_719cd915.jpg",
+      alt: "Fachada da Igreja Matriz de Nossa Senhora das Vitórias, em Oeiras",
+      credit: "Arysson Rios, via Wikimedia Commons",
+      license: "CC BY-SA 4.0",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br",
+      sourceUrl:
+        "https://commons.wikimedia.org/wiki/File:Igreja_Matriz_de_Nossa_Senhora_das_Vit%C3%B3rias_-_Oeiras_-_20240930164907.JPG",
+    },
+  },
+  {
+    id: "parnaiba",
+    title: "Parnaíba: porto, comércio e cidade",
+    place: "Parnaíba",
+    mapQuery: "Porto das Barcas, Parnaíba",
+    text: "Tombado pelo Iphan em 2011, o conjunto histórico e paisagístico reúne cerca de 830 imóveis em cinco setores, entre eles Porto das Barcas, Praças da Graça e Santo Antônio, Estação Ferroviária e Avenida Getúlio Vargas.",
+    source: "Iphan · Patrimônio Material",
+    url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-material",
+    accent: "#3C482D",
+    image: {
+      url: "/manus-storage/parnaiba-porto-das-barcas_44d4b067.jpg",
+      alt: "Parque das Ruínas no Porto das Barcas, em Parnaíba",
+      credit: "GLandovsky, via Wikimedia Commons",
+      license: "CC BY-SA 4.0",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br",
+      sourceUrl:
+        "https://commons.wikimedia.org/wiki/File:Parque_das_Ru%C3%ADnas_-_Porto_das_Barcas.jpg",
+    },
+  },
+  {
+    id: "capivara",
+    title: "Serra da Capivara: paisagem documentada em pedra",
+    place: "São Raimundo Nonato e entorno",
+    mapQuery: "Parque Nacional Serra da Capivara, São Raimundo Nonato",
+    text: "Criado em 1979 para preservar vestígios arqueológicos, o parque reúne centenas de sítios com pinturas e gravuras rupestres. Foi inscrito na Lista do Patrimônio Mundial da UNESCO em 1991 e no Livro do Tombo Arqueológico, Etnográfico e Paisagístico do Iphan em 1993.",
+    source: "Iphan · Patrimônio Arqueológico",
+    url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-arqueologico",
+    accent: "#D9A640",
+    image: {
+      url: "/manus-storage/serra-capivara_e2c5f482.jpg",
+      alt: "Paisagem do Parque Nacional Serra da Capivara, no Piauí",
+      credit: "Mateus S. Figueiredo, via Wikimedia Commons",
+      license: "CC BY-SA 4.0",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br",
+      sourceUrl:
+        "https://commons.wikimedia.org/wiki/File:Parque_Nacional_da_Serra_da_Capivara_Mateussf_(01).jpg",
+    },
+  },
+  {
+    id: "sete-cidades",
+    title: "Sete Cidades: tempo geológico e inscrições rupestres",
+    place: "Piracuruca e Brasileira",
+    mapQuery: "Parque Nacional de Sete Cidades, Piracuruca",
+    text: "O parque foi criado em 1961. Seus monumentos rochosos resultam de processos erosivos de longa duração; no local, o Iphan registra sítios com vestígios pré-coloniais e inscrições rupestres, como as do Salão do Pajé.",
+    source: "Iphan · Patrimônio Arqueológico",
+    url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-arqueologico",
+    accent: "#566B37",
+    image: {
+      url: "/manus-storage/sete-cidades_a8e23770.jpg",
+      alt: "Formação rochosa vista de dentro no Parque Nacional de Sete Cidades, no Piauí",
+      credit: "Otávio Nogueira, via Wikimedia Commons",
+      license: "CC BY 2.0",
+      licenseUrl: "https://creativecommons.org/licenses/by/2.0/deed.pt-br",
+      sourceUrl:
+        "https://commons.wikimedia.org/wiki/File:Parque_Nacional_de_Sete_Cidades_-_Piau%C3%AD_(3704534715).jpg",
+    },
+  },
 ];
 
 const immaterial = [
-  { title: "Cajuína: técnica, casa e hospitalidade", tag: "Reconhecida em 2014", text: "A produção tradicional e as práticas socioculturais associadas à cajuína foram reconhecidas como patrimônio cultural imaterial. O Iphan relaciona seu preparo aos rituais de hospitalidade e às redes familiares de produção no Piauí.", source: "Iphan · Patrimônio Imaterial", url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-imaterial" },
-  { title: "Arte Santeira em Madeira do Piauí", tag: "Registrada em 2023", text: "Esculturas de santos, anjos, caboclos, oratórios e mobiliário em madeira formam uma expressão marcada por autoria e formas estilizadas. O registro reconhece a singularidade de cada peça e a trajetória de artistas de diferentes cidades piauienses.", source: "Iphan · Bem Cultural Brasileiro", url: "https://bcr.iphan.gov.br/acoes-de-salvaguarda/registro-da-arte-santeira-em-madeira-do-piaui-como-patrimonio-cultural-do-brasil/" },
-  { title: "Saberes que seguem em inventário", tag: "Referências culturais", text: "O Iphan informa inventários sobre comunidades quilombolas em 17 municípios, Arte Santeira em seis municípios, Tambor de Crioula do Piauí e patrimônio imaterial relacionado à Serra da Capivara. Inventário não é sinônimo de registro, mas documenta referências e detentores.", source: "Iphan · Patrimônio Imaterial", url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-imaterial" },
+  {
+    title: "Cajuína: técnica, casa e hospitalidade",
+    tag: "Reconhecida em 2014",
+    text: "A produção tradicional e as práticas socioculturais associadas à cajuína foram reconhecidas como patrimônio cultural imaterial. O Iphan relaciona seu preparo aos rituais de hospitalidade e às redes familiares de produção no Piauí.",
+    source: "Iphan · Patrimônio Imaterial",
+    url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-imaterial",
+  },
+  {
+    title: "Arte Santeira em Madeira do Piauí",
+    tag: "Registrada em 2023",
+    text: "Esculturas de santos, anjos, caboclos, oratórios e mobiliário em madeira formam uma expressão marcada por autoria e formas estilizadas. O registro reconhece a singularidade de cada peça e a trajetória de artistas de diferentes cidades piauienses.",
+    source: "Iphan · Bem Cultural Brasileiro",
+    url: "https://bcr.iphan.gov.br/acoes-de-salvaguarda/registro-da-arte-santeira-em-madeira-do-piaui-como-patrimonio-cultural-do-brasil/",
+  },
+  {
+    title: "Saberes que seguem em inventário",
+    tag: "Referências culturais",
+    text: "O Iphan informa inventários sobre comunidades quilombolas em 17 municípios, Arte Santeira em seis municípios, Tambor de Crioula do Piauí e patrimônio imaterial relacionado à Serra da Capivara. Inventário não é sinônimo de registro, mas documenta referências e detentores.",
+    source: "Iphan · Patrimônio Imaterial",
+    url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-imaterial",
+  },
 ];
 
-function Topbar() { return <header className="sticky top-0 z-40 border-b border-[#3C482D]/10 bg-[#F5ECD8]/95 backdrop-blur-xl"><div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"><Link href="/" className="flex items-center gap-2 text-sm font-extrabold text-[#3C482D] hover:text-[#B9572D]"><ArrowLeft className="h-4 w-4" /> Voltar ao atlas</Link><nav className="flex items-center gap-3 text-xs font-extrabold sm:gap-5 sm:text-sm"><Link href="/patrimonios" className="hidden text-[#B9572D] sm:inline">Patrimônios</Link><Link href="/sabores" className="hidden hover:text-[#B9572D] sm:inline">Sabores</Link><Link href="/dados" className="hidden hover:text-[#B9572D] sm:inline">Dados</Link><Link href="/agenda" className="hover:text-[#B9572D]">Agenda</Link><Link href="/parceiros" className="rounded-full bg-[#3C482D] px-3 py-2 text-white hover:bg-[#566B37]">Parceiros</Link></nav></div></header>; }
+function Topbar() {
+  return (
+    <header className="sticky top-0 z-40 border-b border-[#3C482D]/10 bg-[#F5ECD8]/95 backdrop-blur-xl">
+      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-sm font-extrabold text-[#3C482D] hover:text-[#B9572D]"
+        >
+          <ArrowLeft className="h-4 w-4" /> Voltar ao atlas
+        </Link>
+        <nav className="flex items-center gap-3 text-xs font-extrabold sm:gap-5 sm:text-sm">
+          <Link href="/patrimonios" className="hidden text-[#B9572D] sm:inline">
+            Patrimônios
+          </Link>
+          <Link
+            href="/sabores"
+            className="hidden hover:text-[#B9572D] sm:inline"
+          >
+            Sabores
+          </Link>
+          <Link href="/dados" className="hidden hover:text-[#B9572D] sm:inline">
+            Dados
+          </Link>
+          <Link href="/agenda" className="hover:text-[#B9572D]">
+            Agenda
+          </Link>
+          <Link
+            href="/parceiros"
+            className="rounded-full bg-[#3C482D] px-3 py-2 text-white hover:bg-[#566B37]"
+          >
+            Parceiros
+          </Link>
+        </nav>
+      </div>
+    </header>
+  );
+}
 
 export default function PatrimoniosPage() {
   const [activePlaceId, setActivePlaceId] = useState<string | null>(null);
-  const mappedPlaces = useMemo<HeritagePlace[]>(() => material.map(({ id, title, place, mapQuery, accent }) => ({ id, title, place, mapQuery, accent })), []);
-  return <div className="min-h-screen bg-[#F5ECD8] text-[#2E3222]"><Topbar /><main>
-    <section className="relative overflow-hidden bg-[#3C482D] px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24"><div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.05fr_.75fr]"><div><span className="inline-flex items-center gap-2 rounded-full bg-[#B9572D] px-4 py-2 text-[10px] font-extrabold uppercase tracking-[.16em]"><Landmark className="h-3.5 w-3.5" /> Trilha cultural</span><h1 className="display-font mt-6 max-w-3xl text-5xl leading-[.92] tracking-[-.06em] sm:text-6xl">Patrimônio é matéria, memória e prática.</h1><p className="mt-6 max-w-2xl text-base leading-7 text-white/78 sm:text-lg">Uma leitura inicial de lugares, técnicas e referências culturais que ajudam a contar o Piauí. Os textos distinguem o que é tombado, registrado e inventariado.</p></div><div className="relative border-l border-white/20 pl-6 lg:mt-16"><p className="text-[10px] font-extrabold uppercase tracking-[.16em] text-[#E9DCC0]">Como ler esta página</p><p className="mt-3 text-lg font-bold leading-7">Material são os bens, conjuntos e paisagens preservados. Imaterial são saberes, fazeres, expressões e formas de viver que passam entre pessoas.</p><div className="mt-8 h-2 w-full bg-[#B9572D]" /></div></div></section>
-    <section id="mapa-patrimonios" className="border-b border-[#3C482D]/10 bg-[#E9DCC0] px-4 py-14 sm:px-6 lg:px-8 lg:py-20"><div className="mx-auto max-w-7xl"><div className="grid gap-8 lg:grid-cols-[.72fr_1.28fr] lg:items-end"><div><span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-[#B9572D]">Mapa de referências</span><h2 className="display-font mt-3 text-4xl tracking-[-.05em] sm:text-5xl">Onde a história ocupa o território.</h2><p className="mt-4 max-w-lg text-sm leading-6 text-[#566457]">Os marcadores usam a geocodificação do Google Maps a partir do ponto de visitação ou referência especificada em cada ficha. Selecione um marcador ou um cartão para aproximar o mapa.</p></div><p className="border-l border-[#3C482D]/15 pl-5 text-sm font-semibold leading-6 text-[#566B37]">O mapa situa referências históricas; ele não delimita a extensão de conjuntos tombados, parques ou áreas arqueológicas.</p></div><div className="mt-9"><HeritageMap places={mappedPlaces} activePlaceId={activePlaceId} onSelect={setActivePlaceId} /></div></div></section>
-    <section className="px-4 py-14 sm:px-6 lg:px-8 lg:py-20"><div className="mx-auto max-w-7xl"><div className="flex items-end justify-between gap-6"><div><span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-[#B9572D]">01 · Lugares que permanecem</span><h2 className="display-font mt-3 text-4xl tracking-[-.05em] sm:text-5xl">Patrimônios materiais</h2></div><span className="hidden text-sm font-bold text-[#566B37] sm:block">Arquitetura, arqueologia e paisagem</span></div><div className="mt-9 grid gap-5 md:grid-cols-2">{material.map((item, index) => <article key={item.id} className={`overflow-hidden rounded-[1.75rem] border border-[#3C482D]/10 bg-[#FFFDF6] ${index === 0 ? "md:col-span-2" : ""}`}><div className="relative min-h-[220px] overflow-hidden bg-[#E9DCC0]"><img src={item.image.url} alt={item.image.alt} className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(22,31,19,.1),rgba(22,31,19,.68))]" /><div className="relative flex min-h-[220px] flex-col justify-between p-6"><div className="flex items-center justify-between"><span className="grid h-10 w-10 place-items-center rounded-full bg-[#3C482D] text-sm font-extrabold text-white">{String(index + 1).padStart(2, "0")}</span><MapPin className="h-5 w-5 text-[#FFFDF6]" /></div><p className="text-[11px] font-extrabold uppercase tracking-[.15em] text-white">{item.place}</p></div></div><div className="p-6"><h3 className="display-font text-3xl tracking-[-.04em]">{item.title}</h3><p className="mt-4 max-w-3xl text-sm leading-6 text-[#566457]">{item.text}</p><p className="mt-4 text-xs leading-5 text-[#566457]">Imagem: <a href={item.image.sourceUrl} target="_blank" rel="noreferrer" className="font-bold text-[#3C482D] underline decoration-[#B9572D]/50 underline-offset-2 hover:text-[#B9572D]">{item.image.credit}</a> · <a href={item.image.licenseUrl} target="_blank" rel="noreferrer" className="font-bold text-[#3C482D] underline decoration-[#B9572D]/50 underline-offset-2 hover:text-[#B9572D]">{item.image.license}</a></p><div className="mt-5 flex flex-wrap gap-x-5 gap-y-3"><button type="button" onClick={() => { setActivePlaceId(item.id); document.getElementById("mapa-patrimonios")?.scrollIntoView({ behavior: "smooth", block: "center" }); }} className="inline-flex items-center gap-2 text-sm font-extrabold text-[#3C482D] hover:text-[#B9572D]"><MapPin className="h-4 w-4" /> Ver no mapa</button><a href={item.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-extrabold text-[#B9572D] hover:underline">{item.source} <ArrowUpRight className="h-4 w-4" /></a></div></div></article>)}</div></div></section>
-    <section className="border-y border-[#3C482D]/10 bg-[#E9DCC0] px-4 py-14 sm:px-6 lg:px-8 lg:py-20"><div className="mx-auto max-w-7xl"><div className="max-w-2xl"><span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-[#B9572D]">02 · Saberes que circulam</span><h2 className="display-font mt-3 text-4xl tracking-[-.05em] sm:text-5xl">Patrimônios imateriais</h2><p className="mt-4 text-base leading-7 text-[#566457]">Aqui, o centro não é um objeto isolado: são técnicas, repertórios, relações e pessoas que mantêm uma prática viva.</p></div><div className="mt-9 grid gap-5 lg:grid-cols-3">{immaterial.map((item) => <article key={item.title} className="rounded-[1.75rem] bg-[#FFFDF6] p-6"><div className="flex items-center justify-between gap-3"><Sparkles className="h-5 w-5 text-[#B9572D]" /><span className="text-[10px] font-extrabold uppercase tracking-[.12em] text-[#566B37]">{item.tag}</span></div><h3 className="display-font mt-6 text-3xl tracking-[-.04em]">{item.title}</h3><p className="mt-4 text-sm leading-6 text-[#566457]">{item.text}</p><a href={item.url} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-[#B9572D] hover:underline">{item.source} <ArrowUpRight className="h-4 w-4" /></a></article>)}</div></div></section>
-  </main></div>;
+  const mappedPlaces = useMemo<HeritagePlace[]>(
+    () =>
+      material.map(({ id, title, place, mapQuery, accent }) => ({
+        id,
+        title,
+        place,
+        mapQuery,
+        accent,
+      })),
+    []
+  );
+  return (
+    <div className="min-h-screen bg-[#F5ECD8] text-[#2E3222]">
+      <Topbar />
+      <main>
+        <section className="relative overflow-hidden bg-[#3C482D] px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.05fr_.75fr]">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full bg-[#B9572D] px-4 py-2 text-[10px] font-extrabold uppercase tracking-[.16em]">
+                <Landmark className="h-3.5 w-3.5" /> Trilha cultural
+              </span>
+              <h1 className="display-font mt-6 max-w-3xl text-5xl leading-[.92] tracking-[-.06em] sm:text-6xl">
+                Patrimônio é matéria, memória e prática.
+              </h1>
+              <p className="mt-6 max-w-2xl text-base leading-7 text-white/78 sm:text-lg">
+                Uma leitura inicial de lugares, técnicas e referências culturais
+                que ajudam a contar o Piauí. Os textos distinguem o que é
+                tombado, registrado e inventariado.
+              </p>
+            </div>
+            <div className="relative border-l border-white/20 pl-6 lg:mt-16">
+              <p className="text-[10px] font-extrabold uppercase tracking-[.16em] text-[#E9DCC0]">
+                Como ler esta página
+              </p>
+              <p className="mt-3 text-lg font-bold leading-7">
+                Material são os bens, conjuntos e paisagens preservados.
+                Imaterial são saberes, fazeres, expressões e formas de viver que
+                passam entre pessoas.
+              </p>
+              <div className="mt-8 h-2 w-full bg-[#B9572D]" />
+            </div>
+          </div>
+        </section>
+        <section
+          id="mapa-patrimonios"
+          className="border-b border-[#3C482D]/10 bg-[#E9DCC0] px-4 py-14 sm:px-6 lg:px-8 lg:py-20"
+        >
+          <div className="mx-auto max-w-7xl">
+            <div className="grid gap-8 lg:grid-cols-[.72fr_1.28fr] lg:items-end">
+              <div>
+                <span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-[#B9572D]">
+                  Mapa de referências
+                </span>
+                <h2 className="display-font mt-3 text-4xl tracking-[-.05em] sm:text-5xl">
+                  Onde a história ocupa o território.
+                </h2>
+                <p className="mt-4 max-w-lg text-sm leading-6 text-[#566457]">
+                  Os marcadores usam a geocodificação do Google Maps a partir do
+                  ponto de visitação ou referência especificada em cada ficha.
+                  Selecione um marcador ou um cartão para aproximar o mapa.
+                </p>
+              </div>
+              <p className="border-l border-[#3C482D]/15 pl-5 text-sm font-semibold leading-6 text-[#566B37]">
+                O mapa situa referências históricas; ele não delimita a extensão
+                de conjuntos tombados, parques ou áreas arqueológicas.
+              </p>
+            </div>
+            <div className="mt-9">
+              <HeritageMap
+                places={mappedPlaces}
+                activePlaceId={activePlaceId}
+                onSelect={setActivePlaceId}
+              />
+            </div>
+          </div>
+        </section>
+        <section className="px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+          <div className="mx-auto max-w-7xl">
+            <div className="flex items-end justify-between gap-6">
+              <div>
+                <span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-[#B9572D]">
+                  01 · Lugares que permanecem
+                </span>
+                <h2 className="display-font mt-3 text-4xl tracking-[-.05em] sm:text-5xl">
+                  Patrimônios materiais
+                </h2>
+              </div>
+              <span className="hidden text-sm font-bold text-[#566B37] sm:block">
+                Arquitetura, arqueologia e paisagem
+              </span>
+            </div>
+            <div className="mt-9 grid gap-5 md:grid-cols-2">
+              {material.map((item, index) => (
+                <article
+                  key={item.id}
+                  className={`overflow-hidden rounded-[1.75rem] border border-[#3C482D]/10 bg-[#FFFDF6] ${index === 0 ? "md:col-span-2" : ""}`}
+                >
+                  <div className="relative min-h-[220px] overflow-hidden bg-[#E9DCC0]">
+                    <img
+                      src={item.image.url}
+                      alt={item.image.alt}
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(22,31,19,.1),rgba(22,31,19,.68))]" />
+                    <div className="relative flex min-h-[220px] flex-col justify-between p-6">
+                      <div className="flex items-center justify-between">
+                        <span className="grid h-10 w-10 place-items-center rounded-full bg-[#3C482D] text-sm font-extrabold text-white">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <MapPin className="h-5 w-5 text-[#FFFDF6]" />
+                      </div>
+                      <p className="text-[11px] font-extrabold uppercase tracking-[.15em] text-white">
+                        {item.place}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="display-font text-3xl tracking-[-.04em]">
+                      {item.title}
+                    </h3>
+                    <p className="mt-4 max-w-3xl text-sm leading-6 text-[#566457]">
+                      {item.text}
+                    </p>
+                    <p className="mt-4 text-xs leading-5 text-[#566457]">
+                      Imagem:{" "}
+                      <a
+                        href={item.image.sourceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-bold text-[#3C482D] underline decoration-[#B9572D]/50 underline-offset-2 hover:text-[#B9572D]"
+                      >
+                        {item.image.credit}
+                      </a>{" "}
+                      ·{" "}
+                      <a
+                        href={item.image.licenseUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-bold text-[#3C482D] underline decoration-[#B9572D]/50 underline-offset-2 hover:text-[#B9572D]"
+                      >
+                        {item.image.license}
+                      </a>
+                    </p>
+                    <div className="mt-5 flex flex-wrap gap-x-5 gap-y-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActivePlaceId(item.id);
+                          document
+                            .getElementById("mapa-patrimonios")
+                            ?.scrollIntoView({
+                              behavior: "smooth",
+                              block: "center",
+                            });
+                        }}
+                        className="inline-flex items-center gap-2 text-sm font-extrabold text-[#3C482D] hover:text-[#B9572D]"
+                      >
+                        <MapPin className="h-4 w-4" /> Ver no mapa
+                      </button>
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 text-sm font-extrabold text-[#B9572D] hover:underline"
+                      >
+                        {item.source} <ArrowUpRight className="h-4 w-4" />
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section className="border-y border-[#3C482D]/10 bg-[#E9DCC0] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+          <div className="mx-auto max-w-7xl">
+            <div className="max-w-2xl">
+              <span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-[#B9572D]">
+                02 · Saberes que circulam
+              </span>
+              <h2 className="display-font mt-3 text-4xl tracking-[-.05em] sm:text-5xl">
+                Patrimônios imateriais
+              </h2>
+              <p className="mt-4 text-base leading-7 text-[#566457]">
+                Aqui, o centro não é um objeto isolado: são técnicas,
+                repertórios, relações e pessoas que mantêm uma prática viva.
+              </p>
+            </div>
+            <div className="mt-9 grid gap-5 lg:grid-cols-3">
+              {immaterial.map(item => (
+                <article
+                  key={item.title}
+                  className="rounded-[1.75rem] bg-[#FFFDF6] p-6"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <Sparkles className="h-5 w-5 text-[#B9572D]" />
+                    <span className="text-[10px] font-extrabold uppercase tracking-[.12em] text-[#566B37]">
+                      {item.tag}
+                    </span>
+                  </div>
+                  <h3 className="display-font mt-6 text-3xl tracking-[-.04em]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-6 text-[#566457]">
+                    {item.text}
+                  </p>
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-[#B9572D] hover:underline"
+                  >
+                    {item.source} <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
 }

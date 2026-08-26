@@ -1,4 +1,9 @@
-import { AXIOS_TIMEOUT_MS, COOKIE_NAME, SESSION_TTL_MS, decodeOAuthState } from "@shared/const";
+import {
+  AXIOS_TIMEOUT_MS,
+  COOKIE_NAME,
+  SESSION_TTL_MS,
+  decodeOAuthState,
+} from "@shared/const";
 import { ForbiddenError } from "@shared/_core/errors";
 import axios, { type AxiosInstance } from "axios";
 import { parse as parseCookieHeader } from "cookie";
@@ -199,7 +204,12 @@ class SDKServer {
 
   async verifySession(
     cookieValue: string | undefined | null
-  ): Promise<{ openId: string; appId: string; name: string; issuedAtMs: number } | null> {
+  ): Promise<{
+    openId: string;
+    appId: string;
+    name: string;
+    issuedAtMs: number;
+  } | null> {
     if (!cookieValue) {
       console.warn("[Auth] Missing session cookie");
       return null;
@@ -298,7 +308,10 @@ class SDKServer {
       throw ForbiddenError("Session revoked");
     }
 
-    if (user && Date.now() - user.lastSignedIn.getTime() > SESSION_TOUCH_INTERVAL_MS) {
+    if (
+      user &&
+      Date.now() - user.lastSignedIn.getTime() > SESSION_TOUCH_INTERVAL_MS
+    ) {
       await db.upsertUser({
         openId: user.openId,
         lastSignedIn: signedInAt,

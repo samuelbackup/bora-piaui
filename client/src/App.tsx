@@ -22,7 +22,10 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/cidades/:citySlug/locais/:itemSlug" component={PilotPlacePage} />
+      <Route
+        path="/cidades/:citySlug/locais/:itemSlug"
+        component={PilotPlacePage}
+      />
       <Route path="/cidades/:slug" component={CityPage} />
       <Route path="/roteiros/:slug" component={ItineraryPage} />
       <Route path="/destinos/:slug" component={DestinationPage} />

@@ -9,7 +9,9 @@ describe("enforceRateLimit", () => {
   it("permite até o limite, bloqueia quem excede e isola por IP", () => {
     expect(() => enforceRateLimit(req, "teste", opts)).not.toThrow();
     expect(() => enforceRateLimit(req, "teste", opts)).not.toThrow();
-    expect(() => enforceRateLimit(req, "teste", opts)).toThrowError(/Muitas tentativas/);
+    expect(() => enforceRateLimit(req, "teste", opts)).toThrowError(
+      /Muitas tentativas/
+    );
     expect(() => enforceRateLimit(otherReq, "teste", opts)).not.toThrow();
   });
 

@@ -23,7 +23,9 @@ function escapeCsvValue(value: string | null | undefined) {
   if (/^[=+\-@\t\r]/.test(normalized)) {
     normalized = `'${normalized}`;
   }
-  return /[;"\r\n]/.test(normalized) ? `"${normalized.replace(/"/g, '""')}"` : normalized;
+  return /[;"\r\n]/.test(normalized)
+    ? `"${normalized.replace(/"/g, '""')}"`
+    : normalized;
 }
 
 function formatSubmissionDate(value: PartnerProposalCsvRecord["createdAt"]) {
@@ -41,15 +43,19 @@ function formatSubmissionDate(value: PartnerProposalCsvRecord["createdAt"]) {
  * Exportação demonstrativa: deliberadamente não inclui telefone, endereço ou descrição livre.
  */
 export function buildPartnerProposalsCsv(records: PartnerProposalCsvRecord[]) {
-  const rows = records.map(record => [
-    record.businessName,
-    record.city,
-    record.category,
-    record.plan,
-    record.editorialStatus,
-    record.openingHours,
-    formatSubmissionDate(record.createdAt),
-  ].map(value => escapeCsvValue(value)).join(";"));
+  const rows = records.map(record =>
+    [
+      record.businessName,
+      record.city,
+      record.category,
+      record.plan,
+      record.editorialStatus,
+      record.openingHours,
+      formatSubmissionDate(record.createdAt),
+    ]
+      .map(value => escapeCsvValue(value))
+      .join(";")
+  );
 
   return `\uFEFF${CSV_HEADERS.join(";")}\r\n${rows.join("\r\n")}`;
 }

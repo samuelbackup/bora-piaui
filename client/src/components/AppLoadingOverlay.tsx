@@ -31,7 +31,9 @@ export function AppLoadingOverlay() {
     >
       <div className="app-loading-mark">
         <span className="app-loading-sun" />
-        <span className="display-font text-2xl tracking-[-0.06em]">bora <span>piauí</span></span>
+        <span className="display-font text-2xl tracking-[-0.06em]">
+          bora <span>piauí</span>
+        </span>
       </div>
     </div>
   );

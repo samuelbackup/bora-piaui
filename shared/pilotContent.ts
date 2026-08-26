@@ -16,11 +16,18 @@ export const pilotImageSchema = z.object({
 });
 
 export const cityInsertRowSchema = z.object({
-  slug: z.string().trim().min(3).max(120).regex(/^[a-z0-9-]+$/, "Use apenas letras minúsculas, números e hífens."),
+  slug: z
+    .string()
+    .trim()
+    .min(3)
+    .max(120)
+    .regex(/^[a-z0-9-]+$/, "Use apenas letras minúsculas, números e hífens."),
   name: z.string().trim().min(2).max(120),
   eyebrow: z.string().trim().min(3).max(120),
   summary: z.string().trim().min(10),
-  accent: z.string().regex(/^#[0-9a-fA-F]{6}$/, "Use uma cor hexadecimal no formato #RRGGBB."),
+  accent: z
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/, "Use uma cor hexadecimal no formato #RRGGBB."),
   ...pilotSourceFields,
   published: z.boolean().optional(),
 });
@@ -28,7 +35,12 @@ export const cityInsertRowSchema = z.object({
 export const placeInsertRowSchema = z.object({
   cityId: z.number().int().positive(),
   externalId: z.string().trim().min(3).max(140),
-  slug: z.string().trim().min(3).max(140).regex(/^[a-z0-9-]+$/),
+  slug: z
+    .string()
+    .trim()
+    .min(3)
+    .max(140)
+    .regex(/^[a-z0-9-]+$/),
   kind: z.enum(["attraction", "business"]),
   title: z.string().trim().min(3).max(180),
   category: z.string().trim().min(2).max(100),
@@ -59,7 +71,12 @@ export const curatedBusinessInsertRowSchema = z.object({
 });
 
 export const itineraryInsertRowSchema = z.object({
-  slug: z.string().trim().min(3).max(140).regex(/^[a-z0-9-]+$/),
+  slug: z
+    .string()
+    .trim()
+    .min(3)
+    .max(140)
+    .regex(/^[a-z0-9-]+$/),
   cityId: z.number().int().positive(),
   dayScope: z.literal("one-day"),
   title: z.string().trim().min(3).max(180),

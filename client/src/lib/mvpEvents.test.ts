@@ -9,9 +9,15 @@ describe("eventos locais do MVP", () => {
   });
 
   it("cria eventos serializáveis para a futura integração", () => {
-    const event = createMvpEvent("open_route", { item: "encontro-dos-rios", source: "city" });
+    const event = createMvpEvent("open_route", {
+      item: "encontro-dos-rios",
+      source: "city",
+    });
     expect(event.name).toBe("open_route");
-    expect(event.context).toEqual({ item: "encontro-dos-rios", source: "city" });
+    expect(event.context).toEqual({
+      item: "encontro-dos-rios",
+      source: "city",
+    });
     expect(Number.isNaN(Date.parse(event.occurredAt))).toBe(false);
   });
 });

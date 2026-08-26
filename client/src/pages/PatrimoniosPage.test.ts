@@ -5,7 +5,7 @@ describe("imagens dos patrimônios materiais", () => {
   it("mantém uma imagem licenciada, crédito e fonte para cada cartão", () => {
     expect(material).toHaveLength(4);
 
-    material.forEach((item) => {
+    material.forEach(item => {
       expect(item.image.url).toMatch(/^\/manus-storage\//);
       expect(item.image.alt.length).toBeGreaterThan(20);
       expect(item.image.credit).toContain("Wikimedia Commons");

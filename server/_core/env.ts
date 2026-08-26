@@ -30,9 +30,16 @@ const MIN_PRODUCTION_SECRET_LENGTH = 32;
 export function validateEnv(): void {
   const secret = process.env.JWT_SECRET ?? "";
   if (!secret) {
-    throw new Error("[env] JWT_SECRET ausente ou vazio. Configure a variável de ambiente antes de iniciar o servidor.");
+    throw new Error(
+      "[env] JWT_SECRET ausente ou vazio. Configure a variável de ambiente antes de iniciar o servidor."
+    );
   }
-  if (process.env.NODE_ENV === "production" && secret.length < MIN_PRODUCTION_SECRET_LENGTH) {
-    throw new Error(`[env] JWT_SECRET deve ter pelo menos ${MIN_PRODUCTION_SECRET_LENGTH} caracteres em produção.`);
+  if (
+    process.env.NODE_ENV === "production" &&
+    secret.length < MIN_PRODUCTION_SECRET_LENGTH
+  ) {
+    throw new Error(
+      `[env] JWT_SECRET deve ter pelo menos ${MIN_PRODUCTION_SECRET_LENGTH} caracteres em produção.`
+    );
   }
 }

@@ -44,7 +44,8 @@ export function enforceRateLimit(
   if (bucket.count >= opts.max) {
     throw new TRPCError({
       code: "TOO_MANY_REQUESTS",
-      message: "Muitas tentativas seguidas. Aguarde alguns minutos antes de tentar novamente.",
+      message:
+        "Muitas tentativas seguidas. Aguarde alguns minutos antes de tentar novamente.",
     });
   }
 
