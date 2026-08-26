@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Bora Piauí — Documentação Consolidada</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: #26311E; font-size: 11.5pt; line-height: 1.55; margin: 0; background: #FFFDF6; }
+  .cover { background: #3C482D; color: #F5ECD8; padding: 42px 36px; border-radius: 0 0 18px 18px; margin-bottom: 28px; }
+  .cover h1 { font-size: 30pt; margin: 0 0 6px; letter-spacing: -1px; }
+  .cover .tag { color: #D9A640; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 9pt; }
+  .cover p { margin: 4px 0; color: #EDE0C4; }
+  h2 { font-size: 17pt; color: #3C482D; border-bottom: 3px solid #B9572D; padding-bottom: 6px; margin: 34px 0 14px; page-break-after: avoid; }
+  h3 { font-size: 13pt; color: #B9572D; margin: 22px 0 8px; page-break-after: avoid; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 10pt; page-break-inside: avoid; }
+  th { background: #3C482D; color: #F5ECD8; text-align: left; padding: 7px 9px; }
+  td { border: 1px solid #D8CBA8; padding: 6px 9px; vertical-align: top; }
+  tr:nth-child(even) td { background: #F7F0DE; }
+  code { font-family: Consolas, monospace; background: #EDE0C4; padding: 1px 5px; border-radius: 4px; font-size: 9.5pt; }
+  pre { background: #26311E; color: #F5ECD8; padding: 14px 16px; border-radius: 10px; overflow-x: auto; font-size: 9pt; line-height: 1.5; page-break-inside: avoid; }
+  pre code { background: none; color: inherit; padding: 0; }
+  blockquote { border-left: 4px solid #B9572D; background: #FFF5EF; margin: 12px 0; padding: 10px 14px; border-radius: 0 8px 8px 0; }
+  ul li, ol li { margin: 3px 0; }
+  section { page-break-before: always; }
+  section:first-of-type { page-break-before: avoid; }
+  .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-top: 16px; font-size: 10pt; }
+  .meta b { color: #D9A640; }
+  .pill { display: inline-block; background: #D9A640; color: #26311E; font-weight: 700; border-radius: 20px; padding: 2px 12px; font-size: 8.5pt; margin: 2px 3px 2px 0; }
+  .warn { background: #FFF5EF; border: 1px solid #E4B9A0; border-radius: 8px; padding: 10px 14px; margin: 10px 0; }
+  .footer { margin-top: 30px; padding-top: 10px; border-top: 1px solid #D8CBA8; font-size: 8.5pt; color: #68705C; }
+  .noprint { text-align: center; margin: 14px 0; }
+  .noprint button { background: #B9572D; color: #fff; border: none; padding: 10px 22px; border-radius: 24px; font-size: 11pt; font-weight: 700; cursor: pointer; }
+  @media print { .noprint { display: none; } body { background: #fff; } }
+</style>
+</head>
+<body>
+
+<div class="noprint"><button onclick="window.print()">🖨️ Salvar como PDF (Ctrl+P)</button></div>
+
+<div class="cover">
+  <div class="tag">Bora Piauí · Documentação Executiva e Técnica</div>
+  <h1>Documentação Consolidada do Projeto</h1>
+  <p>Atlas editorial de percursos turísticos do Piauí — curadoria verificável, agenda cultural e rede local de parceiros.</p>
+  <div class="meta">
+    <div><b>Versão</b><br>1.0</div>
+    <div><b>Data</b><br>26 de agosto de 2026</div>
+    <div><b>Status</b><br>PR #1 aberto · go-live pendente de banco</div>
+    <div><b>Repositório</b><br>samuelbackup/bora-piaui · fork Gabsz17</div>
+  </div>
+  <div style="margin-top:14px">
+    <span class="pill">Node ≥18</span><span class="pill">pnpm 10</span><span class="pill">TypeScript strict</span><span class="pill">77 testes OK</span><span class="pill">MIT</span>
+  </div>
+</div>
+
+<section>
+  <h2>1. Visão Geral da Plataforma (Produto)</h2>
+  <h3>1.1 O que é</h3>
+  <p>O <strong>Bora Piauí</strong> é um atlas editorial de percursos turísticos do estado do Piauí. Transforma pesquisa cultural verificável em jornada de descoberta: atrações, eventos, patrimônios, roteiros e negócios locais aparecem <strong>sempre com fonte pública e condição operacional declarada</strong>.</p>
+  <blockquote><strong>Regra editorial central: "sem fonte, não publica".</strong> Nenhuma distância, preço, horário ou disponibilidade é inventado pela interface — lacunas viram "em curadoria" ou "operação a confirmar".</blockquote>
+
+  <h3>1.2 Proposta de valor</h3>
+  <table>
+    <tr><th>Para</th><th>Valor entregue</th></tr>
+    <tr><td><strong>Viajantes</strong></td><td>Descoberta confiável do Piauí por polo, cidade e proximidade — com referências públicas para confirmar a visita.</td></tr>
+    <tr><td><strong>Curadores locais</strong></td><td>Painéis administrativos para preparar, revisar e publicar conteúdo com rastreabilidade de fonte.</td></tr>
+    <tr><td><strong>Parceiros comerciais</strong></td><td>Formulário público de proposta com revisão humana — nada é exposto sem validação editorial.</td></tr>
+    <tr><td><strong>Gestão do projeto</strong></td><td>Métricas anonimizadas, pesquisa preservada em <code>docs/</code> e pipeline de migração seguro.</td></tr>
+  </table>
+
+  <h3>1.3 Público-alvo</h3>
+  <ol>
+    <li>Turistas e viajantes planejando visitas (litoral, Serra da Capivara, Teresina).</li>
+    <li>Equipe editorial de curadoria responsável pela validação de fontes.</li>
+    <li>Comércios e serviços locais interessados na rede de parceiros.</li>
+    <li>Pesquisadores que utilizam os relatórios preservados em <code>docs/</code>.</li>
+  </ol>
+
+  <h3>1.4 Mapa de funcionalidades e módulos</h3>
+  <p><strong>Jornada pública</strong></p>
+  <table>
+    <tr><th>Rota</th><th>Página</th><th>Funcionalidade</th><th>Fonte de dados</th></tr>
+    <tr><td><code>/</code></td><td>Home</td><td>Atlas estadual: destinos por polo, filtros, busca, mapa sincronizado, cards das cidades-piloto, dados oficiais e planejador</td><td>destinations.list · cities.list · itineraries.list</td></tr>
+    <tr><td><code>/cidades/:slug</code></td><td>Cidade-piloto</td><td>Atrações com fonte, filtros, "Para comer" ancorado, serviços, Cultura e História, proximidade, mapa</td><td>cities.getBySlug · cityPlaces.listByCity · itineraries.getByCity</td></tr>
+    <tr><td><code>/cidades/:c/locais/:i</code></td><td>Local piloto</td><td>Ficha completa: imagem creditada, rota, contato, fonte</td><td>cityPlaces.getByCityAndSlug</td></tr>
+    <tr><td><code>/roteiros/:slug</code></td><td>Roteiro de 1 dia</td><td>Paradas ordenadas com mapa e avisos de confirmação</td><td>itineraries.getBySlug</td></tr>
+    <tr><td><code>/destinos/:slug</code></td><td>Destino do atlas</td><td>Ficha com galeria de imagens</td><td>trpc.destinations</td></tr>
+    <tr><td><code>/patrimonios</code></td><td>Patrimônios</td><td>Mapa histórico interativo</td><td>Catálogo local</td></tr>
+    <tr><td><code>/sabores</code></td><td>Sabores</td><td>Gastronomia piauiense</td><td>Catálogo local</td></tr>
+    <tr><td><code>/dados</code></td><td>Dados oficiais</td><td>Indicadores IBGE / Observatório</td><td>Estático</td></tr>
+    <tr><td><code>/agenda</code></td><td>Agenda cultural</td><td>Eventos confirmados e publicados</td><td>agenda.list</td></tr>
+    <tr><td><code>/parceiros</code></td><td>Seja parceiro</td><td>Formulário público (rate limit no servidor)</td><td>partners.submit</td></tr>
+    <tr><td><code>/login</code></td><td>Área de acesso</td><td>Login OAuth, sessão atual, logout</td><td>auth.me · /api/oauth/login</td></tr>
+    <tr><td><code>/404</code></td><td>Não encontrado</td><td>Página amigável</td><td>—</td></tr>
+  </table>
+  <p><strong>Jornada administrativa</strong> (protegida por <code>adminProcedure</code>)</p>
+  <table>
+    <tr><th>Rota</th><th>Página</th><th>Funcionalidade</th></tr>
+    <tr><td><code>/admin/editorial</code></td><td>Painel editorial</td><td>CRUD de eventos, publicação, revisão de propostas (status + notas), exportação CSV</td></tr>
+    <tr><td><code>/admin/destinos</code></td><td>Painel de destinos</td><td>Gestão de destinos e galerias de imagens</td></tr>
+  </table>
+  <div class="warn"><strong>Nota:</strong> <code>/patrimonios</code>, <code>/sabores</code> e <code>/dados</code> ainda consomem catálogos estáticos locais — únicos remanescentes, mapeados como próximo passo (§4.4).</div>
+</section>
+
+<section>
+  <h2>2. Visão Geral do Código e Arquitetura Tecnológica</h2>
+  <h3>2.1 Stack tecnológica</h3>
+  <table>
+    <tr><th>Camada</th><th>Tecnologia</th><th>Versão</th><th>Papel</th></tr>
+    <tr><td>Frontend</td><td>React</td><td>19.2.1</td><td>UI declarativa</td></tr>
+    <tr><td>Frontend</td><td>Vite</td><td>7.1.9</td><td>Dev server + build</td></tr>
+    <tr><td>Frontend</td><td>TailwindCSS / Wouter</td><td>4.1.14 / 3.7.1</td><td>Estilo / roteamento SPA</td></tr>
+    <tr><td>Frontend</td><td>TanStack Query + tRPC client</td><td>5.101.4 / 11.18.0</td><td>Estado e chamadas tipadas</td></tr>
+    <tr><td>Backend</td><td>Node.js / Express</td><td>≥18 / 4.21.2</td><td>Runtime / HTTP</td></tr>
+    <tr><td>API</td><td>tRPC server</td><td>11.18.0</td><td>API tipada ponta a ponta</td></tr>
+    <tr><td>Dados</td><td>Drizzle ORM + mysql2</td><td>0.44.7 / 3.23.3</td><td>Schema, migrations, queries</td></tr>
+    <tr><td>Dados</td><td>MySQL / TiDB</td><td>8.x</td><td>Banco relacional</td></tr>
+    <tr><td>Validação</td><td>Zod</td><td>4.1.12</td><td>Schemas compartilhados</td></tr>
+    <tr><td>Linguagem</td><td>TypeScript (strict)</td><td>5.9.3</td><td>Tipagem ponta a ponta</td></tr>
+    <tr><td>Auth</td><td>jose (JWT HS256)</td><td>6.1.0</td><td>Sessões assinadas</td></tr>
+    <tr><td>Testes</td><td>Vitest / Playwright</td><td>2.1.9 / 1.62.0</td><td>77 testes / E2E</td></tr>
+    <tr><td>Qualidade</td><td>Prettier + GitHub Actions</td><td>3.6.2 / —</td><td>lint → check → test</td></tr>
+  </table>
+
+  <h3>2.2 Estrutura de diretórios</h3>
+  <pre><code>bora-piaui/
+├── client/                  # Frontend React (isolado do servidor)
+│   └── src/ pages · components · lib · contexts · hooks
+├── server/                  # Backend Node/Express (isolado do client)
+│   ├── _core/               # index (boot) · trpc · context · env · oauth
+│   │                        # sdk · rateLimit · url · cookies · vite
+│   ├── routers/             # agendaPartners · destinations · metrics
+│   │                        # pilotContent (cities/cityPlaces/itineraries)
+│   ├── db.ts                # Acesso a dados por domínio
+│   ├── db/                  # seed.ts (idempotente) · ping.ts
+│   └── drizzle/             # schema.ts + migrations 0000–0004
+├── shared/                  # const.ts · pilotContent.ts (Zod) · types.ts
+├── docs/                    # architecture · research · validation · plans
+├── scripts/                 # Validações E2E Playwright
+└── docker-compose.yml       # MySQL 8 local (pnpm db:up)</code></pre>
+  <p><strong>Regras de isolamento:</strong> <code>client</code> nunca importa <code>server</code>; contratos traficam por tRPC; validação Zod vive em <code>shared/</code>; o backend é o único dono de <code>drizzle/</code>.</p>
+
+  <h3>2.3 Domínio de dados</h3>
+  <p><strong>14 tabelas</strong> em 5 migrations versionadas:</p>
+  <table>
+    <tr><th>Migration</th><th>Conteúdo</th></tr>
+    <tr><td><code>0000_futuristic_lizard</code></td><td>Bootstrap: users, destinations, destination_images, cultural_events, partner_submissions, usage_events</td></tr>
+    <tr><td><code>0001</code> / <code>0002</code></td><td>Evoluções incrementais</td></tr>
+    <tr><td><code>0003_add_sessions_invalidated_at</code></td><td>Revogação de sessão (upstream)</td></tr>
+    <tr><td><code>0004_pilot-cities-domain</code></td><td>cities, city_places, curated_businesses, itineraries, itinerary_stops, place_proximity_relations, curation_topics, editorial_highlights</td></tr>
+  </table>
+  <p>Domínio piloto: FKs <code>ON DELETE CASCADE</code>, idempotência por <code>slug</code>/<code>externalId</code>, enums editoriais e fontes embutidas (<code>sourceName/Url/VerifiedAt/Responsible</code>).</p>
+
+  <h3>2.4 Segurança, autenticação e validação</h3>
+  <table>
+    <tr><th>Mecanismo</th><th>Implementação</th></tr>
+    <tr><td>Fail-fast de ambiente</td><td><code>validateEnv()</code> na primeira linha do boot: <code>JWT_SECRET</code> obrigatório (≥32 caracteres em produção) — portas só abrem com config válida</td></tr>
+    <tr><td>Autorização</td><td>CRUD editorial somente em <code>adminProcedure</code>; anônimos recebem <code>FORBIDDEN</code></td></tr>
+    <tr><td>Sanitização de URLs</td><td><code>externalUrl()</code>: apenas <code>https:</code> em produção; <code>javascript:</code>/<code>data:</code> bloqueados sempre</td></tr>
+    <tr><td>Rate limit</td><td>Escritas públicas protegidas (ex.: partners.submit 5/10min)</td></tr>
+    <tr><td>Autenticação</td><td>OAuth completo: <code>/api/oauth/login</code> (nonce CSRF em cookie <code>__Host-</code>) → callback → sessão JWT HS256 (7 dias) → redirect pós-login validado</td></tr>
+    <tr><td>Sessões revogáveis</td><td><code>sessions_invalidated_at</code> para invalidação em massa</td></tr>
+    <tr><td>Health check</td><td><code>/healthz</code> executa <code>SELECT 1</code> real: database up/down/unconfigured</td></tr>
+    <tr><td>Repositório</td><td><code>.gitignore</code> bloqueia <code>.env*</code> (exceto exemplo), logs, builds; CI roda lint→check→test</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>3. Relatório de Alterações Recentes (Changelog de Engenharia)</h2>
+  <p>Branch <code>feat/security-hardening-and-dynamic-content</code> · Pull Request <strong>#1</strong>.</p>
+
+  <h3>3.1 Blindagem de Segurança (P0) — <code>1c3afb4</code></h3>
+  <ul>
+    <li>Remoção das rotas públicas <code>demo*</code> — CRUD editorial somente em <code>adminProcedure</code>.</li>
+    <li><code>validateEnv()</code> fail-fast para <code>JWT_SECRET</code> (≥32 caracteres em produção).</li>
+    <li><code>externalUrl()</code>: https-only em produção nos schemas Zod.</li>
+    <li>Painel migrado aos contratos admin + testes de <code>FORBIDDEN</code>.</li>
+  </ul>
+
+  <h3>3.2 Banco de Dados e Seed (P1/P2) — <code>028b630</code></h3>
+  <ul>
+    <li>8 tabelas do domínio cidades-piloto com FKs cascade e idempotência.</li>
+    <li>Schemas Zod de inserção — <strong>parse-before-write</strong>.</li>
+    <li><code>server/db/seed.ts</code> idempotente + <code>assertCatalogIntegrity()</code>.</li>
+  </ul>
+
+  <h3>3.3 API tRPC de leitura (P3) — <code>c4e72db</code></h3>
+  <ul>
+    <li><code>cities</code>, <code>cityPlaces</code> (payload agregado + ficha) e <code>itineraries</code> (lista, por cidade, por slug com paradas).</li>
+    <li><code>NOT_FOUND</code> semântico e validação de entrada.</li>
+  </ul>
+
+  <h3>3.4 Refatoração Dinâmica (P4/P5) — <code>11a4423</code>, <code>3433c54</code></h3>
+  <ul>
+    <li>Home, CityPage, ItineraryPage e PilotPlacePage 100% via tRPC (adaptador <code>pilotContentAdapter</code>).</li>
+    <li>Links internos corrigidos via <code>detailHref</code>; estados loading/retry/404.</li>
+    <li>Código morto removido (−1.8 mil linhas); 44 documentos organizados em <code>docs/</code>; README criado.</li>
+  </ul>
+
+  <h3>3.5 Limpeza e Qualidade — <code>768cdb4</code>, <code>bad023b</code>, <code>b6d57ab</code></h3>
+  <ul>
+    <li><code>drizzle/</code> movido para <code>server/drizzle/</code>; 6 imports atualizados.</li>
+    <li><code>.gitignore</code> endurecido; <code>engines.node ≥18</code>; scripts <code>lint/verify/db:migrate</code>.</li>
+    <li>Prettier aplicado (78 arquivos, apenas estilo).</li>
+  </ul>
+
+  <h3>3.6 Integração com Upstream — <code>0025c2d</code></h3>
+  <ul>
+    <li>3 commits paralelos do mantenedor reconciliados <strong>sem perdas</strong>: rate limit e sessão revogável preservados; camadas mais restritivas do fork mantidas (<code>externalUrl</code> substituiu o <code>safeUrl</code> http-permissivo).</li>
+    <li>Colisão de migration resolvida: piloto renumerado <code>0003 → 0004</code>.</li>
+    <li>Adotada a extração <code>client/src/lib/mvpPlaces.ts</code>.</li>
+  </ul>
+
+  <h3>3.7 Autenticação e maturidade operacional — <code>bd802fa</code></h3>
+  <ul>
+    <li><code>/api/oauth/login</code> + página <code>/login</code> + CTAs no menu e no gate do painel.</li>
+    <li><code>/healthz</code> com ping real · <code>docker-compose.yml</code> · <code>db:ping</code> · CI · README de apresentação.</li>
+  </ul>
+
+  <h3>3.8 Qualidade final</h3>
+  <table>
+    <tr><th>Métrica</th><th>Valor</th></tr>
+    <tr><td>Testes automatizados</td><td><strong>77/77 aprovados</strong> (19 suítes)</td></tr>
+    <tr><td>Tipagem</td><td><code>tsc --noEmit</code> sem erros (strict)</td></tr>
+    <tr><td>Formatação</td><td>Prettier 100% conforme</td></tr>
+    <tr><td>CI</td><td>lint → check → test em push/PR</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>4. Status Atual e Guia de Implantação (Go-Live)</h2>
+  <h3>4.1 Status atual</h3>
+  <table>
+    <tr><th>Item</th><th>Estado</th></tr>
+    <tr><td>Código</td><td>✅ Completo, tipado e testado (77/77)</td></tr>
+    <tr><td>Pull Request</td><td>✅ PR #1 aberto, sem conflitos, aguardando merge</td></tr>
+    <tr><td>Banco de dados</td><td>⚠️ <code>DATABASE_URL</code> configurada, porém nenhum servidor MySQL ativo (<code>ECONNREFUSED :3306</code>) — diagnosticar com <code>pnpm db:ping</code></td></tr>
+    <tr><td>Autenticação</td><td>⚠️ Requer <code>OAUTH_SERVER_URL</code> + <code>VITE_APP_ID</code> do provedor</td></tr>
+  </table>
+  <p><strong>Caminhos para ativar o banco</strong>:</p>
+  <ol>
+    <li><strong>Docker local</strong> — instalar Docker Desktop e rodar <code>pnpm db:up</code> (MySQL 8 · localhost:3306 · root/root · banco <code>bora_piaui</code>).</li>
+    <li><strong>MySQL nativo</strong> — instalar o servidor, criar o banco <code>bora_piaui</code> e ajustar credenciais na URL.</li>
+    <li><strong>Nuvem gratuita</strong> — Railway, Aiven ou PlanetScale; substituir a <code>DATABASE_URL</code> pela URL do provedor.</li>
+  </ol>
+
+  <h3>4.2 Checklist de variáveis de ambiente</h3>
+  <table>
+    <tr><th>Variável</th><th>Obrigatória</th><th>Regra de validação</th></tr>
+    <tr><td><code>NODE_ENV</code></td><td>Sim</td><td><code>development</code> | <code>production</code> — produção ativa https-only e segredo forte</td></tr>
+    <tr><td><code>PORT</code></td><td>Não (3000)</td><td>Porta preferida; 20 seguintes testadas</td></tr>
+    <tr><td><code>DATABASE_URL</code></td><td>Sim</td><td><code>mysql://usuario:senha@host:3306/bora_piaui</code></td></tr>
+    <tr><td><code>JWT_SECRET</code></td><td><strong>Sempre</strong></td><td>Nunca vazio; <strong>≥32 caracteres em produção</strong> (<code>openssl rand -base64 48</code>)</td></tr>
+    <tr><td><code>OAUTH_SERVER_URL</code></td><td>Login</td><td>URL base do provedor OAuth</td></tr>
+    <tr><td><code>VITE_APP_ID</code></td><td>Login</td><td>ID da aplicação no provedor</td></tr>
+    <tr><td><code>OWNER_OPEN_ID</code></td><td>Admin</td><td>openId elevado a <code>admin</code> no primeiro login</td></tr>
+    <tr><td><code>BUILT_IN_FORGE_*</code></td><td>Não</td><td>Integrações opcionais (LLM/imagem)</td></tr>
+    <tr><td><code>BORA_PIAUI_URL</code></td><td>Não</td><td>Base dos Playwrights E2E</td></tr>
+  </table>
+
+  <h3>4.3 Roteiro de implantação</h3>
+  <pre><code># 0. Pós-merge do PR #1: sincronizar
+git checkout main &amp;&amp; git pull upstream main
+
+# 1. Banco ativo (§4.1) — validar conexão
+pnpm db:ping
+
+# 2. Estrutura relacional (migrations 0000 → 0004)
+pnpm db:push
+
+# 3. Carga inicial idempotente (3 cidades, 11 locais, 3 roteiros…)
+pnpm db:seed
+
+# 4. Variáveis de produção
+#    NODE_ENV=production · JWT_SECRET (≥32) · OWNER_OPEN_ID · OAuth
+
+# 5. Aplicação
+pnpm build &amp;&amp; pnpm start        # ou deploy Vercel (vercel.json)
+
+# 6. Smoke de produção
+curl https://SEU_DOMINIO/healthz     # {"ok":true,"database":"up"}
+#    → /cidades/teresina carrega atrações
+#    → /login → OAuth → /admin/editorial com papel admin
+#    → node scripts/validate-editorial-agenda.mjs (sessão admin)</code></pre>
+
+  <h3>4.4 Pendências conhecidas (roadmap)</h3>
+  <ul>
+    <li>Migração dos catálogos estáticos restantes (<code>mvpPlaces</code>; Patrimônios/Sabores/Dados).</li>
+    <li>Rate limit por origem nas demais escritas públicas.</li>
+    <li>DTOs públicos/administrativos distintos para parceiros (PII).</li>
+    <li>Paginação nas listagens administrativas.</li>
+    <li>Harness de autenticação para os Playwrights administrativos.</li>
+  </ul>
+
+  <p class="footer">Documento gerado a partir do estado real do repositório — branch <code>feat/security-hardening-and-dynamic-content</code>, commit <code>bd802fa</code>. Fonte canônica: <code>docs/DOCUMENTACAO_PROJETO.md</code>.</p>
+</section>
+
+</body>
+</html>
