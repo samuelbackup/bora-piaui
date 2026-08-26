@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { getUsageMetrics, recordUsageEvent } from "../db";
 import { adminProcedure, publicProcedure, router } from "../_core/trpc";
+import { enforceRateLimit } from "../_core/rateLimit";
 
 export const usageEventNames = [
   "city_viewed",
@@ -24,7 +25,8 @@ export const usageEventInput = z.object({
 });
 
 export const metricsRouter = router({
-  track: publicProcedure.input(usageEventInput).mutation(async ({ input }) => {
+  track: publicProcedure.input(usageEventInput).mutation(async ({ input, ctx }) => {
+    enforceRateLimit(ctx.req, "metrics.track", { max: 30, windowMs: 60_000 });
     await recordUsageEvent({ ...input, createdAt: new Date() });
     return { success: true } as const;
   }),

@@ -13,8 +13,11 @@ import {
 import { adminProcedure, publicProcedure, router } from "../_core/trpc";
 import { externalUrl } from "../_core/url";
 import { storagePut } from "../storage";
-
 const optionalText = (max: number) => z.string().trim().max(max).nullable().optional();
+
+function isDuplicateEntryError(error: unknown) {
+  return typeof error === "object" && error !== null && "code" in error && (error as { code?: string }).code === "ER_DUP_ENTRY";
+}
 
 export const destinationFields = z.object({
   slug: z.string().trim().min(3).max(120).regex(/^[a-z0-9-]+$/, "Use apenas letras minúsculas, números e hífens."),
@@ -75,7 +78,15 @@ export const destinationsRouter = router({
     return destination;
   }),
   create: adminProcedure.input(destinationFields).mutation(async ({ input }) => {
-    const destination = await createDestination(normalizeDestination(input));
+    let destination;
+    try {
+      destination = await createDestination(normalizeDestination(input));
+    } catch (error) {
+      if (isDuplicateEntryError(error)) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Já existe um destino com esse slug. Escolha outro identificador." });
+      }
+      throw error;
+    }
     if (!destination) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Não foi possível criar o destino." });
     return destination;
   }),

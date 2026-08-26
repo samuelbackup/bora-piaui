@@ -1,4 +1,5 @@
 import { trpc } from "@/lib/trpc";
+import { pilotPlaces, type Place } from "@/lib/mvpPlaces";
 import { ArrowLeft, ExternalLink, FileCheck2, MapPinned, ShieldCheck, Images } from "lucide-react";
 import { Link, useRoute } from "wouter";
 
@@ -14,12 +15,43 @@ function dateLabel(value: Date | string | null | undefined) {
   return Number.isNaN(date.getTime()) ? null : date.toLocaleDateString("pt-BR", { year: "numeric", month: "long", day: "numeric" });
 }
 
+function PilotPlaceFicha({ place }: { place: Place }) {
+  return (
+    <div className="min-h-screen bg-[#F5ECD8] text-[#303722]">
+      <header className="border-b border-[#3C482D]/10 bg-[#F5ECD8]/95 backdrop-blur">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
+          <Link href="/" className="inline-flex items-center gap-2 text-sm font-extrabold text-[#3C482D]"><ArrowLeft className="h-4 w-4" /> Atlas do Piauí</Link>
+          <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#B9572D]">Ficha de destino · piloto</span>
+        </div>
+      </header>
+      <main>
+        <section className="bg-[#3C482D] px-5 py-12 text-white sm:px-8 lg:py-16">
+          <div className="mx-auto max-w-7xl">
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#D9A640]">{place.region} · {place.category}</p>
+            <div className="mt-5 grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
+              <div><h1 className="display-font max-w-4xl text-5xl leading-[.9] tracking-[-.06em] sm:text-7xl">{place.title}</h1><p className="mt-5 max-w-2xl text-lg leading-8 text-white/78">{place.text}</p></div>
+              <div className="rounded-[1.5rem] border border-white/15 bg-white/8 p-5"><p className="text-[10px] font-extrabold uppercase tracking-[.14em] text-white/55">Município</p><p className="mt-2 text-lg font-bold">{place.municipality}</p><a href={place.route} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#B9572D] px-4 py-3 text-sm font-extrabold text-white hover:bg-[#CD6D45]"><MapPinned className="h-4 w-4" /> Abrir rota</a></div>
+            </div>
+          </div>
+        </section>
+
+        <section className="px-5 py-12 sm:px-8 lg:py-16"><div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.18fr_.82fr]">
+          <article><p className="text-[10px] font-extrabold uppercase tracking-[.15em] text-[#B9572D]">Leitura do lugar</p><p className="mt-4 text-lg leading-8 text-[#536049]">{place.detail}</p><a href={place.sourceUrl} target="_blank" rel="noreferrer" className="mt-7 inline-flex items-center gap-2 text-sm font-extrabold text-[#566B37] hover:text-[#B9572D]"><FileCheck2 className="h-4 w-4" /> {place.sourceName} · {place.sourceYear}<ExternalLink className="h-3.5 w-3.5" /></a></article>
+          <aside className="rounded-[1.75rem] border border-[#3C482D]/10 bg-[#FFFDF6] p-6"><div className="flex gap-3"><ShieldCheck className="h-5 w-5 shrink-0 text-[#A87412]" /><div><h2 className="display-font text-2xl tracking-[-.04em]">Antes de visitar</h2><p className="mt-3 text-sm leading-6 text-[#615734]">Este é um recorte editorial do atlas protótipo. Horários, preços e condições operacionais permanecem sem publicação até confirmação pela curadoria — confirme diretamente pelos canais oficiais e use a rota acima para planejar a visita.</p></div></div></aside>
+        </div></section>
+      </main>
+    </div>
+  );
+}
+
 export default function DestinationPage() {
   const [, params] = useRoute("/destinos/:slug");
   const slug = params?.slug ?? "nao-encontrado";
   const { data: destination, isLoading, error } = trpc.destinations.bySlug.useQuery({ slug });
+  const pilotPlace = isLoading ? undefined : pilotPlaces.find((place) => place.id === slug);
 
   if (isLoading) return <main className="min-h-screen bg-[#F5ECD8] px-5 py-20 text-center text-[#566B37]">Carregando destino…</main>;
+  if (!destination && pilotPlace) return <PilotPlaceFicha place={pilotPlace} />;
   if (error || !destination) return <main className="min-h-screen bg-[#F5ECD8] px-5 py-20 text-center"><p className="display-font text-4xl text-[#303722]">Destino não encontrado.</p><Link href="/" className="mt-6 inline-flex rounded-full bg-[#B9572D] px-5 py-3 text-sm font-extrabold text-white">Voltar ao atlas</Link></main>;
 
   const status = statusCopy[destination.operationalStatus];

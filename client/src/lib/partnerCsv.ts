@@ -19,7 +19,10 @@ const CSV_HEADERS = [
 ];
 
 function escapeCsvValue(value: string | null | undefined) {
-  const normalized = value ?? "";
+  let normalized = value ?? "";
+  if (/^[=+\-@\t\r]/.test(normalized)) {
+    normalized = `'${normalized}`;
+  }
   return /[;"\r\n]/.test(normalized) ? `"${normalized.replace(/"/g, '""')}"` : normalized;
 }
 
