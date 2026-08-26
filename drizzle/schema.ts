@@ -1,4 +1,4 @@
-import { boolean, index, int, mysqlEnum, mysqlTable, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
+import { boolean, index, int, json, mysqlEnum, mysqlTable, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
 
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
@@ -131,3 +131,208 @@ export type PartnerSubmission = typeof partnerSubmissions.$inferSelect;
 export type InsertPartnerSubmission = typeof partnerSubmissions.$inferInsert;
 export type UsageEvent = typeof usageEvents.$inferSelect;
 export type InsertUsageEvent = typeof usageEvents.$inferInsert;
+
+export const cities = mysqlTable(
+  "cities",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    slug: varchar("slug", { length: 120 }).notNull(),
+    name: varchar("name", { length: 120 }).notNull(),
+    eyebrow: varchar("eyebrow", { length: 120 }).notNull(),
+    summary: text("summary").notNull(),
+    accent: varchar("accent", { length: 32 }).notNull(),
+    sourceName: varchar("sourceName", { length: 255 }).notNull(),
+    sourceUrl: varchar("sourceUrl", { length: 1024 }).notNull(),
+    sourceVerifiedAt: varchar("sourceVerifiedAt", { length: 96 }).notNull(),
+    sourceResponsible: varchar("sourceResponsible", { length: 255 }),
+    published: boolean("published").default(true).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [uniqueIndex("cities_slug_unique").on(table.slug)]
+);
+
+export const cityPlaces = mysqlTable(
+  "city_places",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    cityId: int("cityId")
+      .notNull()
+      .references(() => cities.id, { onDelete: "cascade" }),
+    externalId: varchar("externalId", { length: 140 }).notNull(),
+    slug: varchar("slug", { length: 140 }).notNull(),
+    kind: mysqlEnum("kind", ["attraction", "business"]).default("attraction").notNull(),
+    title: varchar("title", { length: 180 }).notNull(),
+    category: varchar("category", { length: 100 }).notNull(),
+    summary: text("summary").notNull(),
+    image: json("image").$type<PlaceImage | null>(),
+    routeUrl: varchar("routeUrl", { length: 1024 }),
+    contactUrl: varchar("contactUrl", { length: 1024 }),
+    externalUrl: varchar("externalUrl", { length: 1024 }),
+    mapQuery: varchar("mapQuery", { length: 255 }).notNull(),
+    accent: varchar("accent", { length: 32 }).notNull(),
+    operationalStatus: mysqlEnum("operationalStatus", ["confirmed", "verify", "unavailable"])
+      .default("verify")
+      .notNull(),
+    editorialStatus: mysqlEnum("editorialStatus", ["published", "pending"]).default("pending").notNull(),
+    sourceName: varchar("sourceName", { length: 255 }).notNull(),
+    sourceUrl: varchar("sourceUrl", { length: 1024 }).notNull(),
+    sourceVerifiedAt: varchar("sourceVerifiedAt", { length: 96 }).notNull(),
+    sourceResponsible: varchar("sourceResponsible", { length: 255 }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [
+    uniqueIndex("city_places_external_id_unique").on(table.externalId),
+    index("city_places_city_idx").on(table.cityId),
+  ]
+);
+
+export const curatedBusinesses = mysqlTable(
+  "curated_businesses",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    cityId: int("cityId")
+      .notNull()
+      .references(() => cities.id, { onDelete: "cascade" }),
+    externalId: varchar("externalId", { length: 140 }).notNull(),
+    kind: mysqlEnum("kind", ["restaurant", "service"]).default("service").notNull(),
+    anchorPlaceIds: json("anchorPlaceIds").$type<string[]>().notNull(),
+    title: varchar("title", { length: 180 }).notNull(),
+    category: varchar("category", { length: 100 }).notNull(),
+    summary: text("summary").notNull(),
+    routeUrl: varchar("routeUrl", { length: 1024 }),
+    contactUrl: varchar("contactUrl", { length: 1024 }),
+    editorialStatus: mysqlEnum("editorialStatus", ["published", "pending"]).default("pending").notNull(),
+    sourceName: varchar("sourceName", { length: 255 }).notNull(),
+    sourceUrl: varchar("sourceUrl", { length: 1024 }).notNull(),
+    sourceVerifiedAt: varchar("sourceVerifiedAt", { length: 96 }).notNull(),
+    sourceResponsible: varchar("sourceResponsible", { length: 255 }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [
+    uniqueIndex("curated_businesses_external_id_unique").on(table.externalId),
+    index("curated_businesses_city_idx").on(table.cityId),
+  ]
+);
+
+export const itineraries = mysqlTable(
+  "itineraries",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    cityId: int("cityId")
+      .notNull()
+      .references(() => cities.id, { onDelete: "cascade" }),
+    slug: varchar("slug", { length: 140 }).notNull(),
+    dayScope: mysqlEnum("dayScope", ["one-day"]).default("one-day").notNull(),
+    title: varchar("title", { length: 180 }).notNull(),
+    durationLabel: varchar("durationLabel", { length: 120 }).notNull(),
+    summary: text("summary").notNull(),
+    confirmationNotice: text("confirmationNotice").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [uniqueIndex("itineraries_slug_unique").on(table.slug)]
+);
+
+export const itineraryStops = mysqlTable(
+  "itinerary_stops",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    itineraryId: int("itineraryId")
+      .notNull()
+      .references(() => itineraries.id, { onDelete: "cascade" }),
+    placeId: int("placeId")
+      .notNull()
+      .references(() => cityPlaces.id, { onDelete: "cascade" }),
+    sortOrder: int("sortOrder").default(0).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => [index("itinerary_stops_itinerary_idx").on(table.itineraryId)]
+);
+
+export const placeProximityRelations = mysqlTable(
+  "place_proximity_relations",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    externalId: varchar("externalId", { length: 180 }).notNull(),
+    anchorPlaceId: int("anchorPlaceId")
+      .notNull()
+      .references(() => cityPlaces.id, { onDelete: "cascade" }),
+    relatedPlaceId: int("relatedPlaceId")
+      .notNull()
+      .references(() => cityPlaces.id, { onDelete: "cascade" }),
+    category: varchar("category", { length: 120 }).notNull(),
+    editorialReason: text("editorialReason").notNull(),
+    sourceName: varchar("sourceName", { length: 255 }).notNull(),
+    sourceUrl: varchar("sourceUrl", { length: 1024 }).notNull(),
+    sourceVerifiedAt: varchar("sourceVerifiedAt", { length: 96 }).notNull(),
+    sourceResponsible: varchar("sourceResponsible", { length: 255 }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => [uniqueIndex("place_proximity_relations_external_id_unique").on(table.externalId)]
+);
+
+export const curationTopics = mysqlTable(
+  "curation_topics",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    cityId: int("cityId")
+      .notNull()
+      .references(() => cities.id, { onDelete: "cascade" }),
+    externalId: varchar("externalId", { length: 140 }).notNull(),
+    category: mysqlEnum("category", ["gastronomy", "service"]).default("service").notNull(),
+    title: varchar("title", { length: 180 }).notNull(),
+    description: text("description").notNull(),
+    status: mysqlEnum("status", ["curating", "published"]).default("curating").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [uniqueIndex("curation_topics_external_id_unique").on(table.externalId)]
+);
+
+export const editorialHighlights = mysqlTable(
+  "editorial_highlights",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    cityId: int("cityId")
+      .notNull()
+      .references(() => cities.id, { onDelete: "cascade" }),
+    externalId: varchar("externalId", { length: 140 }).notNull(),
+    title: varchar("title", { length: 160 }).notNull(),
+    description: text("description").notNull(),
+    sourceName: varchar("sourceName", { length: 255 }).notNull(),
+    sourceUrl: varchar("sourceUrl", { length: 1024 }).notNull(),
+    sourceVerifiedAt: varchar("sourceVerifiedAt", { length: 96 }).notNull(),
+    sourceResponsible: varchar("sourceResponsible", { length: 255 }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [uniqueIndex("editorial_highlights_external_id_unique").on(table.externalId)]
+);
+
+export type PlaceImage = {
+  url: string;
+  alt: string;
+  credit?: string;
+  license?: string;
+  licenseUrl?: string;
+};
+
+export type City = typeof cities.$inferSelect;
+export type InsertCity = typeof cities.$inferInsert;
+export type CityPlace = typeof cityPlaces.$inferSelect;
+export type InsertCityPlace = typeof cityPlaces.$inferInsert;
+export type CuratedBusiness = typeof curatedBusinesses.$inferSelect;
+export type InsertCuratedBusiness = typeof curatedBusinesses.$inferInsert;
+export type Itinerary = typeof itineraries.$inferSelect;
+export type InsertItinerary = typeof itineraries.$inferInsert;
+export type ItineraryStop = typeof itineraryStops.$inferSelect;
+export type InsertItineraryStop = typeof itineraryStops.$inferInsert;
+export type PlaceProximityRelation = typeof placeProximityRelations.$inferSelect;
+export type InsertPlaceProximityRelation = typeof placeProximityRelations.$inferInsert;
+export type CurationTopic = typeof curationTopics.$inferSelect;
+export type InsertCurationTopic = typeof curationTopics.$inferInsert;
+export type EditorialHighlight = typeof editorialHighlights.$inferSelect;
+export type InsertEditorialHighlight = typeof editorialHighlights.$inferInsert;
