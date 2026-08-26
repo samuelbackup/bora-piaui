@@ -1,5 +1,6 @@
 import { and, asc, desc, eq, inArray, isNotNull, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
+import mysql from "mysql2/promise";
 import {
   CulturalEvent,
   Destination,
@@ -28,8 +29,7 @@ export async function getDb() {
       const url = process.env.DATABASE_URL;
       const needsSsl = /aivencloud\.com|tidbcloud\.com|sslmode=required|ssl=true/i.test(url);
       if (needsSsl) {
-        const mysql = await import("mysql2/promise");
-        const pool = mysql.default.createPool({
+        const pool = mysql.createPool({
           uri: url,
           ssl: { rejectUnauthorized: false },
         });
