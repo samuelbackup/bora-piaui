@@ -13,6 +13,7 @@ import DadosPage from "./pages/DadosPage";
 import DestinationPage from "./pages/DestinationPage";
 import Home from "./pages/Home";
 import ItineraryPage from "./pages/ItineraryPage";
+import LoginPage from "./pages/LoginPage";
 import PatrimoniosPage from "./pages/PatrimoniosPage";
 import PartnersPage from "./pages/PartnersPage";
 import PilotPlacePage from "./pages/PilotPlacePage";
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/destinos/:slug" component={DestinationPage} />
       <Route path="/admin/destinos" component={AdminDestinations} />
       <Route path="/admin/editorial" component={AdminEditorial} />
+      <Route path="/login" component={LoginPage} />
       <Route path="/patrimonios" component={PatrimoniosPage} />
       <Route path="/sabores" component={SaboresPage} />
       <Route path="/dados" component={DadosPage} />

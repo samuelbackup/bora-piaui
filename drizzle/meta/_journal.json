@@ -29,6 +29,13 @@
       "when": 1787713841412,
       "tag": "0003_add_sessions_invalidated_at",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1787718426275,
+      "tag": "0004_add_password_hash",
+      "breakpoints": true
     }
   ]
 }
