@@ -238,3 +238,5 @@
 - [x] Adicionar imagem licenciada, crédito e fonte ao Polo Cerâmico do Poti Velho.
 - [x] Adicionar imagens licenciadas, créditos e fontes aos cartões de patrimônios materiais.
 - [x] Confirmar no domínio externo as imagens e atribuições dos patrimônios materiais.
+- [x] Inventariar banco, imagens e usuários existentes para orientar o reaproveitamento no desenvolvimento do back-end.
+- [x] Definir roteiro seguro de exportação, armazenamento e migração de autenticação para o novo back-end.
