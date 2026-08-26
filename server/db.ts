@@ -1,19 +1,33 @@
 import { and, asc, desc, eq, isNotNull, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
-  CulturalEvent,
-  Destination,
-  DestinationImage,
+  cities,
+  City,
+  CityPlace,
+  CurationTopic,
+  CuratedBusiness,
   culturalEvents,
+  CulturalEvent,
   destinationImages,
   destinations,
+  Destination,
+  DestinationImage,
+  editorialHighlights,
+  EditorialHighlight,
   InsertCulturalEvent,
   InsertDestination,
   InsertDestinationImage,
   InsertPartnerSubmission,
   InsertUser,
+  itineraries,
+  Itinerary,
+  itineraryStops,
   PartnerSubmission,
   partnerSubmissions,
+  cityPlaces,
+  placeProximityRelations,
+  curationTopics,
+  curatedBusinesses,
   InsertUsageEvent,
   usageEvents,
   users,
@@ -238,4 +252,158 @@ export async function getUsageMetrics() {
     topCities: topCities.map(row => ({ citySlug: row.citySlug ?? "", total: Number(row.total) })),
     topItems: topItems.map(row => ({ itemId: row.itemId ?? "", total: Number(row.total) })),
   };
+}
+
+async function requireCityId(db: NonNullable<Awaited<ReturnType<typeof getDb>>>, citySlug: string): Promise<number | null> {
+  const [city] = await db.select({ id: cities.id }).from(cities).where(eq(cities.slug, citySlug)).limit(1);
+  return city?.id ?? null;
+}
+
+export type CityContentPayload = {
+  places: CityPlace[];
+  curationTopics: CurationTopic[];
+  editorialHighlights: EditorialHighlight[];
+  curatedBusinesses: CuratedBusiness[];
+  proximityRelations: Array<{
+    externalId: string;
+    category: string;
+    editorialReason: string;
+    sourceName: string;
+    sourceUrl: string;
+    sourceVerifiedAt: string;
+    sourceResponsible: string | null;
+    anchorExternalId: string;
+    relatedExternalId: string;
+  }>;
+};
+
+export async function listCities() {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  return db.select().from(cities).where(eq(cities.published, true)).orderBy(asc(cities.name));
+}
+
+export async function getCityBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  const rows = await db.select().from(cities).where(and(eq(cities.slug, slug), eq(cities.published, true))).limit(1);
+  return rows[0] ?? null;
+}
+
+export async function listCityContent(citySlug: string): Promise<CityContentPayload> {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  const cityId = await requireCityId(db, citySlug);
+  if (!cityId) {
+    return { places: [], curationTopics: [], editorialHighlights: [], curatedBusinesses: [], proximityRelations: [] };
+  }
+
+  const places = await db
+    .select()
+    .from(cityPlaces)
+    .where(and(eq(cityPlaces.cityId, cityId), eq(cityPlaces.editorialStatus, "published")))
+    .orderBy(asc(cityPlaces.title));
+  const placeIds = new Set(places.map(place => place.id));
+
+  const [topics, highlights, businesses] = await Promise.all([
+    db.select().from(curationTopics).where(eq(curationTopics.cityId, cityId)).orderBy(asc(curationTopics.title)),
+    db.select().from(editorialHighlights).where(eq(editorialHighlights.cityId, cityId)).orderBy(asc(editorialHighlights.title)),
+    db
+      .select()
+      .from(curatedBusinesses)
+      .where(and(eq(curatedBusinesses.cityId, cityId), eq(curatedBusinesses.editorialStatus, "published")))
+      .orderBy(asc(curatedBusinesses.title)),
+  ]);
+
+  const relationRows = await db
+    .select({
+      externalId: placeProximityRelations.externalId,
+      anchorPlaceId: placeProximityRelations.anchorPlaceId,
+      relatedPlaceId: placeProximityRelations.relatedPlaceId,
+      category: placeProximityRelations.category,
+      editorialReason: placeProximityRelations.editorialReason,
+      sourceName: placeProximityRelations.sourceName,
+      sourceUrl: placeProximityRelations.sourceUrl,
+      sourceVerifiedAt: placeProximityRelations.sourceVerifiedAt,
+      sourceResponsible: placeProximityRelations.sourceResponsible,
+    })
+    .from(placeProximityRelations)
+    .innerJoin(cityPlaces, eq(cityPlaces.id, placeProximityRelations.anchorPlaceId))
+    .where(eq(cityPlaces.cityId, cityId))
+    .orderBy(asc(placeProximityRelations.externalId));
+
+  const externalIdById = new Map(places.map(place => [place.id, place.externalId]));
+  const proximityRelations = relationRows
+    .filter(relation => placeIds.has(relation.relatedPlaceId) && externalIdById.has(relation.anchorPlaceId) && externalIdById.has(relation.relatedPlaceId))
+    .map(relation => ({
+      externalId: relation.externalId,
+      category: relation.category,
+      editorialReason: relation.editorialReason,
+      sourceName: relation.sourceName,
+      sourceUrl: relation.sourceUrl,
+      sourceVerifiedAt: relation.sourceVerifiedAt,
+      sourceResponsible: relation.sourceResponsible,
+      anchorExternalId: externalIdById.get(relation.anchorPlaceId)!,
+      relatedExternalId: externalIdById.get(relation.relatedPlaceId)!,
+    }));
+
+  return { places, curationTopics: topics, editorialHighlights: highlights, curatedBusinesses: businesses, proximityRelations };
+}
+
+export type ItineraryWithCity = { itinerary: Itinerary; city: City };
+
+export async function getItineraryBySlug(slug: string): Promise<{ itinerary: Itinerary; city: City; stops: CityPlace[] } | null> {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  const rows = await db
+    .select({ itinerary: itineraries, city: cities })
+    .from(itineraries)
+    .innerJoin(cities, eq(cities.id, itineraries.cityId))
+    .where(and(eq(itineraries.slug, slug), eq(itineraries.dayScope, "one-day")))
+    .limit(1);
+  const found = rows[0];
+  if (!found) return null;
+
+  const stops = await db
+    .select({ place: cityPlaces, sortOrder: itineraryStops.sortOrder })
+    .from(itineraryStops)
+    .innerJoin(cityPlaces, eq(cityPlaces.id, itineraryStops.placeId))
+    .where(eq(itineraryStops.itineraryId, found.itinerary.id))
+    .orderBy(asc(itineraryStops.sortOrder), asc(itineraryStops.id));
+
+  return {
+    itinerary: found.itinerary,
+    city: found.city,
+    stops: stops.filter(entry => entry.place.editorialStatus === "published").map(entry => entry.place),
+  };
+}
+
+export async function getItineraryByCitySlug(citySlug: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  const rows = await db
+    .select()
+    .from(itineraries)
+    .innerJoin(cities, eq(cities.id, itineraries.cityId))
+    .where(and(eq(cities.slug, citySlug), eq(itineraries.dayScope, "one-day")))
+    .limit(1);
+  return rows[0]?.itineraries ?? null;
+}
+
+export async function listItineraries() {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  return db.select().from(itineraries).where(eq(itineraries.dayScope, "one-day")).orderBy(asc(itineraries.title));
+}
+
+export async function getPlaceBySlugAndCity(citySlug: string, itemSlug: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  const rows = await db
+    .select({ place: cityPlaces, city: cities })
+    .from(cityPlaces)
+    .innerJoin(cities, eq(cities.id, cityPlaces.cityId))
+    .where(and(eq(cities.slug, citySlug), eq(cityPlaces.slug, itemSlug), eq(cityPlaces.editorialStatus, "published")))
+    .limit(1);
+  return rows[0] ?? null;
 }
