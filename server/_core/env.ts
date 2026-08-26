@@ -1,15 +1,15 @@
 import { randomBytes } from "crypto";
 
 function resolveCookieSecret(): string {
-  const secret = process.env.JWT_SECRET ?? "";
+  const secret = process.env.SESSION_JWT_SECRET ?? process.env.JWT_SECRET ?? "";
   if (secret.length > 0) return secret;
   if (process.env.NODE_ENV === "production") {
     throw new Error(
-      "[env] JWT_SECRET é obrigatório em produção. Defina um segredo forte antes de iniciar o servidor — recusar o boot evita sessões forjáveis."
+      "[env] SESSION_JWT_SECRET é obrigatório em produção. Defina um segredo forte antes de iniciar o servidor — recusar o boot evita sessões forjáveis."
     );
   }
   console.warn(
-    "[env] JWT_SECRET ausente: usando segredo efêmero aleatório (sessões serão invalidadas a cada reinício do servidor)."
+    "[env] SESSION_JWT_SECRET ausente: usando segredo efêmero aleatório (sessões serão invalidadas a cada reinício do servidor)."
   );
   return randomBytes(32).toString("hex");
 }

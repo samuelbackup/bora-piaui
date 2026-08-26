@@ -242,3 +242,6 @@
 - [x] Definir roteiro seguro de exportação, armazenamento e migração de autenticação para o novo back-end.
 - [x] Revisar o relatório de análise, extrair requisitos de back-end e atualizar o roteiro de migração com itens aproveitáveis.
 - [x] Sincronizar no GitHub a revisão comparativa do relatório e o roteiro de migração atualizado.
+- [x] Sincronizar as três correções de segurança da branch principal no ambiente de produção.
+- [x] Aplicar a migração de sessão `0003_add_sessions_invalidated_at.sql` no banco de produção.
+- [x] Configurar e validar `SESSION_JWT_SECRET` no ambiente de produção, mantendo compatibilidade segura com o segredo interno da plataforma.
