@@ -78,7 +78,7 @@ export type PilotCurationTopic = {
   category: "gastronomy" | "service";
   title: string;
   description: string;
-  status: "curating";
+  status: "curating" | "published";
 };
 
 export type PilotEditorialHighlight = {

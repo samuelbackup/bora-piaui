@@ -11,6 +11,7 @@ export type MappedPlace = {
   category: string;
   mapQuery: string;
   accent: string;
+  detailHref?: string;
 };
 
 type PiauiMapProps = {
@@ -144,7 +145,7 @@ export function PiauiMap({ places, activePlaceId, onSelect }: PiauiMapProps) {
           <p className="text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#D9A640]">Destino ativo no mapa</p>
           <p className="mt-0.5 truncate text-xs font-bold leading-5">{activePlace ? `${activePlace.title} · ${activePlace.municipality}` : "Selecione um destino para localizar no mapa."}</p>
         </div>
-        {activePlace && <Link href={`/destinos/${activePlace.id}`} aria-label={`Ver detalhes de ${activePlace.title}`} className="tap inline-flex shrink-0 items-center gap-1 rounded-full border border-[#FFFDF6]/35 bg-[#FFFDF6] px-2.5 py-2 text-[11px] font-extrabold text-[#3C482D] hover:bg-[#F5ECD8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A640] focus-visible:ring-offset-2 focus-visible:ring-offset-[#3C482D]">Ver detalhes <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></Link>}
+        {activePlace?.detailHref && <Link href={activePlace.detailHref} aria-label={`Ver detalhes de ${activePlace.title}`} className="tap inline-flex shrink-0 items-center gap-1 rounded-full border border-[#FFFDF6]/35 bg-[#FFFDF6] px-2.5 py-2 text-[11px] font-extrabold text-[#3C482D] hover:bg-[#F5ECD8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A640] focus-visible:ring-offset-2 focus-visible:ring-offset-[#3C482D]">Ver detalhes <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></Link>}
       </div>
     </div>
   );
