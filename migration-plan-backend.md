@@ -20,18 +20,32 @@ O repositório contém o schema Drizzle, helpers de banco, routers tRPC e a inte
 
 O schema atual usa MySQL/TiDB e Drizzle, portanto o caminho com menor risco é manter a compatibilidade MySQL/TiDB no ambiente novo e aplicar migrations versionadas pelo Drizzle.[1]
 
+## 1.1 Gate de segurança antes da migração
+
+O relatório enviado identificou riscos de segurança e jornada; a revisão direta do código confirmou que os procedimentos legados `demo*` de agenda e parceiros continuam públicos, incluindo listagem de propostas e mutações editoriais. Também foram confirmadas a ausência de limitação de taxa nas escritas públicas, o fallback vazio para `JWT_SECRET`, a longa duração da sessão atual e o uso de `z.string().url()` sem allowlist explícita de esquema.[6]
+
+| Requisito P0 | Decisão de arquitetura | Critério de aceite verificável |
+|---|---|---|
+| Autorizar operações editoriais | Remover os procedures `demo*` ou protegê-los com `adminProcedure`; o cliente administrativo usa apenas contratos administrativos | Uma chamada anônima de criação, alteração, exclusão, moderação ou listagem completa retorna `FORBIDDEN` ou não encontra a rota |
+| Separar dados públicos e pessoais | Criar DTOs distintos para leitura pública e administrativa | Um teste de serialização pública não encontra campos pessoais de propostas ou usuários |
+| Proteger escritas públicas | Aplicar rate limit por origem e rota, payload máximo por rota e resposta controlada para excesso | Acima do limite configurado, `partners.submit` e `metrics.track` retornam `429` sem gravar registro adicional |
+| Falhar com configuração insegura | Validar segredos e URLs de infraestrutura no boot | Teste de inicialização com segredo vazio falha antes de abrir portas HTTP |
+| Restringir links externos | Aceitar somente `https:` em produção; `http:` apenas sob regra explícita de ambiente local | Schemas rejeitam `javascript:`, `data:` e outros esquemas não aprovados |
+| Exportar CSV de modo seguro | Restringir a administradores e neutralizar valores iniciados por `=`, `+`, `-` ou `@` | Teste de exportação confirma prefixação segura e ausência de PII fora do conjunto autorizado |
+
 ## 2. Ordem de execução
 
 | Etapa | Resultado esperado | Condição para avançar |
 |---|---|---|
-| 0. Preparar staging | Banco, bucket e provedor OIDC de staging isolados | Segredos fora do Git e acesso de migração com privilégio mínimo |
-| 1. Criar schema | Todas as migrations aplicadas no banco novo | Migration auditada e execução repetível em banco vazio |
-| 2. Extrair e normalizar | Arquivos CSV/JSON de trabalho e manifesto de mídia | Contagens, tipos e referências verificados; PII separado |
-| 3. Migrar mídia | Todos os objetos enviados ao novo bucket | Hash, MIME, tamanho, crédito e licença conferidos |
-| 4. Importar conteúdo | Dados editoriais e relações inseridos | Chaves, slugs, fontes e imagens preservados |
-| 5. Configurar identidade | Novo login funcional e usuários vinculados | Nenhum token/sessão antiga copiado; papéis revisados |
-| 6. Validar em staging | Front-end funciona contra a nova API | Testes, contagens e amostras editoriais aprovados |
-| 7. Cortar produção | Nova API passa a receber leituras/escritas | Backup, plano de rollback e janela de mudança aprovados |
+| 0. Fechar gate de segurança | Contratos administrativos, segredos e limites de escrita protegidos | Testes de autorização, PII, URLs e rate limit aprovados |
+| 1. Preparar staging | Banco, bucket e provedor OIDC de staging isolados | Segredos fora do Git e acesso de migração com privilégio mínimo |
+| 2. Criar schema | Todas as migrations aplicadas no banco novo | Migration auditada e execução repetível em banco vazio |
+| 3. Extrair e normalizar | Arquivos CSV/JSON de trabalho e manifesto de mídia | Contagens, tipos e referências verificados; PII separado |
+| 4. Migrar mídia | Todos os objetos enviados ao novo bucket | Hash, MIME, tamanho, crédito e licença conferidos |
+| 5. Importar conteúdo | Dados editoriais e relações inseridos | Chaves, slugs, fontes e imagens preservados |
+| 6. Configurar identidade | Novo login funcional e usuários vinculados | Nenhum token/sessão antiga copiado; papéis revisados |
+| 7. Validar em staging | Front-end funciona contra a nova API | Testes, contagens e amostras editoriais aprovados |
+| 8. Cortar produção | Nova API passa a receber leituras/escritas | Backup, plano de rollback e janela de mudança aprovados |
 
 ## 3. Exportação e importação de banco de dados
 
@@ -42,6 +56,8 @@ Crie um banco de **staging** separado do banco de produção e aplique o schema 
 Além das tabelas existentes, o novo domínio deve incluir as entidades previstas no blueprint: `cities`, `editorial_sources`, `city_places`, `city_place_media`, `city_editorial_highlights`, `city_curation_topics`, `itineraries`, `itinerary_stops`, `place_proximity_relations` e `editorial_audit_logs`. Os dados existentes de destinos gerais não devem ser duplicados automaticamente como lugares de cidade; a primeira carga deve conter somente as referências editoriais que pertencem às cidades-piloto.[2]
 
 Inclua tabelas de controle de migração, por exemplo `migration_runs` e `media_migration_map`. Elas devem registrar apenas IDs técnicos, status, timestamp, checksum e erros sanitizados, nunca conteúdo de sessão, e-mail, telefone ou endereço completo.
+
+Adicione índices para chaves usadas por leitura e migração — ao menos `slug` único, chaves estrangeiras, `published`, `editorialStatus` e campos de ordenação por data — e defina paginação obrigatória para listagens administrativas. A API nova deve traduzir colisões de slug em erro de domínio tratável, não em erro bruto do banco.[6]
 
 ### 3.2 Extrair por conjuntos e preservar a ordem relacional
 
@@ -64,6 +80,8 @@ Uma consulta de contagem é suficiente para a primeira validação. A migração
 ### 3.4 Métricas de uso
 
 Os eventos atuais não guardam texto livre nem dados de conta, mas carregam um identificador de sessão pseudônimo. Para reduzir reidentificação indireta, exporte o histórico somente como agregação diária, por exemplo `data`, `eventName`, `citySlug`, `itemId` e `total`. No novo back-end, reinicie a geração de sessões pseudônimas e documente a política de retenção. Não transporte o valor de `sessionId` para o ambiente novo.
+
+O endpoint novo de coleta deve aceitar somente o enum de eventos e identificadores curtos já definidos, aplicar limite de taxa e usar escrita em lote ou fila quando a demanda crescer. Falha de telemetria não pode bloquear a jornada pública, e o painel administrativo deve continuar protegido por autorização de servidor.[6]
 
 ## 4. Migração das imagens para o storage novo
 
@@ -115,10 +133,10 @@ Mantenha `users` como perfil interno e crie uma relação de identidade externa,
 | `provider` | Nome fixo do provedor OIDC escolhido |
 | `provider_subject` | Valor `sub` do token validado no servidor |
 | `legacy_manus_open_id` | Apenas para vínculo temporário, com acesso administrativo restrito |
-| `linked_at`, `last_login_at` | Auditoria técnica |
+| `linked_at`, `last_login_at`, `session_version` | Auditoria técnica e invalidação de sessões |
 | `role` | Mantido somente no banco e verificado no servidor |
 
-Imponha unicidade em `(provider, provider_subject)`. A API deve validar assinatura, emissor, audiência e expiração do token antes de criar sessão. Papéis administrativos não devem vir de parâmetros do cliente nem de claims não verificadas; a autorização deve ser aplicada em cada procedimento administrativo.[5]
+Imponha unicidade em `(provider, provider_subject)`. A API deve validar assinatura, emissor, audiência e expiração do token antes de criar sessão. Papéis administrativos não devem vir de parâmetros do cliente nem de claims não verificadas; a autorização deve ser aplicada em cada procedimento administrativo.[5] O novo serviço deve limitar a vida da sessão de acordo com o risco, armazenar `session_version` ou registro revogável no servidor e invalidar sessões quando houver troca de papel, logout ou incidente de segurança.[6]
 
 ### 5.2 Fluxo de transição recomendado
 
@@ -145,6 +163,10 @@ As propostas de parceiros contêm dados de contato e devem ser tratadas como um 
 - As páginas de cidade e os patrimônios renderizam com URLs novas; nenhuma URL `/manus-storage/` fica como dependência de produção após o corte.
 - Login novo cria ou vincula apenas a identidade autenticada; uma conta comum não acessa routers administrativos.
 - Propostas de parceiros e dados de usuário não aparecem em logs, respostas públicas, backups compartilhados ou builds front-end.
+- Rotas legadas `demo*` não estão expostas publicamente e nenhum endpoint administrativo é chamado pelo cliente público.
+- Segredo de sessão ausente interrompe o boot; payloads acima do limite e excesso de chamadas públicas recebem erro controlado sem escrita indevida.
+- URLs externas passam por allowlist de esquema; exportações CSV administrativas neutralizam fórmulas e exigem autorização.
+- Consultas administrativas usam paginação e os índices previstos são verificados no plano de execução do banco.
 - A restauração em staging a partir do último backup é testada antes da troca de produção.
 
 ### Janela de corte
@@ -155,12 +177,16 @@ Primeiro migre e valide em staging. Em produção, congele temporariamente as es
 
 | Prioridade | Ação concreta | Responsável sugerido |
 |---|---|---|
+| P0 | Remover/proteger procedures `demo*`, separar DTOs públicos e administrativos e cobrir autorização/PII por teste | Back-end + QA |
+| P0 | Implementar validação fail-fast de segredos, allowlist de URLs, limites de payload e rate limit de escrita pública | Back-end |
 | P0 | Escolher banco, bucket S3 e provedor OIDC do novo ambiente | Responsável técnico do projeto |
 | P0 | Criar staging isolado, secrets e backup testável | Responsável técnico do projeto |
 | P0 | Criar migrations para o domínio de cidades-piloto e tabelas de mídia/identidade | Back-end |
 | P0 | Produzir manifest e script idempotente de migração de mídia | Back-end |
 | P1 | Converter `mvpPilot.ts` em seed editorial com fontes e créditos | Conteúdo + back-end |
 | P1 | Implementar ponte de vinculação de identidade e revisão manual de papéis | Back-end + administrador |
+| P1 | Adicionar paginação, índices, erros de slug tratáveis e exportação CSV protegida | Back-end + QA |
+| P1 | Corrigir contratos de navegação por slug e remover cidade hardcoded de buscas externas | Front-end + back-end |
 | P1 | Integrar front-end por feature flag e executar testes de regressão | Front-end + QA |
 
 ## Referências
@@ -170,3 +196,4 @@ Primeiro migre e valide em staging. Em produção, congele temporariamente as es
 [3]: https://github.com/samuelbackup/bora-piaui/blob/main/server/storage.ts "Bora Piauí — helpers de armazenamento"
 [4]: https://github.com/samuelbackup/bora-piaui/blob/main/server/_core/oauth.ts "Bora Piauí — callback OAuth atual"
 [5]: https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html "OWASP — Authorization Cheat Sheet"
+[6]: ./review-relatorio-backend.md "Bora Piauí — revisão e verificação do Relatório de Análise"

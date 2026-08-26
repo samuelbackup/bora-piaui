@@ -240,3 +240,4 @@
 - [x] Confirmar no domínio externo as imagens e atribuições dos patrimônios materiais.
 - [x] Inventariar banco, imagens e usuários existentes para orientar o reaproveitamento no desenvolvimento do back-end.
 - [x] Definir roteiro seguro de exportação, armazenamento e migração de autenticação para o novo back-end.
+- [x] Revisar o relatório de análise, extrair requisitos de back-end e atualizar o roteiro de migração com itens aproveitáveis.
