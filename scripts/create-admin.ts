@@ -2,7 +2,7 @@ import { randomBytes, scryptSync } from "crypto";
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq } from "drizzle-orm";
 import mysql from "mysql2/promise";
-import { users } from "../drizzle/schema";
+import { users } from "../server/database/schema";
 
 const email = (process.argv[2] ?? "").trim().toLowerCase();
 const password = process.argv[3] ?? "";
