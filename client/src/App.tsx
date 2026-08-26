@@ -13,6 +13,7 @@ import DadosPage from "./pages/DadosPage";
 import DestinationPage from "./pages/DestinationPage";
 import Home from "./pages/Home";
 import ItineraryPage from "./pages/ItineraryPage";
+import LoginPage from "./pages/LoginPage";
 import PatrimoniosPage from "./pages/PatrimoniosPage";
 import PartnersPage from "./pages/PartnersPage";
 import PilotPlacePage from "./pages/PilotPlacePage";
@@ -36,6 +37,7 @@ function Router() {
       <Route path="/dados" component={DadosPage} />
       <Route path="/agenda" component={AgendaPage} />
       <Route path="/parceiros" component={PartnersPage} />
+      <Route path="/login" component={LoginPage} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

@@ -12,7 +12,11 @@ export const OAUTH_STATE_COOKIE = "__Host-oauth_state";
 
 // `state` carries the callback redirect URI (used at token exchange) plus the
 // CSRF nonce. Defined here so the client encoder and server decoder never drift.
-export type OAuthState = { redirectUri: string; nonce?: string };
+export type OAuthState = {
+  redirectUri: string;
+  nonce?: string;
+  redirectTo?: string;
+};
 
 export const encodeOAuthState = (state: OAuthState): string =>
   btoa(JSON.stringify(state));
@@ -28,8 +32,15 @@ export const decodeOAuthState = (state: string): OAuthState => {
     return { redirectUri: "" };
   }
   try {
-    const parsed = JSON.parse(decoded);
-    if (parsed && typeof parsed.redirectUri === "string") return parsed;
+    const parsed = JSON.parse(decoded) as Partial<OAuthState>;
+    if (parsed && typeof parsed.redirectUri === "string") {
+      return {
+        redirectUri: parsed.redirectUri,
+        nonce: typeof parsed.nonce === "string" ? parsed.nonce : undefined,
+        redirectTo:
+          typeof parsed.redirectTo === "string" ? parsed.redirectTo : undefined,
+      };
+    }
   } catch {
     // Legacy links: `state` was a bare base64(redirectUri) with no nonce.
   }

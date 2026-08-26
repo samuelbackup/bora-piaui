@@ -5,7 +5,9 @@ import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { registerStorageProxy } from "./storageProxy";
+import { sql } from "drizzle-orm";
 import { appRouter } from "../routers";
+import { getDb } from "../db";
 import { createContext } from "./context";
 import { validateEnv } from "./env";
 import { serveStatic, setupVite } from "./vite";
@@ -34,8 +36,25 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
   // Configure body parser with larger size limit for file uploads
-  app.use(express.json({ limit: "12mb" }));
-  app.use(express.urlencoded({ limit: "12mb", extended: true }));
+  app.use(express.json({ limit: "50mb" }));
+  app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  app.get("/healthz", async (_req, res) => {
+    const database = await getDb();
+    let databaseStatus: "up" | "down" | "unconfigured" = "unconfigured";
+    if (database) {
+      try {
+        await database.execute(sql`SELECT 1`);
+        databaseStatus = "up";
+      } catch {
+        databaseStatus = "down";
+      }
+    }
+    res.json({
+      ok: true,
+      database: databaseStatus,
+      env: process.env.NODE_ENV ?? "development",
+    });
+  });
   registerStorageProxy(app);
   registerOAuthRoutes(app);
   // tRPC API

@@ -442,6 +442,13 @@ export default function Home() {
               >
                 Painel demonstrativo
               </Link>
+              <Link
+                href="/login"
+                onClick={() => setMenuOpen(false)}
+                className="tap rounded-xl px-3 py-3 text-left text-sm font-bold hover:bg-[#EDE0C4] focus-visible:bg-[#EDE0C4]"
+              >
+                Entrar / Administração
+              </Link>
               <button
                 onClick={() => {
                   setPlannerOpen(true);

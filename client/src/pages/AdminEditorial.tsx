@@ -132,12 +132,20 @@ export default function AdminEditorial() {
             de administrador para gerenciar a Agenda e as propostas de
             parceiros.
           </p>
-          <Link
-            href="/"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#314027] px-4 py-2 text-sm font-bold text-[#F5ECD8] hover:bg-[#26311E]"
-          >
-            Voltar ao atlas público
-          </Link>
+          <div className="mt-5 flex flex-wrap justify-center gap-2">
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-2 rounded-full bg-[#B9572D] px-4 py-2 text-sm font-bold text-white hover:bg-[#A84626]"
+            >
+              Fazer login
+            </Link>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 rounded-full border border-[#314027]/25 px-4 py-2 text-sm font-bold text-[#314027] hover:bg-[#EDE0C4]"
+            >
+              Voltar ao atlas público
+            </Link>
+          </div>
         </div>
       </div>
     );
