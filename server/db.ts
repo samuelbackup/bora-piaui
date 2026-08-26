@@ -25,7 +25,18 @@ let _db: ReturnType<typeof drizzle> | null = null;
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      const url = process.env.DATABASE_URL;
+      const needsSsl = /aivencloud\.com|tidbcloud\.com|sslmode=required|ssl=true/i.test(url);
+      if (needsSsl) {
+        const mysql = await import("mysql2/promise");
+        const pool = mysql.default.createPool({
+          uri: url,
+          ssl: { rejectUnauthorized: false },
+        });
+        _db = drizzle(pool);
+      } else {
+        _db = drizzle(url);
+      }
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
