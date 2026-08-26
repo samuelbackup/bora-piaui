@@ -23,7 +23,9 @@ export function PiauiMap({ places, activePlaceId, onSelect }: PiauiMapProps) {
   const mapRef = useRef<google.maps.Map | null>(null);
   const markers = useRef(new Map<string, { marker: google.maps.Marker; position: google.maps.LatLngLiteral }>());
   const onSelectRef = useRef(onSelect);
+  const runIdRef = useRef(0);
   const [ready, setReady] = useState(false);
+  const [mapFailed, setMapFailed] = useState(false);
   const activePlace = activePlaceId ? places.find((place) => place.id === activePlaceId) ?? null : null;
 
   useEffect(() => {
@@ -37,6 +39,7 @@ export function PiauiMap({ places, activePlaceId, onSelect }: PiauiMapProps) {
 
   const createMarkers = useCallback(
     async (map: google.maps.Map) => {
+      const runId = ++runIdRef.current;
       setReady(false);
       clearMarkers();
       const geocoder = new google.maps.Geocoder();
@@ -52,6 +55,8 @@ export function PiauiMap({ places, activePlaceId, onSelect }: PiauiMapProps) {
             }),
         ),
       );
+
+      if (runId !== runIdRef.current) return;
 
       results.forEach(({ place, position }, index) => {
         if (!position) return;
@@ -99,11 +104,12 @@ export function PiauiMap({ places, activePlaceId, onSelect }: PiauiMapProps) {
   }, [activePlaceId, ready]);
 
   return (
-    <div role="region" aria-label={`Mapa com ${places.length} ${places.length === 1 ? "destino" : "destinos"}`} aria-busy={!ready} className="relative overflow-hidden rounded-[1.8rem] border border-[#3C482D]/15 bg-[#E6D4AA] shadow-[0_18px_55px_rgba(59,70,42,.14)]">
+    <div role="region" aria-label={`Mapa com ${places.length} ${places.length === 1 ? "destino" : "destinos"}`} aria-busy={!ready && !mapFailed} className="relative overflow-hidden rounded-[1.8rem] border border-[#3C482D]/15 bg-[#E6D4AA] shadow-[0_18px_55px_rgba(59,70,42,.14)]">
       <MapView
         initialCenter={{ lat: -6.45, lng: -42.75 }}
         initialZoom={6}
         className="h-[440px] sm:h-[560px]"
+        onStatusChange={status => setMapFailed(status === "error")}
         onMapReady={(map) => {
           mapRef.current = map;
           map.setOptions({
@@ -119,7 +125,7 @@ export function PiauiMap({ places, activePlaceId, onSelect }: PiauiMapProps) {
           void createMarkers(map);
         }}
       />
-      {!ready && (
+      {!ready && !mapFailed && (
         <div className="pointer-events-none absolute inset-0 overflow-hidden bg-[#E6D4AA]">
           <div className="absolute -left-[8%] top-[22%] h-28 w-[122%] rotate-[-10deg] rounded-[50%] border-y-[4px] border-[#9BC5C7]/75" />
           <div className="absolute -left-[6%] top-[49%] h-44 w-[118%] rotate-[8deg] rounded-[50%] border-t-[3px] border-dashed border-[#B9572D]/55" />

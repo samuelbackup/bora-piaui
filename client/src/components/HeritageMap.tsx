@@ -20,7 +20,9 @@ export function HeritageMap({ places, activePlaceId, onSelect }: HeritageMapProp
   const mapRef = useRef<google.maps.Map | null>(null);
   const markers = useRef(new Map<string, { marker: google.maps.Marker; position: google.maps.LatLngLiteral }>());
   const onSelectRef = useRef(onSelect);
+  const runIdRef = useRef(0);
   const [ready, setReady] = useState(false);
+  const [mapFailed, setMapFailed] = useState(false);
 
   useEffect(() => {
     onSelectRef.current = onSelect;
@@ -32,6 +34,7 @@ export function HeritageMap({ places, activePlaceId, onSelect }: HeritageMapProp
   }, []);
 
   const createMarkers = useCallback(async (map: google.maps.Map) => {
+    const runId = ++runIdRef.current;
     setReady(false);
     clearMarkers();
     const geocoder = new google.maps.Geocoder();
@@ -44,6 +47,8 @@ export function HeritageMap({ places, activePlaceId, onSelect }: HeritageMapProp
         });
       })),
     );
+
+    if (runId !== runIdRef.current) return;
 
     resolved.forEach(({ place, position }, index) => {
       if (!position) return;
@@ -84,6 +89,7 @@ export function HeritageMap({ places, activePlaceId, onSelect }: HeritageMapProp
         initialCenter={{ lat: -7.0, lng: -42.1 }}
         initialZoom={6}
         className="h-[410px] sm:h-[540px]"
+        onStatusChange={status => setMapFailed(status === "error")}
         onMapReady={(map) => {
           mapRef.current = map;
           map.setOptions({
@@ -101,7 +107,7 @@ export function HeritageMap({ places, activePlaceId, onSelect }: HeritageMapProp
           void createMarkers(map);
         }}
       />
-      {!ready && <div className="pointer-events-none absolute inset-0 bg-[#E6D4AA]"><div className="absolute -left-[10%] top-[30%] h-32 w-[122%] rotate-[-9deg] rounded-[50%] border-y-[4px] border-[#9BC5C7]/75" /><div className="absolute inset-0 opacity-40" style={{ backgroundImage: "linear-gradient(rgba(86,107,55,.2) 1px, transparent 1px), linear-gradient(90deg, rgba(86,107,55,.2) 1px, transparent 1px)", backgroundSize: "34px 34px" }} /></div>}
+      {!ready && !mapFailed && <div className="pointer-events-none absolute inset-0 bg-[#E6D4AA]"><div className="absolute -left-[10%] top-[30%] h-32 w-[122%] rotate-[-9deg] rounded-[50%] border-y-[4px] border-[#9BC5C7]/75" /><div className="absolute inset-0 opacity-40" style={{ backgroundImage: "linear-gradient(rgba(86,107,55,.2) 1px, transparent 1px), linear-gradient(90deg, rgba(86,107,55,.2) 1px, transparent 1px)", backgroundSize: "34px 34px" }} /></div>}
       <div className="pointer-events-none absolute left-4 top-4 flex items-center gap-2 rounded-full bg-[#FFFDF6]/95 px-3 py-2 text-xs font-extrabold text-[#3C482D] shadow-sm backdrop-blur">{ready ? <MapPin className="h-4 w-4 text-[#B9572D]" /> : <LoaderCircle className="h-4 w-4 animate-spin text-[#B9572D]" />}{ready ? `${places.length} lugares históricos no mapa` : "Localizando patrimônios"}</div>
     </div>
   );

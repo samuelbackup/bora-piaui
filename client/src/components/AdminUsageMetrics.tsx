@@ -1,9 +1,11 @@
 import { createPortal } from "react-dom";
 import { BarChart3, Loader2, ShieldCheck } from "lucide-react";
+import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 
 export function AdminUsageMetrics() {
-  const active = typeof window !== "undefined" && window.location.pathname === "/admin/editorial";
+  const [location] = useLocation();
+  const active = location === "/admin/editorial";
   const { data, isLoading, isError } = trpc.metrics.summary.useQuery(undefined, { enabled: active });
 
   if (!active) return null;
