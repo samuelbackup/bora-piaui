@@ -15,7 +15,7 @@ import {
   type InsertCurationTopic,
   type InsertEditorialHighlight,
   type InsertItinerary,
-} from "../../drizzle/schema";
+} from "../drizzle/schema";
 import {
   cityInsertRowSchema,
   curatedBusinessInsertRowSchema,
