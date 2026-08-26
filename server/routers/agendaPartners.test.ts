@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { culturalEventFields, partnerSubmissionFields } from "./agendaPartners";
 
 const validEvent = {
@@ -27,6 +27,23 @@ describe("camada editorial de agenda e parceiros", () => {
 
   it("rejeita evento sem URL de fonte", () => {
     expect(() => culturalEventFields.parse({ ...validEvent, sourceUrl: "sem-fonte" })).toThrow();
+  });
+
+  it("rejeita fontes com esquemas perigosos em qualquer ambiente", () => {
+    expect(() => culturalEventFields.parse({ ...validEvent, sourceUrl: "javascript:alert(1)" })).toThrow();
+    expect(() => culturalEventFields.parse({ ...validEvent, sourceUrl: "data:text/html;base64,PGI+" })).toThrow();
+  });
+
+  it("aceita http apenas fora de produção", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    expect(() => culturalEventFields.parse({ ...validEvent, sourceUrl: "http://www.gov.br/" })).toThrow();
+
+    vi.stubEnv("NODE_ENV", "development");
+    expect(culturalEventFields.parse({ ...validEvent, sourceUrl: "http://www.gov.br/" }).sourceUrl).toBe("http://www.gov.br/");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it("aceita proposta de parceiro e mantém o plano escolhido", () => {

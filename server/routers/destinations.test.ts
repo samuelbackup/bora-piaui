@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { destinationFields } from "./destinations";
 
 const validDestination = {
@@ -29,5 +29,22 @@ describe("destinationFields", () => {
 
   it("rejeita URLs operacionais inválidas", () => {
     expect(() => destinationFields.parse({ ...validDestination, routeUrl: "rota-local" })).toThrow();
+  });
+
+  it("rejeita esquemas perigosos nas URLs externas", () => {
+    expect(() => destinationFields.parse({ ...validDestination, sourceUrl: "javascript:alert(1)" })).toThrow();
+    expect(() => destinationFields.parse({ ...validDestination, routeUrl: "data:text/html;base64,PGI+" })).toThrow();
+  });
+
+  it("aceita http apenas fora de produção", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    expect(() => destinationFields.parse({ ...validDestination, routeUrl: "http://maps.google.com/" })).toThrow();
+
+    vi.stubEnv("NODE_ENV", "development");
+    expect(destinationFields.parse({ ...validDestination, routeUrl: "http://maps.google.com/" }).routeUrl).toBe("http://maps.google.com/");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 });

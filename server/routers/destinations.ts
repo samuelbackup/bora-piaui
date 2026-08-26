@@ -11,6 +11,7 @@ import {
   updateDestination,
 } from "../db";
 import { adminProcedure, publicProcedure, router } from "../_core/trpc";
+import { externalUrl } from "../_core/url";
 import { storagePut } from "../storage";
 
 const optionalText = (max: number) => z.string().trim().max(max).nullable().optional();
@@ -24,9 +25,9 @@ export const destinationFields = z.object({
   summary: z.string().trim().min(10).max(600),
   description: z.string().trim().min(30).max(5000),
   mapQuery: z.string().trim().min(3).max(255),
-  routeUrl: z.string().url().max(1024),
+  routeUrl: externalUrl(1024),
   sourceName: z.string().trim().min(3).max(255),
-  sourceUrl: z.string().url().max(1024),
+  sourceUrl: externalUrl(1024),
   sourceYear: z.string().trim().min(4).max(48),
   operationalStatus: z.enum(["confirmado", "verificar", "indisponivel"]),
   hours: optionalText(1000),
@@ -35,7 +36,7 @@ export const destinationFields = z.object({
   contactInfo: optionalText(1000),
   visitNotes: optionalText(2000),
   operationalSource: optionalText(255),
-  operationalSourceUrl: z.string().url().max(1024).nullable().optional(),
+  operationalSourceUrl: externalUrl(1024).nullable().optional(),
   lastVerifiedAt: z.string().datetime().nullable().optional(),
   published: z.boolean(),
 });
