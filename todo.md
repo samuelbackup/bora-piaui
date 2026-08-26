@@ -241,3 +241,4 @@
 - [x] Inventariar banco, imagens e usuários existentes para orientar o reaproveitamento no desenvolvimento do back-end.
 - [x] Definir roteiro seguro de exportação, armazenamento e migração de autenticação para o novo back-end.
 - [x] Revisar o relatório de análise, extrair requisitos de back-end e atualizar o roteiro de migração com itens aproveitáveis.
+- [x] Sincronizar no GitHub a revisão comparativa do relatório e o roteiro de migração atualizado.
