@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 const partnersPageSource = readFileSync(
   new URL("./PartnersPage.tsx", import.meta.url),
   "utf8"
-);
+).replace(/\s+/g, " ");
 
 describe("plano Mais visibilidade", () => {
   it("mantém a proposta editorial sem expor preço ou cobrança", () => {
