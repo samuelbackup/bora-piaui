@@ -23,6 +23,8 @@ import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
+const createDrizzle = drizzle as (client: unknown) => NonNullable<typeof _db>;
+
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
@@ -33,7 +35,7 @@ export async function getDb() {
           uri: url,
           ssl: { rejectUnauthorized: false },
         });
-        _db = drizzle(pool);
+        _db = createDrizzle(pool);
       } else {
         _db = drizzle(url);
       }
