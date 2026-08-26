@@ -13,8 +13,18 @@ import {
   updatePartnerSubmission,
 } from "../db";
 import { adminProcedure, publicProcedure, router } from "../_core/trpc";
+import { enforceRateLimit } from "../_core/rateLimit";
 
 const optionalText = (max: number) => z.string().trim().max(max).nullable().optional();
+const safeUrl = (max: number) =>
+  z.string().trim().url().max(max).refine(
+    value => /^https?:\/\//i.test(value),
+    "Use uma URL começando com http:// ou https://.",
+  );
+
+function isDuplicateEntryError(error: unknown) {
+  return typeof error === "object" && error !== null && "code" in error && (error as { code?: string }).code === "ER_DUP_ENTRY";
+}
 
 export const culturalEventFields = z.object({
   slug: z.string().trim().min(3).max(140).regex(/^[a-z0-9-]+$/, "Use apenas letras minúsculas, números e hífens."),
@@ -26,7 +36,7 @@ export const culturalEventFields = z.object({
   venue: z.string().trim().min(3).max(220),
   summary: z.string().trim().min(20).max(1500),
   sourceName: z.string().trim().min(3).max(255),
-  sourceUrl: z.string().url().max(1024),
+  sourceUrl: safeUrl(1024),
   confirmationStatus: z.enum(["confirmado", "verificar", "cancelado"]),
   published: z.boolean(),
 });
@@ -55,7 +65,15 @@ export const agendaRouter = router({
   list: publicProcedure.query(() => listPublishedCulturalEvents()),
   adminList: adminProcedure.query(() => listAllCulturalEvents()),
   create: adminProcedure.input(culturalEventFields).mutation(async ({ input }) => {
-    const event = await createCulturalEvent(normalizeCulturalEvent(input));
+    let event;
+    try {
+      event = await createCulturalEvent(normalizeCulturalEvent(input));
+    } catch (error) {
+      if (isDuplicateEntryError(error)) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Já existe um evento com esse identificador (slug). Ajuste o título para gerar outro." });
+      }
+      throw error;
+    }
     if (!event) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Não foi possível criar o evento." });
     return event;
   }),
@@ -79,7 +97,8 @@ export const agendaRouter = router({
 });
 
 export const partnersRouter = router({
-  submit: publicProcedure.input(partnerSubmissionFields).mutation(async ({ input }) => {
+  submit: publicProcedure.input(partnerSubmissionFields).mutation(async ({ input, ctx }) => {
+    enforceRateLimit(ctx.req, "partners.submit", { max: 5, windowMs: 10 * 60_000 });
     const submission = await createPartnerSubmission({
       ...input,
       openingHours: input.openingHours ?? null,

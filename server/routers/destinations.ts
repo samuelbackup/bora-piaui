@@ -14,6 +14,15 @@ import { adminProcedure, publicProcedure, router } from "../_core/trpc";
 import { storagePut } from "../storage";
 
 const optionalText = (max: number) => z.string().trim().max(max).nullable().optional();
+const safeUrl = (max: number) =>
+  z.string().trim().url().max(max).refine(
+    value => /^https?:\/\//i.test(value),
+    "Use uma URL começando com http:// ou https://.",
+  );
+
+function isDuplicateEntryError(error: unknown) {
+  return typeof error === "object" && error !== null && "code" in error && (error as { code?: string }).code === "ER_DUP_ENTRY";
+}
 
 export const destinationFields = z.object({
   slug: z.string().trim().min(3).max(120).regex(/^[a-z0-9-]+$/, "Use apenas letras minúsculas, números e hífens."),
@@ -24,9 +33,9 @@ export const destinationFields = z.object({
   summary: z.string().trim().min(10).max(600),
   description: z.string().trim().min(30).max(5000),
   mapQuery: z.string().trim().min(3).max(255),
-  routeUrl: z.string().url().max(1024),
+  routeUrl: safeUrl(1024),
   sourceName: z.string().trim().min(3).max(255),
-  sourceUrl: z.string().url().max(1024),
+  sourceUrl: safeUrl(1024),
   sourceYear: z.string().trim().min(4).max(48),
   operationalStatus: z.enum(["confirmado", "verificar", "indisponivel"]),
   hours: optionalText(1000),
@@ -35,7 +44,7 @@ export const destinationFields = z.object({
   contactInfo: optionalText(1000),
   visitNotes: optionalText(2000),
   operationalSource: optionalText(255),
-  operationalSourceUrl: z.string().url().max(1024).nullable().optional(),
+  operationalSourceUrl: safeUrl(1024).nullable().optional(),
   lastVerifiedAt: z.string().datetime().nullable().optional(),
   published: z.boolean(),
 });
@@ -74,7 +83,15 @@ export const destinationsRouter = router({
     return destination;
   }),
   create: adminProcedure.input(destinationFields).mutation(async ({ input }) => {
-    const destination = await createDestination(normalizeDestination(input));
+    let destination;
+    try {
+      destination = await createDestination(normalizeDestination(input));
+    } catch (error) {
+      if (isDuplicateEntryError(error)) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Já existe um destino com esse slug. Escolha outro identificador." });
+      }
+      throw error;
+    }
     if (!destination) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Não foi possível criar o destino." });
     return destination;
   }),

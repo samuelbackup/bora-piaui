@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, isNotNull, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNotNull, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   CulturalEvent,
@@ -57,6 +57,15 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   await db.insert(users).values(values).onDuplicateKeyUpdate({ set: updateSet });
 }
 
+export async function invalidateUserSessions(openId: string): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  await db
+    .update(users)
+    .set({ sessionsInvalidatedAt: new Date() })
+    .where(eq(users.openId, openId));
+}
+
 export async function getUserByOpenId(openId: string) {
   const db = await getDb();
   if (!db) return undefined;
@@ -70,7 +79,11 @@ async function attachImages(rows: Destination[]): Promise<DestinationWithImages[
   const db = await getDb();
   if (!db) throw new Error("Banco de dados indisponível");
   if (!rows.length) return [];
-  const imageRows = await db.select().from(destinationImages).orderBy(asc(destinationImages.sortOrder), asc(destinationImages.id));
+  const imageRows = await db
+    .select()
+    .from(destinationImages)
+    .where(inArray(destinationImages.destinationId, rows.map(row => row.id)))
+    .orderBy(asc(destinationImages.sortOrder), asc(destinationImages.id));
   return rows.map(destination => ({
     ...destination,
     images: imageRows.filter(image => image.destinationId === destination.id),
@@ -80,14 +93,14 @@ async function attachImages(rows: Destination[]): Promise<DestinationWithImages[
 export async function listPublishedDestinations() {
   const db = await getDb();
   if (!db) throw new Error("Banco de dados indisponível");
-  const rows = await db.select().from(destinations).where(eq(destinations.published, true)).orderBy(asc(destinations.title));
+  const rows = await db.select().from(destinations).where(eq(destinations.published, true)).orderBy(asc(destinations.title)).limit(300);
   return attachImages(rows);
 }
 
 export async function listAllDestinations() {
   const db = await getDb();
   if (!db) throw new Error("Banco de dados indisponível");
-  const rows = await db.select().from(destinations).orderBy(desc(destinations.updatedAt));
+  const rows = await db.select().from(destinations).orderBy(desc(destinations.updatedAt)).limit(500);
   return attachImages(rows);
 }
 
@@ -147,13 +160,14 @@ export async function listPublishedCulturalEvents() {
     .select()
     .from(culturalEvents)
     .where(and(eq(culturalEvents.published, true), eq(culturalEvents.confirmationStatus, "confirmado")))
-    .orderBy(asc(culturalEvents.startsAt));
+    .orderBy(asc(culturalEvents.startsAt))
+    .limit(300);
 }
 
 export async function listAllCulturalEvents() {
   const db = await getDb();
   if (!db) throw new Error("Banco de dados indisponível");
-  return db.select().from(culturalEvents).orderBy(desc(culturalEvents.updatedAt));
+  return db.select().from(culturalEvents).orderBy(desc(culturalEvents.updatedAt)).limit(500);
 }
 
 export async function getCulturalEventById(id: number) {
@@ -204,7 +218,7 @@ export async function getPartnerSubmissionById(id: number) {
 export async function listPartnerSubmissions() {
   const db = await getDb();
   if (!db) throw new Error("Banco de dados indisponível");
-  return db.select().from(partnerSubmissions).orderBy(desc(partnerSubmissions.updatedAt));
+  return db.select().from(partnerSubmissions).orderBy(desc(partnerSubmissions.updatedAt)).limit(500);
 }
 
 export async function updatePartnerSubmission(id: number, data: Partial<InsertPartnerSubmission>) {
