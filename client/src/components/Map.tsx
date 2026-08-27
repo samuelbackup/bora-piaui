@@ -93,6 +93,18 @@ const FORGE_BASE_URL =
 const MAPS_PROXY_URL = `${FORGE_BASE_URL}/v1/maps/proxy`;
 let mapScriptPromise: Promise<void> | null = null;
 
+export function canInitializeMap({
+  isMounted,
+  hasMap,
+  container,
+}: {
+  isMounted: boolean;
+  hasMap: boolean;
+  container: HTMLDivElement | null;
+}): boolean {
+  return isMounted && !hasMap && container !== null;
+}
+
 function loadMapScript(): Promise<void> {
   if (window.google?.maps) return Promise.resolve();
   if (mapScriptPromise) return mapScriptPromise;
@@ -132,17 +144,28 @@ export function MapView({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<google.maps.Map | null>(null);
 
-  const init = usePersistFn(async () => {
+  const init = usePersistFn(async (isMounted: () => boolean) => {
     try {
       await loadMapScript();
     } catch {
       return;
     }
-    if (!mapContainer.current) {
-      console.error("Map container not found");
+    const container = mapContainer.current;
+    if (
+      !canInitializeMap({
+        isMounted: isMounted(),
+        hasMap: map.current !== null,
+        container,
+      }) ||
+      !container
+    ) {
       return;
     }
-    map.current = new window.google.maps.Map(mapContainer.current, {
+
+    const maps = window.google?.maps;
+    if (!maps) return;
+
+    map.current = new maps.Map(container, {
       zoom: initialZoom,
       center: initialCenter,
       // O seletor padrão inclui a opção “Terreno” e pode permanecer visível
@@ -158,7 +181,12 @@ export function MapView({
   });
 
   useEffect(() => {
-    init();
+    let isMounted = true;
+    void init(() => isMounted);
+
+    return () => {
+      isMounted = false;
+    };
   }, [init]);
 
   return (

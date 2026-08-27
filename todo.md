@@ -245,3 +245,4 @@
 - [x] Sincronizar as três correções de segurança da branch principal no ambiente de produção.
 - [x] Aplicar a migração de sessão `0003_add_sessions_invalidated_at.sql` no banco de produção.
 - [x] Configurar e validar `SESSION_JWT_SECRET` no ambiente de produção, mantendo compatibilidade segura com o segredo interno da plataforma.
+- [x] Corrigir a inicialização do mapa na seção Explorar quando o contêiner ainda não estiver disponível.
