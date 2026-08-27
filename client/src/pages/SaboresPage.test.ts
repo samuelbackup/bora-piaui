@@ -6,12 +6,12 @@ describe("filtro regional de sabores", () => {
     expect(filterGallery("Teresina").map((item) => item.title)).toEqual(["Bomba"]);
   });
 
-  it("mantém os dois recortes do interior e todos os itens sem filtro", () => {
-    expect(filterGallery("Interior e sertões")).toHaveLength(2);
-    expect(filterGallery("Todos")).toHaveLength(4);
+  it("mantém somente a Paçoca de carne de sol no recorte do interior e três itens no total", () => {
+    expect(filterGallery("Interior e sertões").map((item) => item.title)).toEqual(["Paçoca de carne de sol"]);
+    expect(filterGallery("Todos")).toHaveLength(3);
   });
 
-  it("mantém fontes públicas distintas para Cajuína, Maria Isabel e Paçoca de carne de sol", () => {
+  it("mantém as fontes verificadas e deixa Maria Isabel fora da galeria", () => {
     const cajuinaStory = stories.find((item) => item.title === "Cajuína");
     const cajuinaGallery = gallery.find((item) => item.title === "Cajuína");
     const mariaIsabel = gallery.find((item) => item.title === "Maria Isabel");
@@ -21,7 +21,7 @@ describe("filtro regional de sabores", () => {
     expect(cajuinaStory?.source).toContain("INPI");
     expect(cajuinaGallery?.url).toBe(cajuinaStory?.url);
     expect(cajuinaGallery?.kind).not.toContain("Iphan");
-    expect(mariaIsabel).toMatchObject({ source: "Alepi · Lei nº 8.279/2024", url: "https://sapl.al.pi.leg.br/norma/5996" });
+    expect(mariaIsabel).toBeUndefined();
     expect(pacoca).toMatchObject({ source: "Rede Clube · Receitas do Piauí", url: "https://redeglobo.globo.com/pi/redeclube/receitas-do-piaui/noticia/descubra-o-segredo-da-tradicional-receita-de-pacoca-com-carne-de-sol.ghtml" });
   });
 });

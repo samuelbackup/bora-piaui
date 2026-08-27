@@ -248,3 +248,5 @@
 - [x] Corrigir a inicialização do mapa na seção Explorar quando o contêiner ainda não estiver disponível.
 - [x] Separar a referência da Cajuína em Sabores da referência patrimonial e preservar o link do Iphan em Patrimônios Imateriais.
 - [x] Adicionar referências externas verificadas para Maria Isabel e Paçoca de carne de sol no mesmo padrão do cartão Bomba.
+- [x] Retirar a referência e o link da Maria Isabel por não haver base editorial suficientemente confirmada para o cartão.
+- [x] Retirar integralmente o cartão Maria Isabel da galeria enquanto não houver fonte e crédito de imagem verificáveis.
