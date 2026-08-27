@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { material } from "./PatrimoniosPage";
+import { immaterial, material } from "./PatrimoniosPage";
 
 describe("imagens dos patrimônios materiais", () => {
   it("mantém uma imagem licenciada, crédito e fonte para cada cartão", () => {
@@ -12,6 +12,15 @@ describe("imagens dos patrimônios materiais", () => {
       expect(item.image.license).toMatch(/^CC BY/);
       expect(item.image.licenseUrl).toContain("creativecommons.org");
       expect(item.image.sourceUrl).toContain("commons.wikimedia.org");
+    });
+  });
+});
+
+describe("Cajuína em patrimônios imateriais", () => {
+  it("preserva a referência atual do Iphan, independente da curadoria de Sabores", () => {
+    expect(immaterial.find((item) => item.title.startsWith("Cajuína"))).toMatchObject({
+      source: "Iphan · Patrimônio Imaterial",
+      url: "https://www.gov.br/iphan/pt-br/superintendencias/piaui/patrimonio-imaterial",
     });
   });
 });

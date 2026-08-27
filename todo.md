@@ -246,3 +246,5 @@
 - [x] Aplicar a migração de sessão `0003_add_sessions_invalidated_at.sql` no banco de produção.
 - [x] Configurar e validar `SESSION_JWT_SECRET` no ambiente de produção, mantendo compatibilidade segura com o segredo interno da plataforma.
 - [x] Corrigir a inicialização do mapa na seção Explorar quando o contêiner ainda não estiver disponível.
+- [x] Separar a referência da Cajuína em Sabores da referência patrimonial e preservar o link do Iphan em Patrimônios Imateriais.
+- [x] Adicionar referências externas verificadas para Maria Isabel e Paçoca de carne de sol no mesmo padrão do cartão Bomba.
