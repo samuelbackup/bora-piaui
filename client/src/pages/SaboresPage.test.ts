@@ -6,12 +6,12 @@ describe("filtro regional de sabores", () => {
     expect(filterGallery("Teresina").map((item) => item.title)).toEqual(["Bomba"]);
   });
 
-  it("mantém somente a Paçoca de carne de sol no recorte do interior e três itens no total", () => {
-    expect(filterGallery("Interior e sertões").map((item) => item.title)).toEqual(["Paçoca de carne de sol"]);
-    expect(filterGallery("Todos")).toHaveLength(3);
+  it("restaura Maria Isabel no recorte do interior e mantém quatro itens no total", () => {
+    expect(filterGallery("Interior e sertões").map((item) => item.title)).toEqual(["Maria Isabel", "Paçoca de carne de sol"]);
+    expect(filterGallery("Todos")).toHaveLength(4);
   });
 
-  it("mantém as fontes verificadas e deixa Maria Isabel fora da galeria", () => {
+  it("mantém as fontes verificadas e exibe Maria Isabel sem fonte ou narrativa factual", () => {
     const cajuinaStory = stories.find((item) => item.title === "Cajuína");
     const cajuinaGallery = gallery.find((item) => item.title === "Cajuína");
     const mariaIsabel = gallery.find((item) => item.title === "Maria Isabel");
@@ -21,7 +21,7 @@ describe("filtro regional de sabores", () => {
     expect(cajuinaStory?.source).toContain("INPI");
     expect(cajuinaGallery?.url).toBe(cajuinaStory?.url);
     expect(cajuinaGallery?.kind).not.toContain("Iphan");
-    expect(mariaIsabel).toBeUndefined();
+    expect(mariaIsabel).toMatchObject({ kind: "Referência visual", description: "", imageCredit: "", source: null, url: null });
     expect(pacoca).toMatchObject({ source: "Rede Clube · Receitas do Piauí", url: "https://redeglobo.globo.com/pi/redeclube/receitas-do-piaui/noticia/descubra-o-segredo-da-tradicional-receita-de-pacoca-com-carne-de-sol.ghtml" });
   });
 });
