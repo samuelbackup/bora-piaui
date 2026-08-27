@@ -6,13 +6,14 @@
 dist/
 build/
 *.dist
+.vite/
+
+# Platform/editor debug artifacts
+.manus-logs/
 
 # Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env*
+!.env.example
 
 # IDE and editor files
 .vscode/

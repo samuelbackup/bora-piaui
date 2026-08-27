@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { ArrowUpRight, CalendarDays, Check, Eye, Handshake, ImagePlus, Loader2, Map, Plus, Save, Trash2 } from "lucide-react";
+import { ArrowUpRight, Check, Eye, Handshake, ImagePlus, Loader2, Map, Plus, Save, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Link } from "wouter";
@@ -66,7 +66,7 @@ export default function AdminDestinations() {
 
   const togglePublished = () => {
     if (!selected) return;
-    const published = !Boolean(selected.published);
+    const published = !selected.published;
     setItems((current) => (current ?? []).map((item) => item.id === selected.id ? { ...item, published } : item));
     setForm((current) => ({ ...current, published }));
     toast.success(published ? "Publicação simulada." : "Despublicação simulada.");

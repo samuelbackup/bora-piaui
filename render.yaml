@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: bora-piaui-api
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npx pnpm@10.15.1 install --frozen-lockfile && npx pnpm@10.15.1 vite build && npx pnpm@10.15.1 exec esbuild server/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+    startCommand: node dist/index.js
+    healthCheckPath: /api/healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_JWT_SECRET
+        generateValue: true
+      - key: BUILT_IN_FORGE_API_URL
+        sync: false
+      - key: BUILT_IN_FORGE_API_KEY
+        sync: false
+      - key: OWNER_OPEN_ID
+        sync: false

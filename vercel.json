@@ -4,6 +4,14 @@
   "outputDirectory": "dist/public",
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "https://bora-piaui-api.onrender.com/api/:path*"
+    },
+    {
+      "source": "/manus-storage/:path*",
+      "destination": "https://bora-piaui-api.onrender.com/manus-storage/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

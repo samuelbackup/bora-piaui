@@ -1,7 +1,7 @@
 import { and, asc, desc, eq, inArray, isNotNull, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
+import mysql from "mysql2/promise";
 import {
-  CulturalEvent,
   Destination,
   DestinationImage,
   culturalEvents,
@@ -12,20 +12,31 @@ import {
   InsertDestinationImage,
   InsertPartnerSubmission,
   InsertUser,
-  PartnerSubmission,
   partnerSubmissions,
   InsertUsageEvent,
   usageEvents,
   users,
-} from "../drizzle/schema";
+} from "./database/schema";
 import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
+const createDrizzle = drizzle as (client: unknown) => NonNullable<typeof _db>;
+
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      const url = process.env.DATABASE_URL;
+      const needsSsl = /aivencloud\.com|tidbcloud\.com|sslmode=required|ssl=true/i.test(url);
+      if (needsSsl) {
+        const pool = mysql.createPool({
+          uri: url,
+          ssl: { rejectUnauthorized: false },
+        });
+        _db = createDrizzle(pool);
+      } else {
+        _db = drizzle(url);
+      }
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
@@ -70,6 +81,13 @@ export async function getUserByOpenId(openId: string) {
   const db = await getDb();
   if (!db) return undefined;
   const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
+  return result[0];
+}
+
+export async function getUserByEmail(email: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(users).where(eq(users.email, email)).limit(1);
   return result[0];
 }
 
