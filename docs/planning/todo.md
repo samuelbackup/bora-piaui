@@ -251,3 +251,4 @@
 - [x] Retirar a referência e o link da Maria Isabel por não haver base editorial suficientemente confirmada para o cartão.
 - [x] Retirar integralmente o cartão Maria Isabel da galeria enquanto não houver fonte e crédito de imagem verificáveis.
 - [x] Restaurar Maria Isabel como referência visual sem fonte, URL ou narrativa factual sobre o prato.
+- [x] Pesquisar e publicar informações verificáveis sobre Maria Isabel, com fonte identificada e link seguro.
