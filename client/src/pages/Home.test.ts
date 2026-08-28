@@ -50,6 +50,13 @@ describe("acessos territoriais da descoberta", () => {
     });
   });
 
+  it("mantém o acesso ao feedback ao lado do roteiro", () => {
+    expect(homeSource).toContain('href="/feedback"');
+    expect(homeSource).toContain('aria-label="Enviar feedback"');
+    expect(homeSource).toContain("Feedback");
+    expect(homeSource.indexOf("Meu roteiro")).toBeLessThan(homeSource.indexOf('href="/feedback"'));
+  });
+
   it("oferece uma alternância persistente de modo escuro no menu compacto", () => {
     expect(homeSource).toContain('role="switch"');
     expect(homeSource).toContain('aria-checked={theme === "dark"}');

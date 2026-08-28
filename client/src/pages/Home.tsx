@@ -14,6 +14,7 @@ import {
   Landmark,
   MapPinned,
   Menu,
+  MessageSquare,
   Minus,
   Moon,
   Plus,
@@ -226,6 +227,7 @@ export default function Home() {
           </button>
           <div className="flex items-center gap-2">
             <button onClick={() => setPlannerOpen(true)} className="tap inline-flex h-10 items-center gap-2 rounded-full bg-[#3C482D] px-4 text-sm font-extrabold text-white"><Bookmark className="h-4 w-4" /><span className="hidden sm:inline">Meu roteiro</span><span className="grid h-5 min-w-5 place-items-center rounded-full bg-white/18 px-1 text-[10px]">{plan.length}</span></button>
+            <Link href="/feedback" aria-label="Enviar feedback" className="tap inline-flex h-10 items-center gap-2 rounded-full border border-[#B9572D]/40 bg-[#FFFDF6] px-3 text-sm font-extrabold text-[#B9572D] hover:bg-[#F3E5C9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B9572D] focus-visible:ring-offset-2"><MessageSquare className="h-4 w-4" /><span className="hidden sm:inline">Feedback</span></Link>
             <button type="button" onClick={() => setMenuOpen((value) => !value)} className="tap grid h-10 w-10 place-items-center rounded-full border border-[#3C482D]/15 bg-[#F5ECD8]" aria-controls="home-navigation-menu" aria-expanded={menuOpen} aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}>{menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
           </div>
         </div>
