@@ -6,7 +6,8 @@ import { AppLoadingOverlay } from "./components/AppLoadingOverlay";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import AdminDestinations from "./pages/AdminDestinations";
-import AdminEditorial from "./pages/AdminEditorial";
+import AdminEditorial from "@/pages/AdminEditorial";
+import AdminFeedbacks from "@/pages/AdminFeedbacks";
 import AgendaPage from "./pages/AgendaPage";
 import CityPage from "./pages/CityPage";
 import DadosPage from "./pages/DadosPage";
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/destinos/:slug" component={DestinationPage} />
       <Route path="/admin/destinos" component={AdminDestinations} />
       <Route path="/admin/editorial" component={AdminEditorial} />
+      <Route path="/admin/feedbacks" component={AdminFeedbacks} />
       <Route path="/login" component={LoginPage} />
       <Route path="/patrimonios" component={PatrimoniosPage} />
       <Route path="/sabores" component={SaboresPage} />
