@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { filterFeedbacks, mockFeedbacks } from "./AdminFeedbacks";
+import { ADMIN_FEEDBACKS_ROUTE, filterFeedbacks, mockFeedbacks } from "./AdminFeedbacks";
 
 describe("AdminFeedbacks mock data", () => {
+  it("expõe a rota administrativa compartilhada", () => {
+    expect(ADMIN_FEEDBACKS_ROUTE).toBe("/admin/feedbacks");
+  });
+
   it("mantém oito registros sintéticos variados para testar a interface", () => {
     expect(mockFeedbacks).toHaveLength(8);
     expect(new Set(mockFeedbacks.map((item) => item.category))).toEqual(new Set(["elogio", "sugestao", "problema"]));

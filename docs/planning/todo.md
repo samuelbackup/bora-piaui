@@ -256,3 +256,4 @@
 - [x] Adicionar janela de feedback na parte inferior das páginas individuais de cada ponto turístico.
 - [x] Adicionar acionador e janela de feedback contextual em cada destino exibido na tela inicial.
 - [x] Criar tela frontend de Administração de Feedbacks com mockFeedbacks, KPIs, filtros reativos, cards e modal de detalhes, sem alterar o backend.
+- [x] Adicionar o item Administração de Feedbacks à navegação do painel administrativo e validar o acesso à rota.

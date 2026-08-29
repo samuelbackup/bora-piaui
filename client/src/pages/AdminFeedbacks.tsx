@@ -5,6 +5,8 @@ import { Link } from "wouter";
 type FeedbackCategory = "elogio" | "sugestao" | "problema";
 type FeedbackStatus = "lido" | "nao_lido";
 
+export const ADMIN_FEEDBACKS_ROUTE = "/admin/feedbacks";
+
 type Feedback = {
   id: number;
   name: string;
