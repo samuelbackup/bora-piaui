@@ -254,3 +254,4 @@
 - [x] Pesquisar e publicar informações verificáveis sobre Maria Isabel, com fonte identificada e link seguro.
 - [x] Adicionar botão Feedback ao lado de Meu roteiro e criar página acessível para envio de opinião sobre o site.
 - [x] Adicionar janela de feedback na parte inferior das páginas individuais de cada ponto turístico.
+- [x] Adicionar acionador e janela de feedback contextual em cada destino exibido na tela inicial.

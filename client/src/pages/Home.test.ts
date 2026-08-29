@@ -57,6 +57,17 @@ describe("acessos territoriais da descoberta", () => {
     expect(homeSource.indexOf("Meu roteiro")).toBeLessThan(homeSource.indexOf('href="/feedback"'));
   });
 
+  it("oferece feedback contextual em cada cartão de destino", () => {
+    expect(homeSource).toContain("openPlaceFeedback(place)");
+    expect(homeSource).toContain("Enviar feedback sobre ${place.title}");
+    expect(homeSource).toContain("Feedback contextual");
+    expect(homeSource).toContain("Sobre {feedbackPlace.title}");
+    expect(homeSource).toContain('name="feedbackType"');
+    expect(homeSource).toContain('name="feedbackMessage"');
+    expect(homeSource).toContain("minLength={10}");
+    expect(homeSource).toContain("Este envio é demonstrativo e não é armazenado.");
+  });
+
   it("oferece uma alternância persistente de modo escuro no menu compacto", () => {
     expect(homeSource).toContain('role="switch"');
     expect(homeSource).toContain('aria-checked={theme === "dark"}');
