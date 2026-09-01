@@ -6,6 +6,6 @@
 - [x] Persistir a marcação de leitura via `trpc.feedbacks.markRead` e atualizar KPIs/lista.
 - [x] Remover PII/mock fields da UI administrativa e alinhar o modelo ao schema real.
 - [ ] Atualizar testes, validar TypeScript, build e fluxo ponta a ponta; falta ensaio autenticado de persistência e `markRead`.
-- [ ] Sincronizar a integração real com a branch principal do GitHub.
+- [x] Sincronizar a integração real com a branch principal do GitHub.
 - [x] Adicionar testes dos procedures de feedback cobrindo autorização administrativa e submit/markRead com helpers isolados.
 - [ ] Registrar evidência verificável da validação do fluxo real sem inserir dados de demonstração no banco de produção; falta staging ou feedback real autorizado.
