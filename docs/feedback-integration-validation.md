@@ -2,20 +2,24 @@
 
 ## Escopo
 
-A integração foi validada sem inserir mensagens artificiais no banco de produção. Os formulários públicos usam `trpc.feedbacks.submit`; o painel administrativo usa `trpc.feedbacks.adminList` e `trpc.feedbacks.markRead`.
+A integração conecta os formulários públicos à persistência via `trpc.feedbacks.submit` e o painel administrativo às consultas e mutations protegidas `trpc.feedbacks.adminList` e `trpc.feedbacks.markRead`. Os feedbacks não coletam nome, e-mail ou outro identificador pessoal.
 
 ## Evidências
 
 | Verificação | Resultado |
 | --- | --- |
 | Contrato de entrada (`feedbackFields`) | 3 testes passando: categorias válidas, limites de mensagem, slug contextual e descarte de campos `name`/`email` fora do contrato. |
-| Submissão contextual | Teste isolado do procedure confirma `category`, `message`, `destinationSlug`, `destinationName`, `rating: null` e `isRead: false` enviados ao helper de persistência. |
+| Submissão contextual | Teste isolado confirma `category`, `message`, `destinationSlug`, `destinationName`, `rating: null` e `isRead: false` enviados ao helper de persistência. |
 | Proteção administrativa | Teste isolado confirma `adminList` e `markRead` bloqueados para sessão anônima e usuário comum com `FORBIDDEN`. |
 | Listagem e leitura | Teste isolado confirma que o admin recebe `listFeedbacks`, consulta o registro e chama `markFeedbackRead` com o id e o novo status. |
-| Banco ativo | Consulta somente leitura confirmou a existência da tabela `feedbacks`, com 0 registros no momento da verificação. Nenhum dado de teste foi criado. |
-| Frontend publicado localmente | `/feedback` e o detalhe de ponto turístico renderizados com o formulário persistente; `/admin/feedbacks` exibiu o bloqueio de área restrita sem sessão administrativa. |
+| Ensaio real autorizado | Em produção, um feedback técnico sem PII foi enviado por `/feedback`, apareceu em `/admin/feedbacks`, foi marcado como lido e o KPI de não lidos passou de 1 para 0 após recarregar a página. |
+| Limpeza do ensaio | O registro técnico foi removido com filtro simultâneo por id e prefixo da mensagem; consulta posterior confirmou `remaining_test_records = 0`. |
+| Schema de autenticação | Foi identificada e corrigida a ausência de `users.passwordHash`; a migration de reconciliação `server/database/0006_reconcile_password_hash.sql` foi aplicada sem alterar dados de usuários. |
+| Frontend publicado | `/feedback` exibiu confirmação após o envio; `/admin/feedbacks` carregou a listagem persistida, filtros, detalhe e controle de leitura com sessão admin. |
 | Qualidade | 23 arquivos de teste e 76 testes passando; TypeScript sem erros; build de produção concluído. |
 
-## Limite deliberado
+## Limites e segurança
 
-O fluxo que cria uma linha real e depois a marca como lida não foi executado contra o banco ativo porque isso exigiria inserir uma mensagem de teste que apareceria no painel editorial. A cobertura equivalente está isolada nos procedures, enquanto a disponibilidade do schema foi verificada por consulta somente leitura. A validação final com um feedback real deve ser feita por um usuário autorizado em staging ou por uma mensagem real de um participante do teste de usabilidade.
+O ensaio real foi executado somente após confirmação explícita e usou uma mensagem identificada como teste técnico. O registro foi removido ao final, sem alterar feedbacks de usuários. A credencial temporária criada para habilitar o ensaio foi removida após o uso; a conta ensaiada ficou sem senha configurada. A senha não foi gravada no código nem em arquivos do projeto. O próximo passo operacional é implementar ou executar um fluxo seguro para o titular definir uma credencial própria.
+
+A validação não cobre carga, abuso de rate limit ou uma sessão de usuário final em múltiplos navegadores. Esses cenários devem ser exercitados em staging antes de um uso público ampliado.

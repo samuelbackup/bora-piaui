@@ -5,7 +5,11 @@
 - [x] Migrar o painel administrativo de mockData para `trpc.feedbacks.adminList`.
 - [x] Persistir a marcação de leitura via `trpc.feedbacks.markRead` e atualizar KPIs/lista.
 - [x] Remover PII/mock fields da UI administrativa e alinhar o modelo ao schema real.
-- [ ] Atualizar testes, validar TypeScript, build e fluxo ponta a ponta; falta ensaio autenticado de persistência e `markRead`.
+- [x] Atualizar testes, validar TypeScript, build e fluxo ponta a ponta, incluindo o ensaio autenticado de persistência e `markRead`.
 - [x] Sincronizar a integração real com a branch principal do GitHub.
 - [x] Adicionar testes dos procedures de feedback cobrindo autorização administrativa e submit/markRead com helpers isolados.
-- [ ] Registrar evidência verificável da validação do fluxo real sem inserir dados de demonstração no banco de produção; falta staging ou feedback real autorizado.
+- [x] Registrar evidência verificável da validação do fluxo real com feedback técnico temporário autorizado em produção, removido ao final.
+- [x] Corrigir o bloqueio de login admin: o código consulta `passwordHash`, mas a tabela `users` ativa não possui essa coluna.
+- [x] Aplicar migration segura para `users.passwordHash` e validar o login administrativo; nenhum hash foi exposto.
+- [x] Reexecutar testes, build e ensaio autenticado do painel após corrigir o schema.
+- [x] Remover a senha temporária usada no ensaio admin; a conta ensaiada ficou sem senha após a validação.
