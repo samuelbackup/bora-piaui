@@ -257,3 +257,5 @@
 - [x] Adicionar acionador e janela de feedback contextual em cada destino exibido na tela inicial.
 - [x] Criar tela frontend de Administração de Feedbacks com mockFeedbacks, KPIs, filtros reativos, cards e modal de detalhes, sem alterar o backend.
 - [x] Adicionar o item Administração de Feedbacks à navegação do painel administrativo e validar o acesso à rota.
+- [ ] Integrar o formulário público e o painel de Feedbacks a dados reais persistidos, com procedimentos administrativos protegidos, sem avaliações fictícias.
+- [ ] Cobrir a integração real com testes de contrato, autorização, envio, leitura e marcação como lido.

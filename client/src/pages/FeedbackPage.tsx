@@ -1,13 +1,35 @@
 import { useState, type FormEvent } from "react";
-import { ArrowLeft, CheckCircle2, MessageSquare, Send } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Loader2, MessageSquare, Send } from "lucide-react";
 import { Link } from "wouter";
+import { trpc } from "@/lib/trpc";
+
+type FeedbackCategory = "elogio" | "sugestao" | "problema";
 
 export default function FeedbackPage() {
+  const [category, setCategory] = useState<FeedbackCategory | "">("");
+  const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const submitFeedback = trpc.feedbacks.submit.useMutation();
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmitted(true);
+    if (!category) return;
+
+    setErrorMessage(null);
+    try {
+      await submitFeedback.mutateAsync({ category, message });
+      setSubmitted(true);
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Não foi possível registrar o feedback agora. Tente novamente.");
+    }
+  }
+
+  function resetForm() {
+    setCategory("");
+    setMessage("");
+    setSubmitted(false);
+    setErrorMessage(null);
   }
 
   return (
@@ -48,36 +70,40 @@ export default function FeedbackPage() {
                 <CheckCircle2 className="mx-auto h-12 w-12 text-[#566B37]" aria-hidden="true" />
                 <h2 className="display-font mt-5 text-4xl tracking-[-0.05em]">Obrigado por contribuir.</h2>
                 <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-[#566457]">
-                  Seu feedback foi registrado nesta demonstração. Ele ajuda a orientar a próxima rodada de melhorias do Bora Piauí.
+                  Seu feedback foi registrado com segurança e ajudará a orientar a próxima rodada de melhorias do Bora Piauí.
                 </p>
-                <Link href="/" className="mt-7 inline-flex items-center justify-center rounded-full bg-[#3C482D] px-5 py-3 text-sm font-extrabold text-white hover:bg-[#566B37] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B9572D] focus-visible:ring-offset-2">
-                  Voltar ao atlas
-                </Link>
+                <div className="mt-7 flex flex-wrap justify-center gap-3">
+                  <button type="button" onClick={resetForm} className="inline-flex items-center justify-center rounded-full border border-[#3C482D]/20 px-5 py-3 text-sm font-extrabold text-[#3C482D] hover:bg-[#F5ECD8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B9572D] focus-visible:ring-offset-2">
+                    Enviar outro
+                  </button>
+                  <Link href="/" className="inline-flex items-center justify-center rounded-full bg-[#3C482D] px-5 py-3 text-sm font-extrabold text-white hover:bg-[#566B37] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B9572D] focus-visible:ring-offset-2">
+                    Voltar ao atlas
+                  </Link>
+                </div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                 <div>
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#B9572D]">Sua leitura</p>
                   <h2 className="display-font mt-2 text-4xl tracking-[-0.05em]">Como foi sua experiência?</h2>
                 </div>
                 <div>
                   <label htmlFor="feedback-type" className="text-sm font-extrabold text-[#3C482D]">Tipo de feedback</label>
-                  <select id="feedback-type" name="feedbackType" required className="mt-2 h-12 w-full rounded-xl border border-[#3C482D]/15 bg-[#F5ECD8] px-4 text-sm font-semibold text-[#2E3222] outline-none focus:border-[#B9572D] focus:ring-2 focus:ring-[#B9572D]/30">
+                  <select id="feedback-type" name="feedbackType" required value={category} onChange={(event) => setCategory(event.target.value as FeedbackCategory | "")} className="mt-2 h-12 w-full rounded-xl border border-[#3C482D]/15 bg-[#F5ECD8] px-4 text-sm font-semibold text-[#2E3222] outline-none focus:border-[#B9572D] focus:ring-2 focus:ring-[#B9572D]/30">
                     <option value="">Selecione uma opção</option>
                     <option value="elogio">O que funcionou bem</option>
-                    <option value="melhoria">O que pode melhorar</option>
-                    <option value="conteudo">Conteúdo que gostaria de encontrar</option>
-                    <option value="problema">Encontrei um problema</option>
+                    <option value="sugestao">Sugestão de melhoria ou conteúdo</option>
+                    <option value="problema">Encontrei uma dúvida ou problema</option>
                   </select>
                 </div>
                 <div>
                   <label htmlFor="feedback-message" className="text-sm font-extrabold text-[#3C482D]">Seu feedback</label>
-                  <textarea id="feedback-message" name="message" required minLength={10} rows={7} placeholder="Escreva sua opinião com o máximo de detalhes que desejar..." className="mt-2 w-full resize-y rounded-xl border border-[#3C482D]/15 bg-[#F5ECD8] px-4 py-3 text-sm leading-6 text-[#2E3222] outline-none placeholder:text-[#7A806D] focus:border-[#B9572D] focus:ring-2 focus:ring-[#B9572D]/30" />
-                  <p className="mt-2 text-xs text-[#7A806D]">Mínimo de 10 caracteres. Não inclua dados pessoais.</p>
+                  <textarea id="feedback-message" name="message" required minLength={10} maxLength={3000} rows={7} value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Escreva sua opinião com o máximo de detalhes que desejar..." className="mt-2 w-full resize-y rounded-xl border border-[#3C482D]/15 bg-[#F5ECD8] px-4 py-3 text-sm leading-6 text-[#2E3222] outline-none placeholder:text-[#7A806D] focus:border-[#B9572D] focus:ring-2 focus:ring-[#B9572D]/30" />
+                  <p className="mt-2 text-xs text-[#7A806D]">Mínimo de 10 e máximo de 3.000 caracteres. Não inclua dados pessoais.</p>
                 </div>
-                <button type="submit" className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#B9572D] px-5 py-3.5 text-sm font-extrabold text-white hover:bg-[#A34827] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B9572D] focus-visible:ring-offset-2">
-                  Enviar feedback
-                  <Send className="h-4 w-4" aria-hidden="true" />
+                {errorMessage && <p className="rounded-xl bg-[#FCE8E2] px-4 py-3 text-sm font-semibold leading-6 text-[#8C3D20]" role="alert">{errorMessage}</p>}
+                <button type="submit" disabled={submitFeedback.isPending || !category || message.trim().length < 10} className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#B9572D] px-5 py-3.5 text-sm font-extrabold text-white hover:bg-[#A34827] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B9572D] focus-visible:ring-offset-2">
+                  {submitFeedback.isPending ? <><Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> Enviando...</> : <>Enviar feedback <Send className="h-4 w-4" aria-hidden="true" /></>}
                 </button>
               </form>
             )}

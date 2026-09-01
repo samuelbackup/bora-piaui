@@ -7,9 +7,11 @@ import {
   culturalEvents,
   destinationImages,
   destinations,
+  feedbacks,
   InsertCulturalEvent,
   InsertDestination,
   InsertDestinationImage,
+  InsertFeedback,
   InsertPartnerSubmission,
   InsertUser,
   partnerSubmissions,
@@ -244,6 +246,33 @@ export async function updatePartnerSubmission(id: number, data: Partial<InsertPa
   if (!db) throw new Error("Banco de dados indisponível");
   await db.update(partnerSubmissions).set(data).where(eq(partnerSubmissions.id, id));
   return getPartnerSubmissionById(id);
+}
+
+export async function createFeedback(data: InsertFeedback) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  const result = await db.insert(feedbacks).values(data);
+  return getFeedbackById(Number(result[0].insertId));
+}
+
+export async function getFeedbackById(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  const result = await db.select().from(feedbacks).where(eq(feedbacks.id, id)).limit(1);
+  return result[0] ?? null;
+}
+
+export async function listFeedbacks() {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  return db.select().from(feedbacks).orderBy(desc(feedbacks.createdAt)).limit(500);
+}
+
+export async function markFeedbackRead(id: number, isRead: boolean) {
+  const db = await getDb();
+  if (!db) throw new Error("Banco de dados indisponível");
+  await db.update(feedbacks).set({ isRead }).where(eq(feedbacks.id, id));
+  return getFeedbackById(id);
 }
 
 export async function recordUsageEvent(data: InsertUsageEvent) {

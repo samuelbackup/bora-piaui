@@ -65,7 +65,9 @@ describe("acessos territoriais da descoberta", () => {
     expect(homeSource).toContain('name="feedbackType"');
     expect(homeSource).toContain('name="feedbackMessage"');
     expect(homeSource).toContain("minLength={10}");
-    expect(homeSource).toContain("Este envio é demonstrativo e não é armazenado.");
+    expect(homeSource).toContain("O envio é armazenado sem identificação pessoal.");
+    expect(homeSource).toContain("trpc.feedbacks.submit.useMutation");
+    expect(homeSource).toContain("destinationSlug: feedbackPlace.id");
   });
 
   it("oferece uma alternância persistente de modo escuro no menu compacto", () => {

@@ -5,6 +5,7 @@ import { publicProcedure, router } from "./_core/trpc";
 import { agendaRouter, partnersRouter } from "./routers/agendaPartners";
 import { destinationsRouter } from "./routers/destinations";
 import { metricsRouter } from "./routers/metrics";
+import { feedbacksRouter } from "./routers/feedbacks";
 
 export const appRouter = router({
   system: systemRouter,
@@ -17,6 +18,7 @@ export const appRouter = router({
   agenda: agendaRouter,
   partners: partnersRouter,
   metrics: metricsRouter,
+  feedbacks: feedbacksRouter,
 });
 
 export type AppRouter = typeof appRouter;

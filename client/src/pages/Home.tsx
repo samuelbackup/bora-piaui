@@ -1,5 +1,5 @@
 /* Cerrado e Rios — Atlas de Percursos: atlas editorial, filtros territoriais e dados públicos; barro queimado é a única cor de ação. */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
@@ -25,6 +25,7 @@ import {
   TreePine,
   Waves,
   X,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { PiauiMap } from "@/components/PiauiMap";
@@ -41,6 +42,7 @@ const capivaraVisitUrl = "https://www.gov.br/icmbio/pt-br/assuntos/biodiversidad
 
 
 const categories = ["Todos", "Natureza", "Patrimônio", "Litoral", "Cultura", "Cidade"] as const;
+type FeedbackCategory = "elogio" | "sugestao" | "problema";
 const regions = ["Todos", "Polo Teresina", "Aventura e Mistério", "Costa do Delta", "Águas", "Nascentes", "Origens", "Histórico Cultural"] as const;
 
 export function getAvailablePoles(
@@ -108,6 +110,10 @@ export default function Home() {
   const [polePreviewRegion, setPolePreviewRegion] = useState<Region | null>(null);
   const [plannerOpen, setPlannerOpen] = useState(false);
   const [feedbackPlace, setFeedbackPlace] = useState<Place | null>(null);
+  const [feedbackCategory, setFeedbackCategory] = useState<FeedbackCategory | "">("");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [feedbackError, setFeedbackError] = useState<string | null>(null);
+  const submitFeedback = trpc.feedbacks.submit.useMutation();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const anyDialogOpen = Boolean(selected) || plannerOpen || feedbackPlace;
@@ -221,6 +227,30 @@ export default function Home() {
 
   function openPlaceFeedback(place: Place) {
     setFeedbackPlace(place);
+    setFeedbackCategory("");
+    setFeedbackMessage("");
+    setFeedbackError(null);
+  }
+
+  async function submitPlaceFeedback(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!feedbackPlace || !feedbackCategory) return;
+
+    setFeedbackError(null);
+    try {
+      await submitFeedback.mutateAsync({
+        category: feedbackCategory,
+        message: feedbackMessage,
+        destinationSlug: feedbackPlace.id,
+        destinationName: feedbackPlace.title,
+      });
+      toast.success(`Feedback sobre ${feedbackPlace.title} registrado.`);
+      setFeedbackPlace(null);
+      setFeedbackCategory("");
+      setFeedbackMessage("");
+    } catch (error) {
+      setFeedbackError(error instanceof Error ? error.message : "Não foi possível registrar o feedback agora. Tente novamente.");
+    }
   }
 
   return (
@@ -295,7 +325,7 @@ export default function Home() {
       </main>
 
       {selected && <div onClick={event => { if (event.target === event.currentTarget) setSelected(null); }} className="fixed inset-0 z-50 flex items-end bg-[#26301f]/55 p-0 backdrop-blur-[2px] sm:items-center sm:justify-center sm:p-6" role="dialog" aria-modal="true" aria-label={`Detalhes de ${selected.title}`}><div className="w-full max-w-xl overflow-hidden rounded-t-[2rem] bg-[#FFFDF6] sm:rounded-[2rem]"><div className="flex items-center justify-between p-5 sm:p-6"><div><p className="text-[10px] font-extrabold uppercase tracking-[0.15em]" style={{ color: selected.accent }}>{selected.region} · {selected.category}</p><h2 className="display-font mt-2 text-3xl tracking-[-0.05em]">{selected.title}</h2><p className="mt-1 text-sm font-bold text-[#70745F]">{selected.municipality}</p></div><button onClick={() => setSelected(null)} className="tap grid h-10 w-10 place-items-center rounded-full bg-[#E9DCC0]" aria-label="Fechar detalhes"><X className="h-5 w-5" /></button></div><div className="px-5 pb-6 sm:px-6 sm:pb-7">{selected.image && <img src={selected.image} alt="" className="mb-5 h-44 w-full rounded-[1.25rem] object-cover" />}<p className="text-base leading-7 text-[#586049]">{selected.detail}</p><p className="mt-4 text-xs leading-5 text-[#85846F]">Referência: {sourceAnchor(selected.sourceUrl, selected.sourceName)} · {selected.sourceYear}. Confirme regras, operação e condições de visita antes de sair.</p><div className="mt-6 grid gap-3 sm:grid-cols-4"><button onClick={() => showPlaceOnMap(selected)} className="tap inline-flex items-center justify-center gap-2 rounded-full bg-[#E9DCC0] px-4 py-3 text-sm font-extrabold text-[#3C482D]"><MapPinned className="h-4 w-4" /> Mapa</button><button onClick={() => toggleItinerary(selected)} className="tap inline-flex justify-center gap-2 rounded-full bg-[#3C482D] px-4 py-3 text-sm font-extrabold text-white">{itinerary.includes(selected.id) ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}{itinerary.includes(selected.id) ? "Remover" : "Roteiro"}</button><a href={selected.sourceUrl} target="_blank" rel="noopener noreferrer" className="tap inline-flex justify-center gap-2 rounded-full border border-[#3C482D]/15 px-4 py-3 text-sm font-extrabold">Fonte <ExternalLink className="h-4 w-4" /></a><a href={selected.route} target="_blank" rel="noopener noreferrer" className="tap inline-flex justify-center gap-2 rounded-full bg-[#B9572D] px-4 py-3 text-sm font-extrabold text-white">Rota <ExternalLink className="h-4 w-4" /></a></div></div></div></div>}
-      {feedbackPlace && <div onClick={event => { if (event.target === event.currentTarget) setFeedbackPlace(null); }} className="fixed inset-0 z-[55] flex items-end bg-[#26301f]/55 p-0 backdrop-blur-[2px] sm:items-center sm:justify-center sm:p-6" role="dialog" aria-modal="true" aria-label={`Enviar feedback sobre ${feedbackPlace.title}`}><form onSubmit={event => { event.preventDefault(); toast.success(`Feedback sobre ${feedbackPlace.title} registrado para esta demonstração.`); setFeedbackPlace(null); }} className="w-full max-w-lg rounded-t-[2rem] bg-[#FFFDF6] p-5 sm:rounded-[2rem] sm:p-7"><div className="flex items-start justify-between gap-4"><div><p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#B9572D]">Feedback contextual</p><h2 className="display-font mt-2 text-3xl tracking-[-0.05em]">Sobre {feedbackPlace.title}</h2><p className="mt-2 text-sm leading-6 text-[#68705C]">Conte o que ajudaria a tornar esta parada mais clara para você.</p></div><button type="button" onClick={() => setFeedbackPlace(null)} className="tap grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#E9DCC0]" aria-label="Fechar janela de feedback"><X className="h-5 w-5" /></button></div><div className="mt-6 grid gap-4"><label className="block"><span className="text-xs font-extrabold uppercase tracking-[0.12em] text-[#566B37]">Tipo de feedback</span><select name="feedbackType" required defaultValue="" className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/14 bg-[#F5ECD8] px-4 text-sm font-bold text-[#35402B] outline-none focus:border-[#B9572D] focus:ring-2 focus:ring-[#B9572D]/15"><option value="" disabled>Selecione uma opção</option><option value="clareza">Algo ficou pouco claro</option><option value="fonte">Quero conferir uma fonte</option><option value="acesso">Tenho uma dúvida sobre acesso</option><option value="ideia">Tenho uma sugestão</option></select></label><label className="block"><span className="text-xs font-extrabold uppercase tracking-[0.12em] text-[#566B37]">Sua mensagem</span><textarea name="feedbackMessage" required minLength={10} rows={4} placeholder="Escreva pelo menos 10 caracteres" className="mt-2 w-full resize-y rounded-[1.25rem] border border-[#3C482D]/14 bg-[#F5ECD8] px-4 py-3 text-sm leading-6 text-[#35402B] outline-none placeholder:text-[#929781] focus:border-[#B9572D] focus:ring-2 focus:ring-[#B9572D]/15" /></label><p className="text-xs leading-5 text-[#85846F]">Não informe nome, telefone, e-mail ou outros dados pessoais. Este envio é demonstrativo e não é armazenado.</p></div><div className="mt-6 flex flex-wrap justify-end gap-2"><button type="button" onClick={() => setFeedbackPlace(null)} className="tap rounded-full border border-[#3C482D]/15 px-4 py-2.5 text-sm font-extrabold text-[#566B37]">Cancelar</button><button type="submit" className="tap inline-flex items-center gap-2 rounded-full bg-[#B9572D] px-4 py-2.5 text-sm font-extrabold text-white hover:bg-[#CD6D45]"><MessageSquare className="h-4 w-4" /> Enviar feedback</button></div></form></div>}
+      {feedbackPlace && <div onClick={event => { if (event.target === event.currentTarget) setFeedbackPlace(null); }} className="fixed inset-0 z-[55] flex items-end bg-[#26301f]/55 p-0 backdrop-blur-[2px] sm:items-center sm:justify-center sm:p-6" role="dialog" aria-modal="true" aria-label={`Enviar feedback sobre ${feedbackPlace.title}`}><form onSubmit={submitPlaceFeedback} noValidate className="w-full max-w-lg rounded-t-[2rem] bg-[#FFFDF6] p-5 sm:rounded-[2rem] sm:p-7"><div className="flex items-start justify-between gap-4"><div><p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#B9572D]">Feedback contextual</p><h2 className="display-font mt-2 text-3xl tracking-[-0.05em]">Sobre {feedbackPlace.title}</h2><p className="mt-2 text-sm leading-6 text-[#68705C]">Conte o que ajudaria a tornar esta parada mais clara para você.</p></div><button type="button" onClick={() => setFeedbackPlace(null)} className="tap grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#E9DCC0]" aria-label="Fechar janela de feedback"><X className="h-5 w-5" /></button></div><div className="mt-6 grid gap-4"><label className="block"><span className="text-xs font-extrabold uppercase tracking-[0.12em] text-[#566B37]">Tipo de feedback</span><select name="feedbackType" required value={feedbackCategory} onChange={(event) => setFeedbackCategory(event.target.value as FeedbackCategory | "")} className="mt-2 h-11 w-full rounded-full border border-[#3C482D]/14 bg-[#F5ECD8] px-4 text-sm font-bold text-[#35402B] outline-none focus:border-[#B9572D] focus:ring-2 focus:ring-[#B9572D]/15"><option value="" disabled>Selecione uma opção</option><option value="elogio">O conteúdo foi útil</option><option value="sugestao">Tenho uma sugestão</option><option value="problema">Algo ficou pouco claro ou deu problema</option></select></label><label className="block"><span className="text-xs font-extrabold uppercase tracking-[0.12em] text-[#566B37]">Sua mensagem</span><textarea name="feedbackMessage" required minLength={10} maxLength={3000} value={feedbackMessage} onChange={(event) => setFeedbackMessage(event.target.value)} rows={4} placeholder="Escreva pelo menos 10 caracteres" className="mt-2 w-full resize-y rounded-[1.25rem] border border-[#3C482D]/14 bg-[#F5ECD8] px-4 py-3 text-sm leading-6 text-[#35402B] outline-none placeholder:text-[#929781] focus:border-[#B9572D] focus:ring-2 focus:ring-[#B9572D]/15" /></label><p className="text-xs leading-5 text-[#85846F]">Não informe nome, telefone, e-mail ou outros dados pessoais. O envio é armazenado sem identificação pessoal.</p>{feedbackError && <p className="rounded-xl bg-[#FCE8E2] px-4 py-3 text-xs font-semibold leading-5 text-[#8C3D20]" role="alert">{feedbackError}</p>}</div><div className="mt-6 flex flex-wrap justify-end gap-2"><button type="button" onClick={() => setFeedbackPlace(null)} className="tap rounded-full border border-[#3C482D]/15 px-4 py-2.5 text-sm font-extrabold text-[#566B37]">Cancelar</button><button type="submit" disabled={submitFeedback.isPending || !feedbackCategory || feedbackMessage.trim().length < 10} className="tap inline-flex items-center gap-2 rounded-full bg-[#B9572D] px-4 py-2.5 text-sm font-extrabold text-white hover:bg-[#CD6D45] disabled:cursor-not-allowed disabled:opacity-60">{submitFeedback.isPending ? <><Loader2 className="h-4 w-4 animate-spin" /> Enviando...</> : <><MessageSquare className="h-4 w-4" /> Enviar feedback</>}</button></div></form></div>}
 
       {plannerOpen && <div onClick={event => { if (event.target === event.currentTarget) setPlannerOpen(false); }} className="fixed inset-0 z-50 flex justify-end bg-[#26301f]/45 backdrop-blur-[2px]" role="dialog" aria-modal="true" aria-label="Meu roteiro"><div className="flex h-full w-full max-w-md flex-col bg-[#FFFDF6] shadow-2xl"><div className="flex items-center justify-between border-b border-[#3C482D]/10 p-5"><div><p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#B9572D]">Meu roteiro</p><h2 className="display-font mt-1 text-3xl tracking-[-0.05em]">Meu Piauí, por etapas</h2></div><button onClick={() => setPlannerOpen(false)} className="tap grid h-10 w-10 place-items-center rounded-full bg-[#E9DCC0]" aria-label="Fechar roteiro"><X className="h-5 w-5" /></button></div><div className="flex-1 overflow-y-auto p-5"><div className="rounded-[1.5rem] bg-[#566B37] p-5 text-white"><p className="text-sm font-bold">{plan.length ? `${plan.length} parada${plan.length > 1 ? "s" : ""} escolhida${plan.length > 1 ? "s" : ""}` : "Seu roteiro está vazio"}</p><p className="mt-1 text-sm leading-6 text-white/72">Monte um ponto de partida. Distâncias, operação e melhor ordem devem ser confirmadas antes da viagem.</p></div>{plan.length ? <ol className="mt-6 space-y-3">{plan.map((place, index) => <li key={place.id} className="flex gap-3 rounded-[1.25rem] border border-[#3C482D]/10 bg-white p-4"><span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#B9572D] text-xs font-extrabold text-white">{index + 1}</span><div className="min-w-0 flex-1"><p className="font-extrabold">{place.title}</p><p className="mt-0.5 text-xs font-bold text-[#70745F]">{place.region} · {place.municipality}</p></div><button onClick={() => toggleItinerary(place)} className="tap grid h-8 w-8 place-items-center rounded-full bg-[#E9DCC0]" aria-label={`Remover ${place.title}`}><Minus className="h-4 w-4" /></button></li>)}</ol> : <div className="mt-6 rounded-[1.5rem] border border-dashed border-[#3C482D]/18 p-8 text-center"><Compass className="mx-auto h-7 w-7 text-[#B9572D]" /><p className="mt-3 text-sm font-bold">Escolha uma primeira parada para começar.</p></div>}</div><div className="border-t border-[#3C482D]/10 p-5"><div className="flex gap-3"><button onClick={() => goTo("explorar")} className="tap flex-1 rounded-full bg-[#3C482D] px-4 py-3 text-sm font-extrabold text-white">Explorar</button><button onClick={clearItinerary} disabled={!plan.length} className="tap rounded-full border border-[#3C482D]/15 px-4 py-3 text-sm font-extrabold disabled:cursor-not-allowed disabled:opacity-35">Limpar</button></div></div></div></div>}
 

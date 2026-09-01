@@ -102,6 +102,26 @@ export const partnerSubmissions = mysqlTable("partner_submissions", {
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
+export const feedbacks = mysqlTable(
+  "feedbacks",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    category: mysqlEnum("category", ["elogio", "sugestao", "problema"]).notNull(),
+    message: text("message").notNull(),
+    rating: int("rating"),
+    destinationSlug: varchar("destinationSlug", { length: 120 }),
+    destinationName: varchar("destinationName", { length: 180 }),
+    isRead: boolean("isRead").default(false).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [
+    index("feedbacks_created_at_idx").on(table.createdAt),
+    index("feedbacks_category_idx").on(table.category),
+    index("feedbacks_is_read_idx").on(table.isRead),
+  ]
+);
+
 export const usageEvents = mysqlTable(
   "usage_events",
   {
@@ -133,3 +153,5 @@ export type PartnerSubmission = typeof partnerSubmissions.$inferSelect;
 export type InsertPartnerSubmission = typeof partnerSubmissions.$inferInsert;
 export type UsageEvent = typeof usageEvents.$inferSelect;
 export type InsertUsageEvent = typeof usageEvents.$inferInsert;
+export type Feedback = typeof feedbacks.$inferSelect;
+export type InsertFeedback = typeof feedbacks.$inferInsert;
