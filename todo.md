@@ -13,3 +13,4 @@
 - [x] Aplicar migration segura para `users.passwordHash` e validar o login administrativo; nenhum hash foi exposto.
 - [x] Reexecutar testes, build e ensaio autenticado do painel após corrigir o schema.
 - [x] Remover a senha temporária usada no ensaio admin; a conta ensaiada ficou sem senha após a validação.
+- [x] Renomear a marca pública exibida de “Bora Piauí” para “Umbora Piauí” em títulos, abas, metadados e textos visíveis, preservando identificadores técnicos.

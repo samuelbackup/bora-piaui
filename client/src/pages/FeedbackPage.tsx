@@ -41,7 +41,7 @@ export default function FeedbackPage() {
             Voltar ao atlas
           </Link>
           <Link href="/" className="display-font text-2xl tracking-[-0.07em] text-[#3C482D]">
-            bora <span className="text-[#B9572D]">piauí</span>
+            umbora <span className="text-[#B9572D]">piauí</span>
           </Link>
         </div>
       </header>
@@ -54,7 +54,7 @@ export default function FeedbackPage() {
               Escuta aberta
             </span>
             <h1 className="display-font mt-6 max-w-xl text-5xl leading-[0.94] tracking-[-0.06em] sm:text-6xl">
-              Ajude a melhorar o Bora Piauí.
+              Ajude a melhorar o Umbora Piauí.
             </h1>
             <p className="mt-6 max-w-lg text-base leading-8 text-[#566457] sm:text-lg">
               Conte o que funcionou, o que ficou confuso ou qual conteúdo você gostaria de encontrar no atlas. Sua opinião orienta as próximas melhorias do protótipo.
@@ -70,7 +70,7 @@ export default function FeedbackPage() {
                 <CheckCircle2 className="mx-auto h-12 w-12 text-[#566B37]" aria-hidden="true" />
                 <h2 className="display-font mt-5 text-4xl tracking-[-0.05em]">Obrigado por contribuir.</h2>
                 <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-[#566457]">
-                  Seu feedback foi registrado com segurança e ajudará a orientar a próxima rodada de melhorias do Bora Piauí.
+                  Seu feedback foi registrado com segurança e ajudará a orientar a próxima rodada de melhorias do Umbora Piauí.
                 </p>
                 <div className="mt-7 flex flex-wrap justify-center gap-3">
                   <button type="button" onClick={resetForm} className="inline-flex items-center justify-center rounded-full border border-[#3C482D]/20 px-5 py-3 text-sm font-extrabold text-[#3C482D] hover:bg-[#F5ECD8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B9572D] focus-visible:ring-offset-2">

@@ -79,6 +79,6 @@ export function trackMvpEvent(name: MvpEventName, context?: MvpEventContext) {
   const usage = toUsageEvent(name, context);
   const sessionId = usage ? getUsageSessionId() : null;
   if (usage && sessionId && typeof window !== "undefined") window.dispatchEvent(new CustomEvent<MvpUsageEvent>(MVP_USAGE_EVENT_NAME, { detail: { ...usage, sessionId } }));
-  if (import.meta.env.DEV) console.info("[Bora Piauí · evento]", event);
+  if (import.meta.env.DEV) console.info("[Umbora Piauí · evento]", event);
   return event;
 }

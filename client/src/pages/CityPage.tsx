@@ -83,7 +83,7 @@ export default function CityPage() {
     <div className="min-h-screen bg-[#F5ECD8] text-[#2E3222]">
       <header className="border-b border-[#3C482D]/12 bg-[#F5ECD8]/95 backdrop-blur">
         <div className="mx-auto flex min-h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="tap flex items-center gap-3" aria-label="Voltar ao início"><span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#B9572D]"><img src={markImage} alt="Marca Bora Piauí" className="h-8 w-8 object-contain" /></span><span className="display-font text-[1.4rem] tracking-[-0.06em]">bora <span className="text-[#B9572D]">piauí</span></span></Link>
+          <Link href="/" className="tap flex items-center gap-3" aria-label="Voltar ao início"><span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#B9572D]"><img src={markImage} alt="Marca Umbora Piauí" className="h-8 w-8 object-contain" /></span><span className="display-font text-[1.4rem] tracking-[-0.06em]">umbora <span className="text-[#B9572D]">piauí</span></span></Link>
           <Link href="/#explorar" className="tap inline-flex items-center gap-2 text-sm font-extrabold text-[#566B37] hover:text-[#B9572D]"><ChevronLeft className="h-4 w-4" /> Atlas</Link>
         </div>
       </header>

@@ -258,8 +258,8 @@ export default function Home() {
       <header className="home-header sticky top-0 z-40 border-b border-[#3C482D]/10 bg-[#F5ECD8]/92 backdrop-blur-xl transition-colors duration-200">
         <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <button onClick={() => goTo("inicio")} className="tap flex items-center gap-3" aria-label="Ir ao início">
-            <span className="grid h-11 w-11 place-items-center overflow-hidden rounded-2xl bg-[#B9572D] shadow-[0_6px_0_rgba(185,87,45,.16)]"><img src={markImage} alt="Marca Bora Piauí" className="h-9 w-9 object-contain" /></span>
-            <span className="display-font text-[1.5rem] leading-none tracking-[-0.07em]">bora <span className="text-[#B9572D]">piauí</span></span>
+            <span className="grid h-11 w-11 place-items-center overflow-hidden rounded-2xl bg-[#B9572D] shadow-[0_6px_0_rgba(185,87,45,.16)]"><img src={markImage} alt="Marca Umbora Piauí" className="h-9 w-9 object-contain" /></span>
+            <span className="display-font text-[1.5rem] leading-none tracking-[-0.07em]">umbora <span className="text-[#B9572D]">piauí</span></span>
           </button>
           <div className="flex items-center gap-2">
             <button onClick={() => setPlannerOpen(true)} className="tap inline-flex h-10 items-center gap-2 rounded-full bg-[#3C482D] px-4 text-sm font-extrabold text-white"><Bookmark className="h-4 w-4" /><span className="hidden sm:inline">Meu roteiro</span><span className="grid h-5 min-w-5 place-items-center rounded-full bg-white/18 px-1 text-[10px]">{plan.length}</span></button>
