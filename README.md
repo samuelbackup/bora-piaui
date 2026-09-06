@@ -41,7 +41,7 @@ patches/           Patches de dependências (pnpm)
 
 | Variável | Uso |
 | --- | --- |
-| `DATABASE_URL` | MySQL (obrigatória) |
+| `DATABASE_URL` | PostgreSQL (obrigatória) |
 | `SESSION_JWT_SECRET` | Segredo de assinatura de sessão (obrigatória em produção) |
 | `BUILT_IN_FORGE_API_URL` / `BUILT_IN_FORGE_API_KEY` | Upload e proxy de imagens |
 | `VITE_FRONTEND_FORGE_API_KEY` | Proxy do Google Maps no frontend |

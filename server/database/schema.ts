@@ -1,23 +1,30 @@
-import { boolean, index, int, mysqlEnum, mysqlTable, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
+import { boolean, index, integer, pgEnum, pgTable, serial, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
 
-export const users = mysqlTable("users", {
-  id: int("id").autoincrement().primaryKey(),
+export const userRole = pgEnum("user_role", ["user", "admin"]);
+export const operationalStatus = pgEnum("operational_status", ["confirmado", "verificar", "indisponivel"]);
+export const confirmationStatus = pgEnum("confirmation_status", ["confirmado", "verificar", "cancelado"]);
+export const partnerPlan = pgEnum("partner_plan", ["gratuito", "destaque"]);
+export const editorialStatus = pgEnum("editorial_status", ["pendente", "em_revisao", "aprovado", "recusado"]);
+export const feedbackCategory = pgEnum("feedback_category", ["elogio", "sugestao", "problema"]);
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
-  role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  role: userRole("role").default("user").notNull(),
   passwordHash: text("passwordHash"),
   sessionsInvalidatedAt: timestamp("sessionsInvalidatedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull().$onUpdate(() => new Date()),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
 });
 
-export const destinations = mysqlTable(
+export const destinations = pgTable(
   "destinations",
   {
-    id: int("id").autoincrement().primaryKey(),
+    id: serial("id").primaryKey(),
     slug: varchar("slug", { length: 120 }).notNull(),
     title: varchar("title", { length: 180 }).notNull(),
     polo: varchar("polo", { length: 100 }).notNull(),
@@ -30,9 +37,7 @@ export const destinations = mysqlTable(
     sourceName: varchar("sourceName", { length: 255 }).notNull(),
     sourceUrl: varchar("sourceUrl", { length: 1024 }).notNull(),
     sourceYear: varchar("sourceYear", { length: 48 }).notNull(),
-    operationalStatus: mysqlEnum("operationalStatus", ["confirmado", "verificar", "indisponivel"])
-      .default("verificar")
-      .notNull(),
+    operationalStatus: operationalStatus("operationalStatus").default("verificar").notNull(),
     hours: text("hours"),
     pricing: text("pricing"),
     accessInfo: text("accessInfo"),
@@ -43,27 +48,27 @@ export const destinations = mysqlTable(
     lastVerifiedAt: timestamp("lastVerifiedAt"),
     published: boolean("published").default(true).notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().notNull().$onUpdate(() => new Date()),
   },
   table => [uniqueIndex("destinations_slug_unique").on(table.slug)]
 );
 
-export const destinationImages = mysqlTable("destination_images", {
-  id: int("id").autoincrement().primaryKey(),
-  destinationId: int("destinationId")
+export const destinationImages = pgTable("destination_images", {
+  id: serial("id").primaryKey(),
+  destinationId: integer("destinationId")
     .notNull()
     .references(() => destinations.id, { onDelete: "cascade" }),
   imageUrl: varchar("imageUrl", { length: 1024 }).notNull(),
   altText: varchar("altText", { length: 255 }).notNull(),
   caption: text("caption"),
-  sortOrder: int("sortOrder").default(0).notNull(),
+  sortOrder: integer("sortOrder").default(0).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
-export const culturalEvents = mysqlTable(
+export const culturalEvents = pgTable(
   "cultural_events",
   {
-    id: int("id").autoincrement().primaryKey(),
+    id: serial("id").primaryKey(),
     slug: varchar("slug", { length: 140 }).notNull(),
     title: varchar("title", { length: 220 }).notNull(),
     city: varchar("city", { length: 120 }).notNull(),
@@ -74,18 +79,16 @@ export const culturalEvents = mysqlTable(
     summary: text("summary").notNull(),
     sourceName: varchar("sourceName", { length: 255 }).notNull(),
     sourceUrl: varchar("sourceUrl", { length: 1024 }).notNull(),
-    confirmationStatus: mysqlEnum("confirmationStatus", ["confirmado", "verificar", "cancelado"])
-      .default("verificar")
-      .notNull(),
+    confirmationStatus: confirmationStatus("confirmationStatus").default("verificar").notNull(),
     published: boolean("published").default(false).notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().notNull().$onUpdate(() => new Date()),
   },
   table => [uniqueIndex("cultural_events_slug_unique").on(table.slug)]
 );
 
-export const partnerSubmissions = mysqlTable("partner_submissions", {
-  id: int("id").autoincrement().primaryKey(),
+export const partnerSubmissions = pgTable("partner_submissions", {
+  id: serial("id").primaryKey(),
   businessName: varchar("businessName", { length: 180 }).notNull(),
   city: varchar("city", { length: 120 }).notNull(),
   category: varchar("category", { length: 100 }).notNull(),
@@ -93,27 +96,25 @@ export const partnerSubmissions = mysqlTable("partner_submissions", {
   address: varchar("address", { length: 255 }).notNull(),
   openingHours: varchar("openingHours", { length: 255 }),
   description: text("description").notNull(),
-  plan: mysqlEnum("plan", ["gratuito", "destaque"]).default("gratuito").notNull(),
-  editorialStatus: mysqlEnum("editorialStatus", ["pendente", "em_revisao", "aprovado", "recusado"])
-    .default("pendente")
-    .notNull(),
+  plan: partnerPlan("plan").default("gratuito").notNull(),
+  editorialStatus: editorialStatus("editorialStatus").default("pendente").notNull(),
   editorialNotes: text("editorialNotes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull().$onUpdate(() => new Date()),
 });
 
-export const feedbacks = mysqlTable(
+export const feedbacks = pgTable(
   "feedbacks",
   {
-    id: int("id").autoincrement().primaryKey(),
-    category: mysqlEnum("category", ["elogio", "sugestao", "problema"]).notNull(),
+    id: serial("id").primaryKey(),
+    category: feedbackCategory("category").notNull(),
     message: text("message").notNull(),
-    rating: int("rating"),
+    rating: integer("rating"),
     destinationSlug: varchar("destinationSlug", { length: 120 }),
     destinationName: varchar("destinationName", { length: 180 }),
     isRead: boolean("isRead").default(false).notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().notNull().$onUpdate(() => new Date()),
   },
   table => [
     index("feedbacks_created_at_idx").on(table.createdAt),
@@ -122,10 +123,10 @@ export const feedbacks = mysqlTable(
   ]
 );
 
-export const usageEvents = mysqlTable(
+export const usageEvents = pgTable(
   "usage_events",
   {
-    id: int("id").autoincrement().primaryKey(),
+    id: serial("id").primaryKey(),
     eventName: varchar("eventName", { length: 48 }).notNull(),
     sessionId: varchar("sessionId", { length: 36 }).notNull(),
     citySlug: varchar("citySlug", { length: 80 }),

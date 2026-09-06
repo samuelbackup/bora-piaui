@@ -1,7 +1,7 @@
 import { randomBytes, scryptSync } from "crypto";
-import { drizzle } from "drizzle-orm/mysql2";
+import { drizzle } from "drizzle-orm/node-postgres";
 import { eq } from "drizzle-orm";
-import mysql from "mysql2/promise";
+import { Pool } from "pg";
 import { users } from "../server/database/schema";
 
 const email = (process.argv[2] ?? "").trim().toLowerCase();
@@ -22,7 +22,7 @@ const salt = randomBytes(16).toString("hex");
 const hash = scryptSync(password, salt, 64).toString("hex");
 const passwordHash = `${salt}:${hash}`;
 
-const pool = mysql.createPool(process.env.DATABASE_URL);
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const db = drizzle(pool);
 
 const existing = await db.select({ id: users.id }).from(users).where(eq(users.email, email)).limit(1);

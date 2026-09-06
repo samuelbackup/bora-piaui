@@ -1,6 +1,6 @@
 import { and, asc, desc, eq, inArray, isNotNull, sql } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/mysql2";
-import mysql from "mysql2/promise";
+import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 import {
   Destination,
   DestinationImage,
@@ -21,24 +21,18 @@ import {
 } from "./database/schema";
 import { ENV } from "./_core/env";
 
-let _db: ReturnType<typeof drizzle> | null = null;
-
-const createDrizzle = drizzle as (client: unknown) => NonNullable<typeof _db>;
+let _db: NodePgDatabase | null = null;
 
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
       const url = process.env.DATABASE_URL;
-      const needsSsl = /aivencloud\.com|tidbcloud\.com|sslmode=required|ssl=true/i.test(url);
-      if (needsSsl) {
-        const pool = mysql.createPool({
-          uri: url,
-          ssl: { rejectUnauthorized: false },
-        });
-        _db = createDrizzle(pool);
-      } else {
-        _db = drizzle(url);
-      }
+      const needsSsl = /aivencloud\.com|sslmode=required|ssl=true/i.test(url);
+      const pool = new Pool({
+        connectionString: url,
+        ...(needsSsl ? { ssl: { rejectUnauthorized: false } } : {}),
+      });
+      _db = drizzle(pool);
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
@@ -67,7 +61,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     values.role = "admin";
     updateSet.role = "admin";
   }
-  await db.insert(users).values(values).onDuplicateKeyUpdate({ set: updateSet });
+  await db.insert(users).values(values).onConflictDoUpdate({ target: users.openId, set: updateSet });
 }
 
 export async function invalidateUserSessions(openId: string): Promise<void> {
@@ -224,8 +218,8 @@ export async function removeCulturalEvent(id: number) {
 export async function createPartnerSubmission(data: InsertPartnerSubmission) {
   const db = await getDb();
   if (!db) throw new Error("Banco de dados indisponível");
-  const result = await db.insert(partnerSubmissions).values(data);
-  return getPartnerSubmissionById(Number(result[0].insertId));
+  const result = await db.insert(partnerSubmissions).values(data).returning({ id: partnerSubmissions.id });
+  return getPartnerSubmissionById(result[0].id);
 }
 
 export async function getPartnerSubmissionById(id: number) {
@@ -251,8 +245,8 @@ export async function updatePartnerSubmission(id: number, data: Partial<InsertPa
 export async function createFeedback(data: InsertFeedback) {
   const db = await getDb();
   if (!db) throw new Error("Banco de dados indisponível");
-  const result = await db.insert(feedbacks).values(data);
-  return getFeedbackById(Number(result[0].insertId));
+  const result = await db.insert(feedbacks).values(data).returning({ id: feedbacks.id });
+  return getFeedbackById(result[0].id);
 }
 
 export async function getFeedbackById(id: number) {
