@@ -27,17 +27,65 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
   throw new Error(`No available port found starting from ${startPort}`);
 }
 
+const geocodeCache = new Map<string, { lat: number; lng: number } | null>();
+const GEOCODE_TTL_MS = 1000 * 60 * 60 * 24 * 7;
+
+async function nominatimLookup(query: string): Promise<{ lat: number; lng: number } | null> {
+  const url = new URL("https://nominatim.openstreetmap.org/search");
+  url.searchParams.set("q", query);
+  url.searchParams.set("format", "json");
+  url.searchParams.set("limit", "1");
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": "UmboraPiaui/1.0 (https://bora-piaui.vercel.app)",
+      "Accept": "application/json",
+    },
+  });
+  if (!response.ok) return null;
+  const data = (await response.json()) as Array<{ lat: string; lon: string }>;
+  const first = data[0];
+  if (!first) return null;
+  const lat = Number(first.lat);
+  const lng = Number(first.lon);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  return { lat, lng };
+}
+
+function registerGeocodeProxy(app: import("express").Express) {
+  app.get("/api/geocode", async (req: import("express").Request, res: import("express").Response) => {
+    const query = String(req.query.q ?? "").trim();
+    if (!query) {
+      res.status(400).json({ error: "missing q" });
+      return;
+    }
+    const cacheKey = query.toLowerCase();
+    if (geocodeCache.has(cacheKey)) {
+      const cached = geocodeCache.get(cacheKey) ?? null;
+      res.json({ lat: cached?.lat ?? null, lng: cached?.lng ?? null, cached: true });
+      return;
+    }
+    try {
+      const result = await nominatimLookup(query);
+      geocodeCache.set(cacheKey, result);
+      setTimeout(() => geocodeCache.delete(cacheKey), GEOCODE_TTL_MS).unref?.();
+      res.json({ lat: result?.lat ?? null, lng: result?.lng ?? null, cached: false });
+    } catch (error) {
+      console.error("[Geocode] error:", error);
+      res.status(502).json({ error: "geocode upstream failed" });
+    }
+  });
+}
+
 async function startServer() {
   const app = express();
   const server = createServer(app);
-  // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "12mb" }));
   app.use(express.urlencoded({ limit: "12mb", extended: true }));
   registerStorageProxy(app);
+  registerGeocodeProxy(app);
   app.get("/api/healthz", (_req, res) => {
     res.status(200).json({ status: "ok" });
   });
-  // tRPC API
   app.use(
     "/api/trpc",
     createExpressMiddleware({
@@ -45,7 +93,6 @@ async function startServer() {
       createContext,
     })
   );
-  // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
   } else {

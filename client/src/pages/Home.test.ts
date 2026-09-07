@@ -1,8 +1,10 @@
+// @vitest-environment jsdom
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { getAvailablePoles, getPolePreview } from "./Home";
 
-const homeSource = readFileSync(new URL("./Home.tsx", import.meta.url), "utf8");
+const homeSource = readFileSync(join(import.meta.dirname, "./Home.tsx"), "utf8");
 
 describe("acessos territoriais da descoberta", () => {
   const catalog = [
