@@ -1,5 +1,7 @@
 # Contrato de integração — Front-end e Back-end do Bora Piauí
 
+> **Documento histórico (ago/2026).** Contrato escrito quando a integração ainda era planejada; os procedimentos tRPC atuais (fonte de verdade em `server/routers/`) já superam este texto. Mantido como referência das decisões originais.
+
 ## Finalidade e escopo
 
 Este documento organiza a futura integração do Bora Piauí sem deslocar a responsabilidade da experiência de interface para a frente de back-end. O front-end permanece responsável por rotas, composição visual, interações, acessibilidade, filtros locais, estados de carregamento, ausência de resultado e falha. O back-end será responsável por disponibilizar dados válidos, regras de publicação, persistência, autenticação e autorização quando aplicáveis.

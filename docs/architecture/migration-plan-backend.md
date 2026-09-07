@@ -1,5 +1,7 @@
 # Roteiro de migração para o novo back-end — Bora Piauí
 
+> **Documento histórico (ago/2026).** Roteiro executado durante a implementação do back-end; migrações posteriores (sessões, `passwordHash`) e a troca para PostgreSQL não constam aqui. Ver README e `server/database/` para o estado atual.
+
 **Status:** proposta técnica para execução em staging antes de produção  
 **Objetivo:** transportar os dados hoje mantidos no ambiente atual para o novo back-end sem perda editorial, sem quebrar créditos de imagens e sem transferir sessões, tokens ou credenciais de usuários.
 

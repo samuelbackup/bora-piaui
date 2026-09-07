@@ -1,5 +1,7 @@
 # Blueprint de back-end — Bora Piauí
 
+> **Documento histórico (ago/2026).** Proposta escrita antes da implementação. A API foi implantada no Render (não Railway) e o banco foi migrado de MySQL/TiDB para **PostgreSQL** em set/2026 — ver README. Mantido como registro de decisões, não como estado atual.
+
 **Autor:** Manus AI  
 **Status:** Proposta técnica para integração gradual  
 **Escopo:** API, dados, segurança e implantação que suportam o front-end existente sem reescrever a experiência pública.

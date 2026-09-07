@@ -1,5 +1,7 @@
 # Relatório resumido de status — Bora Piauí
 
+> **Documento histórico (21/ago/2026).** Reflete o momento pré-implementação do back-end. Parte dos registros de validação citados como referência foi arquivada ou removida em reorganizações posteriores do repositório.
+
 **Data:** 21 de agosto de 2026  
 **Escopo deste relatório:** front-end, documentação de integração e preparação do fluxo de entrega.  
 **Situação geral:** o protótipo navegável está funcional e publicado; a principal etapa pendente é implementar e integrar o back-end real conforme o blueprint técnico.

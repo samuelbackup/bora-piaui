@@ -257,5 +257,18 @@
 - [x] Adicionar acionador e janela de feedback contextual em cada destino exibido na tela inicial.
 - [x] Criar tela frontend de Administração de Feedbacks com mockFeedbacks, KPIs, filtros reativos, cards e modal de detalhes, sem alterar o backend.
 - [x] Adicionar o item Administração de Feedbacks à navegação do painel administrativo e validar o acesso à rota.
-- [ ] Integrar o formulário público e o painel de Feedbacks a dados reais persistidos, com procedimentos administrativos protegidos, sem avaliações fictícias.
-- [ ] Cobrir a integração real com testes de contrato, autorização, envio, leitura e marcação como lido.
+- [x] Conectar o formulário público `/feedback` à mutation persistente de feedbacks.
+- [x] Conectar o modal contextual da Home à mutation persistente com destino associado.
+- [x] Conectar o feedback contextual de ponto turístico à mutation persistente com ponto associado.
+- [x] Migrar o painel administrativo de mockData para `trpc.feedbacks.adminList`.
+- [x] Persistir a marcação de leitura via `trpc.feedbacks.markRead` e atualizar KPIs/lista.
+- [x] Remover PII/mock fields da UI administrativa e alinhar o modelo ao schema real.
+- [x] Atualizar testes, validar TypeScript, build e fluxo ponta a ponta, incluindo o ensaio autenticado de persistência e `markRead`.
+- [x] Sincronizar a integração real com a branch principal do GitHub.
+- [x] Adicionar testes dos procedures de feedback cobrindo autorização administrativa e submit/markRead com helpers isolados.
+- [x] Registrar evidência verificável da validação do fluxo real com feedback técnico temporário autorizado em produção, removido ao final.
+- [x] Corrigir o bloqueio de login admin: o código consulta `passwordHash`, mas a tabela `users` ativa não possui essa coluna.
+- [x] Aplicar migration segura para `users.passwordHash` e validar o login administrativo; nenhum hash foi exposto.
+- [x] Reexecutar testes, build e ensaio autenticado do painel após corrigir o schema.
+- [x] Remover a senha temporária usada no ensaio admin; a conta ensaiada ficou sem senha após a validação.
+- [x] Renomear a marca pública exibida de “Bora Piauí” para “Umbora Piauí” em títulos, abas, metadados e textos visíveis, preservando identificadores técnicos.

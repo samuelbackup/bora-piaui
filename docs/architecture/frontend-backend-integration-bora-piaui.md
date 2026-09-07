@@ -1,5 +1,7 @@
 # Documento de integração — front-end e back-end do Bora Piauí
 
+> **Documento histórico (ago/2026).** A integração descrita aqui já foi implementada (routers tRPC em `server/routers/`, banco PostgreSQL, painéis administrativos reais). Consulte o README para o estado atual.
+
 **Objetivo:** migrar o front-end existente de dados locais para serviços persistidos, sem alterar os fluxos já testados e sem introduzir informação turística não verificada.
 
 ## 1. Contrato de integração adotado

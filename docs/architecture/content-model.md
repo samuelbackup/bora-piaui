@@ -1,4 +1,4 @@
-# Modelo de conteúdo — Bora Piauí
+# Modelo de conteúdo — Umbora Piauí
 
 ## Regra editorial
 
