@@ -27,7 +27,7 @@ export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
       const url = process.env.DATABASE_URL;
-      const needsSsl = /aivencloud\.com|sslmode=required|ssl=true/i.test(url);
+      const needsSsl = /aivencloud\.com|render\.com|sslmode=required|ssl=true/i.test(url);
       const pool = new Pool({
         connectionString: url,
         ...(needsSsl ? { ssl: { rejectUnauthorized: false } } : {}),

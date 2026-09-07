@@ -13,7 +13,8 @@ if (!email || !password || password.length < 8) {
   process.exit(1);
 }
 
-if (!process.env.DATABASE_URL) {
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
   console.error("Defina DATABASE_URL antes de rodar este script.");
   process.exit(1);
 }
@@ -22,7 +23,11 @@ const salt = randomBytes(16).toString("hex");
 const hash = scryptSync(password, salt, 64).toString("hex");
 const passwordHash = `${salt}:${hash}`;
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const needsSsl = /aivencloud\.com|render\.com|sslmode=required|ssl=true/i.test(connectionString);
+const pool = new Pool({
+  connectionString,
+  ...(needsSsl ? { ssl: { rejectUnauthorized: false } } : {}),
+});
 const db = drizzle(pool);
 
 const existing = await db.select({ id: users.id }).from(users).where(eq(users.email, email)).limit(1);
