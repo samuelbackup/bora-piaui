@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import L from "leaflet";
 import { LoaderCircle, MapPin } from "lucide-react";
 import { MapView } from "@/components/Map";
 
@@ -17,32 +16,9 @@ type HeritageMapProps = {
   onSelect: (id: string) => void;
 };
 
-async function geocode(query: string): Promise<[number, number] | null> {
-  try {
-    const url = new URL("/api/geocode", window.location.origin);
-    url.searchParams.set("q", `${query}, Piauí, Brasil`);
-    const response = await fetch(url.toString());
-    if (!response.ok) return null;
-    const data = (await response.json()) as { lat: number | null; lng: number | null };
-    if (data.lat == null || data.lng == null) return null;
-    return [data.lat, data.lng];
-  } catch {
-    return null;
-  }
-}
-
-function buildMarkerIcon(index: number, accent: string): L.DivIcon {
-  return L.divIcon({
-    className: "leaflet-heritage-marker",
-    html: `<span style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9999px;background:${accent};color:#FFFDF6;font-weight:800;font-size:14px;border:3px solid #FFFDF6;box-shadow:0 4px 12px rgba(45,54,34,.28);">${index + 1}</span>`,
-    iconSize: [34, 34],
-    iconAnchor: [17, 17],
-  });
-}
-
 export function HeritageMap({ places, activePlaceId, onSelect }: HeritageMapProps) {
-  const mapRef = useRef<L.Map | null>(null);
-  const markers = useRef(new Map<string, { marker: L.Marker; position: [number, number] }>());
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const markers = useRef(new Map<string, { marker: google.maps.Marker; position: google.maps.LatLngLiteral }>());
   const onSelectRef = useRef(onSelect);
   const runIdRef = useRef(0);
   const [ready, setReady] = useState(false);
@@ -53,37 +29,42 @@ export function HeritageMap({ places, activePlaceId, onSelect }: HeritageMapProp
   }, [onSelect]);
 
   const clearMarkers = useCallback(() => {
-    markers.current.forEach(({ marker }) => marker.remove());
+    markers.current.forEach(({ marker }) => marker.setMap(null));
     markers.current.clear();
   }, []);
 
-  const createMarkers = useCallback(async (map: L.Map) => {
+  const createMarkers = useCallback(async (map: google.maps.Map) => {
     const runId = ++runIdRef.current;
     setReady(false);
     clearMarkers();
+    const geocoder = new google.maps.Geocoder();
+    const bounds = new google.maps.LatLngBounds();
     const resolved = await Promise.all(
-      places.map(async (place) => {
-        const position = await geocode(place.mapQuery);
-        return { place, position };
-      }),
+      places.map((place) => new Promise<{ place: HeritagePlace; position: google.maps.LatLngLiteral | null }>((resolve) => {
+        geocoder.geocode({ address: `${place.mapQuery}, Piauí, Brasil` }, (matches, status) => {
+          const location = status === "OK" && matches?.[0] ? matches[0].geometry.location : null;
+          resolve({ place, position: location ? { lat: location.lat(), lng: location.lng() } : null });
+        });
+      })),
     );
 
     if (runId !== runIdRef.current) return;
 
-    const bounds = L.latLngBounds([]);
     resolved.forEach(({ place, position }, index) => {
       if (!position) return;
-      const marker = L.marker(position, {
-        title: `${place.title} · ${place.place}`,
-        icon: buildMarkerIcon(index, place.accent),
-      });
-      marker.on("click", () => onSelectRef.current(place.id));
-      marker.addTo(map);
-      markers.current.set(place.id, { marker, position });
       bounds.extend(position);
+      const marker = new google.maps.Marker({
+        map,
+        position,
+        title: `${place.title} · ${place.place}`,
+        label: { text: String(index + 1), color: "#FFFDF6", fontWeight: "700" },
+        icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: place.accent, fillOpacity: 1, strokeColor: "#FFFDF6", strokeWeight: 3, scale: 13 },
+      });
+      marker.addListener("click", () => onSelectRef.current(place.id));
+      markers.current.set(place.id, { marker, position });
     });
 
-    if (bounds.isValid()) map.fitBounds(bounds, { padding: [78, 78] });
+    if (!bounds.isEmpty()) map.fitBounds(bounds, 78);
     setReady(true);
   }, [clearMarkers, places]);
 
@@ -95,24 +76,34 @@ export function HeritageMap({ places, activePlaceId, onSelect }: HeritageMapProp
     if (!activePlaceId || !mapRef.current) return;
     const current = markers.current.get(activePlaceId);
     if (!current) return;
-    mapRef.current.flyTo(current.position, 10, { duration: 0.8 });
-    const el = current.marker.getElement();
-    if (el) {
-      el.classList.add("leaflet-marker-bounce");
-      const timeout = window.setTimeout(() => el.classList.remove("leaflet-marker-bounce"), 700);
-      return () => window.clearTimeout(timeout);
-    }
+    mapRef.current.panTo(current.position);
+    mapRef.current.setZoom(10);
+    current.marker.setAnimation(google.maps.Animation.BOUNCE);
+    const timeout = window.setTimeout(() => current.marker.setAnimation(null), 700);
+    return () => window.clearTimeout(timeout);
   }, [activePlaceId, ready]);
 
   return (
     <div className="relative overflow-hidden rounded-[1.8rem] border border-[#3C482D]/15 bg-[#E6D4AA] shadow-[0_18px_55px_rgba(59,70,42,.14)]">
       <MapView
-        initialCenter={[-7.0, -42.1]}
+        initialCenter={{ lat: -7.0, lng: -42.1 }}
         initialZoom={6}
         className="h-[410px] sm:h-[540px]"
         onStatusChange={status => setMapFailed(status === "error")}
         onMapReady={(map) => {
           mapRef.current = map;
+          map.setOptions({
+            mapTypeControl: false,
+            streetViewControl: false,
+            styles: [
+              { elementType: "geometry", stylers: [{ color: "#f1e5ca" }] },
+              { elementType: "labels.text.fill", stylers: [{ color: "#564b35" }] },
+              { featureType: "water", elementType: "geometry", stylers: [{ color: "#9bc5c7" }] },
+              { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#bed0a4" }] },
+              { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
+              { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#e0cfae" }] },
+            ],
+          });
           void createMarkers(map);
         }}
       />

@@ -1,11 +1,20 @@
+/// <reference types="@types/google.maps" />
+
 import { useEffect, useRef, useState } from "react";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import { AlertTriangle, LoaderCircle, RotateCcw } from "lucide-react";
 import { usePersistFn } from "@/hooks/usePersistFn";
 import { cn } from "@/lib/utils";
 
+declare global {
+  interface Window {
+    google?: typeof google;
+  }
+}
+
 export type MapStatus = "loading" | "ready" | "error";
+
+const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+let mapScriptPromise: Promise<void> | null = null;
 
 export function canInitializeMap({
   isMounted,
@@ -19,23 +28,49 @@ export function canInitializeMap({
   return isMounted && !hasMap && container !== null;
 }
 
+function injectScript(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&v=weekly&libraries=marker,places,geocoding,geometry`;
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    script.onload = () => resolve();
+    script.onerror = () => {
+      script.remove();
+      reject(new Error("Failed to load Google Maps script"));
+    };
+    document.head.appendChild(script);
+  });
+}
+
+function loadMapScript(): Promise<void> {
+  if (window.google?.maps) return Promise.resolve();
+  if (!mapScriptPromise) {
+    mapScriptPromise = injectScript().catch((error) => {
+      mapScriptPromise = null;
+      throw error;
+    });
+  }
+  return mapScriptPromise;
+}
+
 interface MapViewProps {
   className?: string;
-  initialCenter?: [number, number];
+  initialCenter?: google.maps.LatLngLiteral;
   initialZoom?: number;
-  onMapReady?: (map: L.Map) => void;
+  onMapReady?: (map: google.maps.Map) => void;
   onStatusChange?: (status: MapStatus) => void;
 }
 
 export function MapView({
   className,
-  initialCenter = [-7.0, -42.1],
-  initialZoom = 6,
+  initialCenter = { lat: 37.7749, lng: -122.4194 },
+  initialZoom = 12,
   onMapReady,
   onStatusChange,
 }: MapViewProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<L.Map | null>(null);
+  const map = useRef<google.maps.Map | null>(null);
   const [status, setStatus] = useState<MapStatus>("loading");
   const statusRef = useRef(onStatusChange);
 
@@ -48,49 +83,43 @@ export function MapView({
     statusRef.current?.(next);
   };
 
-  const init = usePersistFn((isMounted: () => boolean) => {
-    const container = mapContainer.current;
-    if (!canInitializeMap({ isMounted: isMounted(), hasMap: map.current !== null, container }) || !container) {
+  const init = usePersistFn(async (isMounted: () => boolean) => {
+    publish("loading");
+    try {
+      await loadMapScript();
+    } catch {
+      if (isMounted()) publish("error");
       return;
     }
-    try {
-      const instance = L.map(container, {
-        center: initialCenter,
-        zoom: initialZoom,
-        zoomControl: true,
-        scrollWheelZoom: true,
-        attributionControl: true,
-      });
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      }).addTo(instance);
-      map.current = instance;
-      publish("ready");
-      onMapReady?.(instance);
-    } catch (error) {
-      console.error("[Map] failed to init:", error);
-      if (isMounted()) publish("error");
-    }
+
+    const container = mapContainer.current;
+    if (!canInitializeMap({ isMounted: isMounted(), hasMap: map.current !== null, container }) || !container) return;
+
+    const maps = window.google?.maps;
+    if (!maps) return;
+
+    map.current = new maps.Map(container, {
+      zoom: initialZoom,
+      center: initialCenter,
+      mapTypeControl: false,
+      fullscreenControl: true,
+      zoomControl: true,
+      streetViewControl: true,
+    });
+    publish("ready");
+    onMapReady?.(map.current);
   });
 
   const retry = () => {
-    if (map.current) {
-      map.current.remove();
-      map.current = null;
-    }
-    init(() => true);
+    void init(() => true);
   };
 
   useEffect(() => {
     let isMounted = true;
-    init(() => isMounted);
+    void init(() => isMounted);
+
     return () => {
       isMounted = false;
-      if (map.current) {
-        map.current.remove();
-        map.current = null;
-      }
     };
   }, [init]);
 
