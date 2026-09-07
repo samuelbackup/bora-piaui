@@ -20,7 +20,7 @@ const TABLES = [
 ] as const;
 
 const BOOLEAN_FIELDS = new Set(["published", "isRead"]);
-const needsSsl = /aivencloud\.com|sslmode=required|ssl=true/i.test(pgUrl);
+const needsSsl = /aivencloud\.com|render\.com|sslmode=required|ssl=true/i.test(pgUrl);
 
 async function main() {
   const mysqlConn = await mysql.createConnection(mysqlUrl);
