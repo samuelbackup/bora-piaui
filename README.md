@@ -66,7 +66,7 @@ O script trunca as tabelas de destino antes de copiar (usuários, destinos, imag
 | `DATABASE_URL` | PostgreSQL (obrigatória) |
 | `SESSION_JWT_SECRET` | Segredo de assinatura de sessão (obrigatória em produção) |
 | `BUILT_IN_FORGE_API_URL` / `BUILT_IN_FORGE_API_KEY` | Upload e proxy de imagens |
-| `VITE_FRONTEND_FORGE_API_KEY` | Proxy do Google Maps no frontend |
+| `VITE_GOOGLE_MAPS_API_KEY` | Chave direta do Google Maps no frontend (gere em Google Cloud Console) |
 
 Sem `SESSION_JWT_SECRET` em produção o servidor **recusa o boot** por segurança.
 

@@ -9,7 +9,7 @@
     },
     {
       "source": "/manus-storage/:path*",
-      "destination": "https://bora-piaui-api.onrender.com/manus-storage/:path*"
+      "destination": "/uploads/:path*"
     },
     {
       "source": "/(.*)",
